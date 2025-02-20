@@ -1,0 +1,16 @@
+comand untuk embed sosial media
+-> php artisan embed:social
+
+
+php artisan db:seed --class=PostSeeder
+
+
+php artisan schedule:run
+manual -> php artisan posts:update-status
+
+linux -> menjalankan shedule task
+crontab -e
+* * * * * /usr/bin/php /path-to-your-project/artisan schedule:run >> /dev/null 2>&1
+
+windows
+taskschd.msc
