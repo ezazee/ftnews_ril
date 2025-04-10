@@ -1,8 +1,12 @@
 <?php
 
 namespace App\Providers;
-use Carbon\Carbon;
+
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
+use App\Models\Categori;
+use App\Models\Post;
+use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +23,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Carbon::setLocale('id');
+        if (Schema::hasTable('posts') && Schema::hasTable('categories')) {
+            View::composer('*', function ($view) {
+                $postTerpopuler = Post::with('kategori', 'user')
+                    ->where('status', 'publish')
+                    ->orderBy('view', 'desc')
+                    ->take(5)
+                    ->get();
+                
+                $categories = Categori::all();
+                $view->with(compact('postTerpopuler', 'categories'));
+            });
+        }
     }
 }

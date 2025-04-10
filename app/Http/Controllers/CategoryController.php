@@ -3,77 +3,106 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Category;
 use Illuminate\Support\Str;
+use App\Models\Categori;
 use App\Models\SubCategory;
-Use Alert;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class CategoryController extends Controller
 {
-    public function create()
-    {
-        $category = Category::with('subCateg')->paginate(10);
-        return view('apps.categori', compact('category'));
+    public function categoryEdit($id) {
+        $categories = Categori::all(); 
+        $category = Categori::where('id', $id)->firstOrFail();
+        return view('backend.pages.blog.category.edit',compact('categories','category'));
+    }
+    public function categoryCreate() {
+        $categories = Categori::with('subCategories')->get();
+        return view('backend.pages.blog.category.create',compact('categories'));
     }
 
-    public function store(Request $request)
-    {
+    public function categoryUpdate(Request $request, $id) {
+        $request->validate([
+            'nama_kategori' => 'required|string|max:250|unique:categories,nama_kategori,' . $id . '|unique:sub_categories,nama_sub_kategori,' . $id,
+            'parent_id' => 'nullable|exists:categories,id',
+        ]);
+    
+        if ($request->has('parent_id') && $request->parent_id) {
+            $subCategory = SubCategory::findOrFail($id);
+            $subCategory->nama_sub_kategori = $request->nama_kategori;
+            $subCategory->category_id = $request->parent_id;
+            $subCategory->slug = \Str::slug($request->nama_kategori);
+            $subCategory->save();
+    
+            Alert::success('Success', 'Sub Category updated successfully!!');
+            return redirect()->back()->with('success', 'Sub Category updated successfully.');
+        } else {
+            // Update Category
+            $category = Categori::findOrFail($id);
+            $category->nama_kategori = $request->nama_kategori;
+            $category->slug = \Str::slug($request->nama_kategori);
+            $category->save();
+    
+            Alert::success('Success', 'Category updated successfully!!');
+            return redirect()->back()->with('success', 'Category updated successfully.');
+        }
+    }    
 
-        // $request->validate([
-        //     'name' => 'required|string|max:255',
-        // ]);
-        
-        $category = Category::create([
-            'nama_kategori' => $request->nama_kategori,
-            'slug' => Str::slug($request->nama_kategori)
-          ]);
-          Alert::success('Success', 'Add Categori Success');
-        return redirect()->route('categori.create')->with('success', 'Category added successfully');
+
+    public function SubcategEdit($id) {
+        $categories = Categori::all(); 
+        $category = SubCategory::where('id', $id)->firstOrFail();
+        return view('backend.pages.blog.category.subcateg',compact('categories','category'));
     }
 
-    public function edit($id)
-    {
-        $category = Category::findorfail($id);
-        return view('admin.category.edit', compact('category'));
-    }
+    public function categoryAdd(Request $request) {
 
-    public function update(Request $request, $id)
-    {
-      $this->validate($request, [
-        'name' => 'required|min:3'
-      ]);
+        $request->validate([
+            'nama_kategori' => 'required|string|max:250|unique:categories,nama_kategori|unique:sub_categories,nama_sub_kategori',
+            'parent_id' => 'nullable|exists:categories,id',
+        ]);
 
-      $category_data = [
-        'name' => $request->name,
-        'slug' => Str::slug($request->name)
-      ];
 
-      Category::whereId($id)->update($category_data);
+        if ($request->has('parent_id') && $request->parent_id) {
+            $subCategory = new SubCategory();
+            $subCategory->nama_sub_kategori = $request->nama_kategori;
+            $subCategory->category_id = $request->parent_id;
+            $subCategory->slug = \Str::slug($request->nama_kategori);
+            $subCategory->save();
+            Alert::success('Success', 'Sub Category added successfully!!');
+            return redirect()->back()->with('success', 'Category Added successfully.');
 
-      return redirect()->route('category.index')->with('success', 'Category Berhasil Diupdate');
-    }
+        } else {
+            $category = new Categori();
+            $category->nama_kategori = $request->nama_kategori;
+            $category->slug = \Str::slug($request->nama_kategori);
+            $category->save();
+            Alert::success('Success', 'Category added successfully!!');
+            return redirect()->back()->with('success', 'Category Added successfully.');
+        }
 
-    public function destroy($id)
-    {
-        $category = Category::findorfail($id);
-        $category->delete();
-
-        return redirect()->back()->with('success', 'Category Berhasil Dihapus');
     }
     
-    public function getSubcategories($categoryId)
-    {
-        try {
-            $subcategories = SubCategory::where('category_id', $categoryId)->get();
-            
-            if ($subcategories->isEmpty()) {
-                return response()->json(['message' => 'No subcategories found'], 404);
-            }
+    public function categoryDestroy($id){
+        $category = Categori::where('id', $id)->first();
 
-            return response()->json($subcategories);
-        } catch (\Exception $e) {
-            \Log::error('Tidak ada subcategori ' . $e->getMessage());
-            return response()->json(['error' => 'Unable to fetch subcategories'], 500);
+        if ($category) {
+            $category->delete();
+            Alert::error('Delete', 'Category Deleted!!');
+            return redirect()->route('category.create')->with('success', 'Category deleted successfully.');
         }
+
+        return redirect()->route('category.edit')->with('error', 'Category not found.');
+    }
+
+    public function subcategDestroy($id){
+        $category = SubCategory::where('id', $id)->first();
+
+        if ($category) {
+            $category->delete();
+            Alert::error('Delete', 'Sub Category Deleted!!');
+            return redirect()->route('category.create')->with('success', 'Category deleted successfully.');
+        }
+        
+        return redirect()->back()->with('success', 'Category not found..');
     }
 }

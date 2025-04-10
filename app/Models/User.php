@@ -18,11 +18,18 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'first_name',
+        'last_name',
         'name',
-        'email',
         'slug',
+        'email',
+        'phone',
+        'birthday',
+        'description',
         'password',
-        'role'
+        'images',
+        'status',
+        'role_id',
     ];
 
     /**
@@ -42,11 +49,15 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
     ];
 
-    public function hasRole($role): bool
+    public function role()
     {
-        return $this->role === $role;
+        return $this->belongsTo(Role::class);
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class, 'user_id');
     }
 }

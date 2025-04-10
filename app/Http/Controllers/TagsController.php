@@ -3,86 +3,67 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Tags;
+use App\Models\Tag;
 use Illuminate\Support\Str;
-Use Alert;
+use RealRashid\SweetAlert\Facades\Alert;
+
 
 class TagsController extends Controller
 {
-    public function create(Request $request)
+    public function tagsIndex(Request $request)
     {
-        $search = $request->input('search');
 
-        $query = Tags::query();
-        if ($search) {
-            $query->whereRaw('LOWER(nama_tags) LIKE ?', ["%{$search}%"]);
+        $query = Tag::query();
+
+        if ($request->has('filter_columns')) {
+            foreach ($request->input('filter_columns') as $index => $column) {
+                $operator = $request->input('filter_operators')[$index] ?? '=';
+                $value = $request->input('filter_values')[$index] ?? '';
+    
+                if (!empty($column) && !empty($value)) {
+                    if ($operator === 'like') {
+                        $value = "%$value%";
+                    }
+    
+                    $query->where($column, $operator, $value);
+                }
+            }
         }
-
-        $tags = $query->orderBy('nama_tags', 'asc')->paginate(20);
-        return view('apps.tags', compact('tags'));
-    }
-
-    public function store(Request $request)
-    {
-        $tags = Tags::create([
-            'nama_tags' => $request->nama_tags,
-            'slug' => Str::slug($request->nama_tags)
-          ]);
-        Alert::success('Success', 'Add Categori Success');
-        return redirect()->route('tags.create')->with('success', 'Category added successfully');
-    }
-
-    public function destroy($id)
-    {
-        $tags = Tags::findorfail($id);
-        $tags->delete();
-
-        return redirect()->back()->with('success', 'Category Berhasil Dihapus');
-    }
-
-    public function update(Request $request, $id)
-    {
-        $tags = Tags::findOrFail($id);
-        $tags->nama_tags = $request->input('nama_tags');
-        $tags->save();
-        return redirect()->back()->with('success', 'Category Berhasil Dihapus');
-    }
-
-    public function addtag(Request $request)
-    {
-        $validatedData = $request->validate([
-            'nama_tags' => 'required|string|max:255',
-        ]);
     
-        $tagName = $validatedData['nama_tags'];
-    
-        $existingTag = Tags::where('nama_tags', $tagName)->first();
+        $tag = $query->orderBy('nama_tags', 'asc')->paginate(50);
+        return view('backend.pages.blog.tags.index',compact('tag'));
+    }
+    public function tagsEdit($id)
+    {
+        $tag = Tag::where('id', $id)->firstOrFail();
+        return view('backend.pages.blog.tags.edit',compact('tag'));
+    }
+    public function tagsCreate()
+    {
+        return view('backend.pages.blog.tags.create');
+    }
+
+    public function tagAdd(Request $request){
+
+        $existingTag = Tag::where('nama_tags', $request->nama_tags)->first();
+
         if ($existingTag) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Tag already exists.',
-            ], 400);
+            Alert::info('Info', 'Tag already exists!');
+            return redirect()->back()->with('info', 'Tag already exists.');
         }
-    
-        try {
-            $tag = Tags::create([
-                'nama_tags' => $tagName,
-                'slug' => Str::slug($tagName),
-            ]);
-    
-            return response()->json([
-                'success' => true,
-                'id' => $tag->id,
-                'nama_tags' => $tag->nama_tags,
-            ], 201);
-    
-        } catch (\Exception $e) {
-            \Log::error('Tag creation failed: ' . $e->getMessage());
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred while adding the tag.',
-            ], 500);
-        }
+
+        Tag::create([
+            'nama_tags' => $request->nama_tags,
+            'slug' => Str::slug($request->nama_tags),
+        ]);
+        Alert::success('Success', 'Tags added successfully!!');
+        return redirect()->back()->with('success', 'Tag Added successfully.');
     }
 
+    public function tagDelete($id){
+        $tag = Tag::findOrFail($id);
+        $tag->delete();
+        Alert::error('Delete', 'Tag Deleted!!');
+        return redirect()->route('tags.index')->with('success', 'Member deleted successfully.');
+    }
 }

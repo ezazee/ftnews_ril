@@ -3,7 +3,6 @@
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
-use Monolog\Processor\PsrLogMessageProcessor;
 
 return [
 
@@ -62,28 +61,14 @@ return [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
-            'replace_placeholders' => true,
         ],
-        
+
         'daily' => [
-            'driver' => 'monolog',
-            'handler' => Monolog\Handler\RotatingFileHandler::class,
-            'with' => [
-                'filename' => storage_path('logs/laravel.log'),
-                'maxFiles' => 7, // Simpan log selama 7 hari (opsional)
-            ],
+            'driver' => 'daily',
+            'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
-            'tap' => [App\Logging\CustomLogFormatter::class],
+            'days' => 14,
         ],
-
-
-        // 'daily' => [
-        //     'driver' => 'daily',
-        //     'path' => storage_path('logs/laravel.log'),
-        //     'level' => env('LOG_LEVEL', 'debug'),
-        //     'days' => 1,
-        //     'replace_placeholders' => true,
-        // ],
 
         'slack' => [
             'driver' => 'slack',
@@ -91,10 +76,7 @@ return [
             'username' => 'Laravel Log',
             'emoji' => ':boom:',
             'level' => env('LOG_LEVEL', 'critical'),
-            'replace_placeholders' => true,
         ],
-        
-        
 
         'papertrail' => [
             'driver' => 'monolog',
@@ -105,7 +87,6 @@ return [
                 'port' => env('PAPERTRAIL_PORT'),
                 'connectionString' => 'tls://'.env('PAPERTRAIL_URL').':'.env('PAPERTRAIL_PORT'),
             ],
-            'processors' => [PsrLogMessageProcessor::class],
         ],
 
         'stderr' => [
@@ -116,20 +97,16 @@ return [
             'with' => [
                 'stream' => 'php://stderr',
             ],
-            'processors' => [PsrLogMessageProcessor::class],
         ],
 
         'syslog' => [
             'driver' => 'syslog',
             'level' => env('LOG_LEVEL', 'debug'),
-            'facility' => LOG_USER,
-            'replace_placeholders' => true,
         ],
 
         'errorlog' => [
             'driver' => 'errorlog',
             'level' => env('LOG_LEVEL', 'debug'),
-            'replace_placeholders' => true,
         ],
 
         'null' => [

@@ -1,6 +1,2 @@
 User-agent: *
-Disallow: 
-Disallow: /cgi-bin/
-Disallow: /spring/
-Disallow: /.well-known/
-Disallow: /config/
+Disallow:

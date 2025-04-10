@@ -1,26 +1,34 @@
 <?php
 
 return [
-'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
-'allowed_methods' => ['*'],
+    /*
+    |--------------------------------------------------------------------------
+    | Cross-Origin Resource Sharing (CORS) Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Here you may configure your settings for cross-origin resource sharing
+    | or "CORS". This determines what cross-origin operations may execute
+    | in web browsers. You are free to adjust these settings as needed.
+    |
+    | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+    |
+    */
 
-'allowed_origins' => [
-    'https://www.youtube.com',
-    'https://www.instagram.com',
-    'https://www.facebook.com',
-    'https://www.tiktok.com',
-    'https://x.com/'
-],
+    'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
-'allowed_origins_patterns' => [],
+    'allowed_methods' => ['*'],
 
-'allowed_headers' => ['*'],
+    'allowed_origins' => ['*'],
 
-'exposed_headers' => [],
+    'allowed_origins_patterns' => [],
 
-'max_age' => 0,
+    'allowed_headers' => ['*'],
 
-'supports_credentials' => false,
+    'exposed_headers' => [],
+
+    'max_age' => 0,
+
+    'supports_credentials' => false,
 
 ];

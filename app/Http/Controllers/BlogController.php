@@ -3,32 +3,64 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Category;
-use App\Models\Tags;
-use App\Models\User;
-use App\Models\Media;
+use App\Models\Categori;
 use App\Models\Post;
-use App\Models\SubCategory;
+use App\Models\Tag;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
+use App\Helpers\ImageResizeHelper;
+
+
 
 class BlogController extends Controller
 {
-    public function category($categorySlug, $subCategorySlug = null)
+    public function blogPost(Request $request)
     {
-        $category = Category::with('subCateg')->where('slug', $categorySlug)->firstOrFail();
-        $subCategory = $subCategorySlug ? SubCategory::where('slug', $subCategorySlug)
-            ->where('category_id', $category->id)
-            ->firstOrFail() : null;
-        $media = Media::all();
-        $categories = Category::with('subCateg')->get();
-        $postQuery = Post::with('kategori', 'user')->where('kategori_id', $category->id);
+        $query = Post::with('kategori', 'user');
 
-        if ($subCategory) {
-            $postQuery->where('sub_category_id', $subCategory->id);
+        if ($request->has('filter_columns')) {
+            foreach ($request->filter_columns as $index => $column) {
+                $operator = $request->filter_operators[$index] ?? 'like';
+                $value = $request->filter_values[$index] ?? '';
+
+                if (!empty($column) && !empty($value)) {
+                    if ($column === 'categori') {
+                        $query->whereHas('kategori', function ($q) use ($operator, $value) {
+                            if ($operator === 'like') {
+                                $value = "%$value%";
+                            }
+                            $q->where('nama_kategori', $operator, $value);
+                        });
+                    } elseif ($column === 'author') {
+                        $query->whereHas('user', function ($q) use ($operator, $value) {
+                            if ($operator === 'like') {
+                                $value = "%$value%";
+                            }
+                            $q->where('name', $operator, $value);
+                        });
+                    }else {
+                        if ($operator === 'like') {
+                            $value = "%$value%";
+                        }
+                        $query->where($column, $operator, $value);
+                    }
+                }
+            }
         }
-        $post = $postQuery->where('status', 'public')->orderBy('created_at', 'desc')->latest()->paginate(15);
 
-        $allPosts = collect([$post->items()])->flatten();
+        $post = $query->latest()->paginate(20);
+
+        return view('backend.pages.blog.posting.index', compact('post'));
+    }
+
+    public function editPost($id){
+        $post = Post::with('kategori')->findOrFail($id);
+        $category = Categori::all();
+        $allPosts = collect([$post])->flatten();
 
         foreach ($allPosts as $singlePost) {
             if ($singlePost->gambar) {
@@ -36,387 +68,181 @@ class BlogController extends Controller
             }
         }
 
-        return view('blog.categori', compact('media', 'categories', 'category', 'subCategory', 'post'));
+        return view('backend.pages.blog.posting.edit',compact('post','category'));
+    }
+    public function createPost() {
+        $category = Categori::all();
+        return view('backend.pages.blog.posting.create',compact('category'));
     }
 
-    public function bytitle($slug)
-{
-    $populer = Post::with('kategori', 'user')
-        ->where('status', 'public')
-        ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
-        ->orderBy('view', 'desc')
-        ->take(4)
-        ->get();
-    
-    if ($populer->isEmpty()) {
-        $weekCounter = 1;
-        while ($populer->isEmpty() && $weekCounter <= 4) {
-            $populer = Post::with('kategori', 'user')
-                ->where('status', 'public')
-                ->whereBetween('created_at', [
-                    Carbon::now()->subWeeks($weekCounter)->startOfWeek(),
-                    Carbon::now()->subWeeks($weekCounter)->endOfWeek()
-                ])
-                ->orderBy('view', 'desc')
-                ->take(4)
-                ->get();
-            
-            $weekCounter++;
-        }
-    }
-    
-    $post = Post::with(['kategori.subCateg', 'user'])->where('slug', $slug)->where('status', 'public')->firstOrFail();
-    $postTerkini = Post::with('kategori', 'user')
-    ->where('status', 'public')
-    ->latest()
-    ->take(5)
-    ->get();
-    
-    
+    public function PostAdd(Request $request) {
+        $validatedData = $request->validate([
+            'short_description' => 'nullable|string',
+            'content' => 'required|string',
+            'headline' => 'nullable|string|in:yes,no',
+            'banner_image' => 'required|url',
+        ]);
 
-    // Regular expressions for embedding content
-    $patterns = [
-        '/\[embed\](https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([^\s&]+))\[\/embed\]/i' => '<iframe width="560" height="315" src="https://www.youtube.com/embed/$2" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
-        '/\[embed\](https?:\/\/(?:www\.)?tiktok\.com\/@[\w\-]+\/video\/(\d+))\[\/embed\]/i' => '<blockquote class="tiktok-embed" cite="$1" data-video-id="$2" style="max-width: 605px;min-width: 325px;"> <section> </section> </blockquote><script async src="https://www.tiktok.com/embed.js"></script>',
-        '/\[embed\](https?:\/\/(?:www\.)?instagram\.com\/p\/([^\s\/]+))\[\/embed\]/i' => '<blockquote class="instagram-media" data-instgrm-permalink="$1" data-instgrm-version="12" style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"></blockquote><script async src="//www.instagram.com/embed.js"></script>',
-        '/\[embed\](https?:\/\/(?:www\.)?twitter\.com\/[^\s]+\/status\/(\d+))\[\/embed\]/i' => '<blockquote class="twitter-tweet"><a href="$1"></a></blockquote><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>',
-        '/\[embed\](https?:\/\/(?:www\.)?facebook\.com\/[^\s]+\/posts\/(\d+))\[\/embed\]/i' => '<iframe src="https://www.facebook.com/plugins/post.php?href=$1&width=500" width="500" height="684" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allow="encrypted-media"></iframe>',
-    ];
+            $post = Post::create([
+                'title' => $request->input('title'),
+                'slug' => Str::slug($request->input('title')),
+                'short_description' => $request->input('short_description'),
+                'image_caption' => $request->input('image_caption'),
+                'content' => $request->input('content'),
+                'keyword' => $request->input('seo_meta.seo_title'),
+                'description' => $request->input('seo_meta.seo_description'),
+                'start_date' => \Carbon\Carbon::parse($request->input('scheduled_date'))->format('Y-m-d'),
+                'start_time' => \Carbon\Carbon::parse($request->input('scheduled_time'))->format('H:i'),
+                'status' => $request->input('status'),
+                'headline' => $request->input('headline', 'no'),
+                'kategori_id' => $request->input('categories'),
+                'gambar' => $request->input('banner_image'),
+                'user_id' => Auth::id(),
+            ]);
 
-    // Replace patterns in content
-    foreach ($patterns as $pattern => $replacement) {
-        $post->content = preg_replace($pattern, $replacement, $post->content);
-    }
+            $tags = json_decode($request->input('tag'), true);
+            if ($tags && is_array($tags)) {
+                $tagIds = [];
+                foreach ($tags as $tag) {
+                    if (!empty($tag['value'])) {
+                        $slug = Str::slug($tag['value']);
 
-    $post->increment('view');
+                        $tagModel = Tag::firstOrCreate(
+                            ['nama_tags' => $tag['value']],
+                            ['slug' => $slug]
+                        );
+                        $tagIds[] = $tagModel->id;
+                    }
+                }
 
-    $tagsdetail = $post->tags;
-    $categoripost = $post->kategori->subCateg->where('id', $post->sub_category_id)->first();
-
-    $categories = Category::with('subCateg')->get();
-    $media = Media::all();
-
-    // Related posts by category and subcategory
-    $relatedPosts = Post::where(function ($query) use ($post) {
-        $query->where('kategori_id', $post->kategori_id)
-              ->where('sub_category_id', $post->sub_category_id);
-    })
-    ->where('id', '!=', $post->id) 
-    ->where('status', 'public') 
-    ->take(8)
-    ->get();
-
-    // Related posts by tags
-    $bacaJugaPosts = Post::whereHas('tags', function ($query) use ($post) {
-        $query->whereIn('tags.id', $post->tags->pluck('id'));
-    })
-    ->where('id', '!=', $post->id)  
-    ->where('status', 'public')     
-    ->take(2)
-    ->get();
-
-
-    $blockquotes = [];
-    foreach ($bacaJugaPosts as $relatedPost) {
-        $blockquotes[] = "<div><blockquote>Baca Juga: <a href='" . route('bytitle', $relatedPost->slug) . "' style='color: #50a6d6;'>" . $relatedPost->title . "</a></blockquote></div>";
-    }
-    
-    // $ads = [
-    // "<script async src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7366174212541814' crossorigin='anonymous'></script>
-    // <ins class='adsbygoogle' style='display:block; text-align:center;' data-ad-layout='in-article' data-ad-format='fluid' data-ad-client='ca-pub-7366174212541814' data-ad-slot='2995019997'></ins>
-    // <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>"
-    // ];
-    
-    $contentParagraphs = preg_split('/(<\/?p>|\\n)/', $post->content, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
-    
-    while (count($contentParagraphs) < 7) {
-        $contentParagraphs[] = "";
-    }
-    
-    if (count($contentParagraphs) >= 6) {
-        if (isset($blockquotes[0])) {
-            array_splice($contentParagraphs, 12, 0, $blockquotes[0]); 
-        }
-    
-        if (isset($blockquotes[1])) {
-            $blockquoteWithMargin = '<div class="mt-3">' . $blockquotes[1] . '</div>';
-            array_splice($contentParagraphs, 25, 0, $blockquoteWithMargin);
-        }
-    
-        if (isset($ads[0])) {
-            $blockquoteWithMarginads = '<div class="mt-3">' . $ads[0] . '</div>';
-            array_splice($contentParagraphs, 8, 0, $blockquoteWithMarginads);
-        }
-    
-        if (isset($ads[1])) {
-            array_splice($contentParagraphs, 20, 0, $ads[1]);
-        }
-    }
-    
-
-    $post->content = implode("", $contentParagraphs);
-
-
-    $allPosts = collect([$post, $relatedPosts, $populer,$postTerkini])->flatten();
-
-    foreach ($allPosts as $singlePost) {
-        if ($singlePost && $singlePost->gambar) {
-            $singlePost->gambar = explode('|', $singlePost->gambar);
-        }
-    }
-
-    return view('blog.detail', compact('post', 'categories', 'categoripost', 'media', 'relatedPosts', 'tagsdetail', 'populer','postTerkini'));
-}
-
-    
-
-    public function bytags($slug)
-    {
-        $tag = Tags::where('slug', $slug)->firstOrFail();
-        $post = $tag->posts()->where('status', 'public')->orderBy('created_at', 'desc')->paginate(15);
-        $categories = Category::with('subCategories')->get();
-        $media = Media::all();
-        $postTerkini = Post::with('kategori', 'user')
-            ->where('status', 'public')
-            ->latest()
-            ->take(5)
-            ->get();
-            
-        $populer = Post::with('kategori', 'user')
-        ->where('status', 'public')
-        ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
-        ->orderBy('view', 'desc')
-        ->take(4)
-        ->get();
-    
-        if ($populer->isEmpty()) {
-            $weekCounter = 1;
-            while ($populer->isEmpty() && $weekCounter <= 4) {
-                $populer = Post::with('kategori', 'user')
-                    ->where('status', 'public')
-                    ->whereBetween('created_at', [
-                        Carbon::now()->subWeeks($weekCounter)->startOfWeek(),
-                        Carbon::now()->subWeeks($weekCounter)->endOfWeek()
-                    ])
-                    ->orderBy('view', 'desc')
-                    ->take(4)
-                    ->get();
-                
-                $weekCounter++;
+                $post->tags()->sync($tagIds);
             }
-        }
-
-        $allPosts = collect([$populer, $post->items()])->flatten();
-        foreach ($allPosts as $singlePost) {
-            if ($singlePost->gambar) {
-                $singlePost->gambar = explode('|', $singlePost->gambar);
-            }
-        }
-
-        return view('blog.tags', compact('post', 'categories', 'media', 'populer', 'tag', 'postTerkini'));
+        Alert::success('Success', 'Post added successfully!!');
+        return redirect()->back()->with('success', 'post Added successfully.');
     }
 
-    public function search(Request $request)
-    {
-        $query = $request->input('search');
-        $post = Post::whereRaw('LOWER(title) LIKE ?', ['%' . strtolower($query) . '%'])
-            ->where('status', 'public')
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
-        $post->appends(['search' => $query]);
-          $populer = Post::with('kategori', 'user')
-        ->where('status', 'public')
-        ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
-        ->orderBy('view', 'desc')
-        ->take(4)
-        ->get();
-    
-        if ($populer->isEmpty()) {
-            $weekCounter = 1;
-            while ($populer->isEmpty() && $weekCounter <= 4) {
-                $populer = Post::with('kategori', 'user')
-                    ->where('status', 'public')
-                    ->whereBetween('created_at', [
-                        Carbon::now()->subWeeks($weekCounter)->startOfWeek(),
-                        Carbon::now()->subWeeks($weekCounter)->endOfWeek()
-                    ])
-                    ->orderBy('view', 'desc')
-                    ->take(4)
-                    ->get();
-                
-                $weekCounter++;
-            }
-        }      
-        $media = Media::all();
-        $categories = Category::with('subCategories')->get();
+    // NEW
+    // public function PostAdd(Request $request)
+    // {
+    //     $request->validate([
+    //         'title' => 'required|string|max:255',
+    //         'slug' => 'nullable|string|max:255|unique:posts,slug',
+    //         'short_description' => 'nullable|string',
+    //         'content' => 'required|string',
+    //         'headline' => 'nullable|string|in:yes,no',
+    //         'categories' => 'required|integer|exists:categories,id',
+    //         'banner_image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+    //         'tag' => 'required|json',
+    //     ]);
 
-        $allPosts = collect([$populer, $post->items()])->flatten();
-        foreach ($allPosts as $singlePost) {
-            if ($singlePost->gambar) {
-                $singlePost->gambar = explode('|', $singlePost->gambar);
-            }
-        }
-        return view('blog.search-results', compact('post', 'query', 'populer', 'media', 'categories'));
-    }
+    //     if ($request->hasFile('banner_image')) {
+    //         $image = $request->file('banner_image');
+    //         $filename = time() . '.' . $image->getClientOriginalExtension();
+    //         $thumbFilename = time() . '_thumb.' . $image->getClientOriginalExtension();
+
+    //         $filePath = $image->getRealPath();
+    //         if (ImageResizeHelper::isDuplicateFile($filePath, 'public/gambar')) {
+    //             return redirect()->back()->with('error', 'File gambar sudah ada di sistem.');
+    //         }
+
+    //         $imagePaths = ImageResizeHelper::resizeImage($image, $filename, $thumbFilename);
+
+    //         if (isset($imagePaths['error'])) {
+    //             return redirect()->back()->with('error', $imagePaths['error']);
+    //         }
+    //     } else {
+    //         return redirect()->back()->with('error', 'Gambar wajib diunggah.');
+    //     }
+
+    //     $post = Post::create([
+    //         'title' => $request->input('title'),
+    //         'slug' => $request->input('slug', Str::slug($request->input('title'))),
+    //         'short_description' => $request->input('short_description'),
+    //         'image_caption' => $request->input('image_caption'),
+    //         'content' => $request->input('content'),
+    //         'keyword' => $request->input('seo_meta.seo_title'),
+    //         'description' => $request->input('seo_meta.seo_description'),
+    //         'start_date' => \Carbon\Carbon::parse($request->input('scheduled_date'))->format('Y-m-d'),
+    //         'start_time' => \Carbon\Carbon::parse($request->input('scheduled_time'))->format('H:i'),
+    //         'status' => $request->input('status'),
+    //         'headline' => $request->input('headline', 'no'),
+    //         'kategori_id' => $request->input('categories'),
+    //         'gambar' => 'storage/gambar/' . $filename,
+    //         'thumbs' => 'storage/photos/shares' . $thumbFilename,
+    //         'user_id' => Auth::id(),
+    //     ]);
+
+    //     $tags = json_decode($request->input('tag'), true);
+    //     if ($tags && is_array($tags)) {
+    //         $tagIds = [];
+    //         foreach ($tags as $tag) {
+    //             if (!empty($tag['value'])) {
+    //                 $slug = Str::slug($tag['value']);
+
+    //                 $tagModel = Tag::firstOrCreate(
+    //                     ['nama_tags' => $tag['value']],
+    //                     ['slug' => $slug]
+    //                 );
+    //                 $tagIds[] = $tagModel->id;
+    //             }
+    //         }
+
+    //         $post->tags()->sync($tagIds);
+    //     }
+
+    //     Alert::success('Success', 'Post added successfully!!');
+    //     return redirect()->back()->with('success', 'Post added successfully.');
+    // }
 
 
-    public function byauthor($slug)
-    {
-        $user = User::where('slug', $slug)->firstOrFail();
-        $posts = Post::where('user_id', $user->id)
-            ->with('kategori', 'user')
-            ->where('status', 'public')
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
+    public function PostUpdate(Request $request, $id) {
+        // dd($request);
+        $post = Post::findOrFail($id);
 
-        $postCount = $posts->total();
+        $post->update([
+            'title' => $request->input('title'),
+            'short_description' => $request->input('short_description'),
+            'content' => $request->input('content'),
+            'image_caption' => $request->input('image_caption'),
+            'keyword' => $request->input('seo_meta.seo_title'),
+            'description' => $request->input('seo_meta.seo_description'),
+            'start_date' => \Carbon\Carbon::parse($request->input('scheduled_date'))->format('Y-m-d'),
+            'start_time' => \Carbon\Carbon::parse($request->input('scheduled_time'))->format('H:i'),
+            'status' => $request->input('status'),
+            'headline' => $request->input('headline', 'no'),
+            'kategori_id' => $request->input('categories'),
+            'gambar' => $request->input('banner_image'),
+        ]);
 
-        $categories = Category::with('subCateg')->get();
-        $media = Media::all();
+        $tags = json_decode($request->input('tag'), true);
+        if ($tags && is_array($tags)) {
+            $tagIds = [];
+            foreach ($tags as $tag) {
+                if (!empty($tag['value'])) {
+                    $slug = Str::slug($tag['value']);
 
-        $allPosts = collect([$posts->items()])->flatten();
-        foreach ($allPosts as $singlePost) {
-            if ($singlePost->gambar) {
-                $singlePost->gambar = explode('|', $singlePost->gambar);
-            }
-        }
-
-        return view('blog.author', compact('categories', 'media', 'user', 'posts', 'postCount'));
-    }
-
-    public function byindex()
-    {
-        $post = Post::where('status', 'public')
-        ->orderBy('created_at', 'desc')
-        ->paginate(17);
-        
-         $populer = Post::with('kategori', 'user')
-        ->where('status', 'public')
-        ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
-        ->orderBy('view', 'desc')
-        ->take(4)
-        ->get();
-    
-        if ($populer->isEmpty()) {
-            $weekCounter = 1;
-            while ($populer->isEmpty() && $weekCounter <= 4) {
-                $populer = Post::with('kategori', 'user')
-                    ->where('status', 'public')
-                    ->whereBetween('created_at', [
-                        Carbon::now()->subWeeks($weekCounter)->startOfWeek(),
-                        Carbon::now()->subWeeks($weekCounter)->endOfWeek()
-                    ])
-                    ->orderBy('view', 'desc')
-                    ->take(4)
-                    ->get();
-                
-                $weekCounter++;
-            }
-        }   
-        $media = Media::all();
-        $categories = Category::with('subCategories')->get();
-        $postTerkini = Post::with('kategori', 'user')
-        ->where('status', 'public')
-        ->latest()
-        ->take(5)
-        ->get();
-
-        $allPosts = collect([$populer,$postTerkini, $post->items()])->flatten();
-
-        foreach ($allPosts as $singlePost) {
-            if ($singlePost->gambar) {
-                $singlePost->gambar = explode('|', $singlePost->gambar);
-            }
-        }
-
-        return view('blog.byindex',compact('post', 'populer', 'media', 'categories','postTerkini'));
-    }
-    
-    public function slim()
-    {
-        $categories = Category::with('subCategories')->get();
-        $media = Media::all();
-        $populer = Post::with('kategori', 'user')
-            ->where('status', 'public')
-            ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
-            ->orderBy('view', 'desc')
-            ->take(4)
-            ->get();
-
-        if ($populer->isEmpty()) {
-            $weekCounter = 1;
-            while ($populer->isEmpty() && $weekCounter <= 4) {
-                $populer = Post::with('kategori', 'user')
-                    ->where('status', 'public')
-                    ->whereBetween('created_at', [
-                        Carbon::now()->subWeeks($weekCounter)->startOfWeek(),
-                        Carbon::now()->subWeeks($weekCounter)->endOfWeek()
-                    ])
-                    ->orderBy('view', 'desc')
-                    ->take(4)
-                    ->get();
-
-                $weekCounter++;
-            }
-        }
-        $postTerkini = Post::with('kategori', 'user')
-            ->where('status', 'public')
-            ->latest()
-            ->take(4)
-            ->get();
-
-            $allPosts = collect([$populer, $postTerkini])->flatten();
-            foreach ($allPosts as $singlePost) {
-                if ($singlePost && $singlePost->gambar) {
-                    $singlePost->gambar = explode('|', $singlePost->gambar);
+                    $tagModel = Tag::firstOrCreate(
+                        ['nama_tags' => $tag['value']],
+                        ['slug' => $slug]
+                    );
+                    $tagIds[] = $tagModel->id;
                 }
             }
 
-        return view('blog.slim', compact('categories', 'media', 'populer', 'postTerkini'));
-    }
-    
-    
-    public function by404()
-    {
-        $categories = Category::with('subCategories')->get();
-        $media = Media::all();
-        $populer = Post::with('kategori', 'user')
-            ->where('status', 'public')
-            ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
-            ->orderBy('view', 'desc')
-            ->take(4)
-            ->get();
-
-        if ($populer->isEmpty()) {
-            $weekCounter = 1;
-            while ($populer->isEmpty() && $weekCounter <= 4) {
-                $populer = Post::with('kategori', 'user')
-                    ->where('status', 'public')
-                    ->whereBetween('created_at', [
-                        Carbon::now()->subWeeks($weekCounter)->startOfWeek(),
-                        Carbon::now()->subWeeks($weekCounter)->endOfWeek()
-                    ])
-                    ->orderBy('view', 'desc')
-                    ->take(4)
-                    ->get();
-
-                $weekCounter++;
-            }
+            $post->tags()->sync($tagIds);
         }
-        $postTerkini = Post::with('kategori', 'user')
-            ->where('status', 'public')
-            ->latest()
-            ->take(4)
-            ->get();
 
-            $allPosts = collect([$populer, $postTerkini])->flatten();
-            foreach ($allPosts as $singlePost) {
-                if ($singlePost && $singlePost->gambar) {
-                    $singlePost->gambar = explode('|', $singlePost->gambar);
-                }
-            }
+        Alert::success('Success', 'Post updated successfully!!');
+        return redirect()->back()->with('success', 'post Added successfully.');
+    }
 
-        return view('errors.temp404', compact('categories', 'media', 'populer', 'postTerkini'));
+
+    public function deletePost($id)
+    {
+        $post = Post::findOrFail($id);
+        $post->delete();
+        Alert::error('Delete', 'Post Deleted!!');
+        return redirect()->route('blog.post')->with('success', 'Post deleted successfully.');
     }
 
 }

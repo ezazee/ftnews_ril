@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('posts:update-status')->everyMinute();
+        $schedule->command('posts:publish-scheduled')->everyMinute();
     }
 
     /**
@@ -24,9 +24,4 @@ class Kernel extends ConsoleKernel
 
         require base_path('routes/console.php');
     }
-
-    protected $commands = [
-        \App\Console\Commands\EmbedSocialVideos::class,
-        Commands\UpdatePostStatus::class,
-    ];
 }

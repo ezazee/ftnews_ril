@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report</title>
+    <style>
+        /* A4 Paper size */
+        @page {
+            size: A4;
+            margin: 20mm;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            color: #333;
+            line-height: 1.4;
+            font-size: 12px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        header img {
+            height: 50px;
+            width: auto;
+        }
+
+        header .report-title {
+            text-align: right;
+        }
+
+        header .report-title h4 {
+            margin: 0;
+            color: #555;
+        }
+
+        header .report-title p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        h5 {
+            color: #1D99D2;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #1D99D2;
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+            font-size: 10px; /* smaller font size for print */
+        }
+
+        th {
+            background-color: #1D99D2;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* For the footer */
+        footer {
+            text-align: center;
+            font-size: 12px;
+            margin-top: 20px;
+            color: #777;
+        }
+
+        /* Responsive for large screens or printing */
+        @media print {
+            body {
+                font-size: 10px;
+            }
+
+            table {
+                font-size: 10px;
+            }
+
+            th, td {
+                padding: 6px 8px;
+            }
+        }
+
+        /* Optional: If you want to print the logo to be smaller */
+        header img {
+            height: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="data:image/png;base64,{{ $image }}" width="80px" height="100px" alt="Placeholder Logo">
+        <div class="report-title">
+            <h4>Reporting Order</h4>
+            <p>From: 2024-12-01 To: 2025-01-14</p>
+        </div>
+    </header>
+
+    <h5>Order Report</h5>
+    <table>
+        <thead>
+            <tr>
+                <th>Order Number</th>
+                <th>User Name</th>
+                <th>Total Amount (Rp)</th>
+                <th>Discount (Rp)</th>
+                <th>Payment Method</th>
+                <th>Status</th>
+                <th>Order Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>#ORD674C5095332BE</td>
+                <td>Mohamad Rezaaa ++</td>
+                <td class="text-right">Rp285.000</td>
+                <td class="text-right">Rp0</td>
+                <td class="text-center">Transfer</td>
+                <td class="text-center">Canceled</td>
+                <td class="text-center">01 Dec 2024</td>
+            </tr>
+            <tr>
+                <td>#ORD6750104A856F6</td>
+                <td>Risqi Andriyana</td>
+                <td class="text-right">Rp655.000</td>
+                <td class="text-right">Rp77.000</td>
+                <td class="text-center">Transfer</td>
+                <td class="text-center">Canceled</td>
+                <td class="text-center">04 Dec 2024</td>
+            </tr>
+            <tr>
+                <td>#ORD675D04184C861</td>
+                <td>Tanti Sagittarini</td>
+                <td class="text-right">Rp297.500</td>
+                <td class="text-right">Rp24.500</td>
+                <td class="text-center">Transfer</td>
+                <td class="text-center">Canceled</td>
+                <td class="text-center">14 Dec 2024</td>
+            </tr>
+            <tr>
+                <td>#ORD676504A532FC5</td>
+                <td>Tanti Sagittarini</td>
+                <td class="text-right">Rp677.000</td>
+                <td class="text-right">Rp77.000</td>
+                <td class="text-center">Transfer</td>
+                <td class="text-center">Canceled</td>
+                <td class="text-center">20 Dec 2024</td>
+            </tr>
+            <tr>
+                <td>#ORD676505240990B</td>
+                <td>Tanti Sagittarini</td>
+                <td class="text-right">Rp166.750</td>
+                <td class="text-right">Rp11.250</td>
+                <td class="text-center">Transfer</td>
+                <td class="text-center">Processing</td>
+                <td class="text-center">20 Dec 2024</td>
+            </tr>
+            <tr>
+                <td>#ORD677BA4B7ED23F</td>
+                <td>Dev Administrator</td>
+                <td class="text-right">Rp144.000</td>
+                <td class="text-right">Rp0</td>
+                <td class="text-center">Cash</td>
+                <td class="text-center">Completed</td>
+                <td class="text-center">06 Jan 2025</td>
+            </tr>
+            <tr>
+                <td>#ORD677BA653541E0</td>
+                <td>Dev Administrator</td>
+                <td class="text-right">Rp432.000</td>
+                <td class="text-right">Rp0</td>
+                <td class="text-center">Cash</td>
+                <td class="text-center">Completed</td>
+                <td class="text-center">06 Jan 2025</td>
+            </tr>
+            <tr>
+                <td>#ORD677BA667A801C</td>
+                <td>Dev Administrator</td>
+                <td class="text-right">Rp432.000</td>
+                <td class="text-right">Rp0</td>
+                <td class="text-center">Cash</td>
+                <td class="text-center">Completed</td>
+                <td class="text-center">06 Jan 2025</td>
+            </tr>
+            <tr>
+                <td>#ORD678458B8E5189</td>
+                <td>Risqi Andriyana</td>
+                <td class="text-right">Rp156.000</td>
+                <td class="text-right">Rp0</td>
+                <td class="text-center">Transfer</td>
+                <td class="text-center">Canceled</td>
+                <td class="text-center">13 Jan 2025</td>
+            </tr>
+            <tr>
+                <td>#ORD6784AF446D38</td>
+                <td>Andy Reza</td>
+                <td class="text-right">Rp278.001</td>
+                <td class="text-right">Rp19.999</td>
+                <td class="text-center">Transfer</td>
+                <td class="text-center">Canceled</td>
+                <td class="text-center">13 Jan 2025</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="6" class="text-center"><strong>Total Overall Amount:</strong></td>
+                <td><strong>Rp1.174.750</strong></td>
+            </tr>
+            <tr>
+                <td colspan="6" class="text-center"><strong>Total Return Amount:</strong></td>
+                <td><strong>-Rp0</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <footer>
+        © 2025 PE Skin Professional. All rights reserved.
+    </footer>
+</body>
+
+</html>
