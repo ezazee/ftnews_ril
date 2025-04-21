@@ -14,7 +14,7 @@
             </svg> </button>
         <h1 class="navbar-brand navbar-brand-autodark me-4">
             <a href="{{ route('dashboard') }}">
-                <img src="{{ asset('backend/images/logo/logo.svg') }}" style="max-height: 32px; height: auto;"
+                <img src="{{ asset('backend/images/logo/logo.png') }}" style="max-height: 32px; height: auto;"
                     alt="Botble Technologies" class="navbar-brand-image">
             </a>
         </h1>
@@ -45,7 +45,7 @@
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
-                    
+
                     <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <svg class="icon dropdown-item-icon svg-icon-ti-ti-logout" xmlns="http://www.w3.org/2000/svg"
                             width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -56,7 +56,7 @@
                             <path d="M18 15l3 -3" />
                         </svg>
                         Logout
-                    </a>                    
+                    </a>
                 </div>
             </div>
         </div>

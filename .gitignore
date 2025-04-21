@@ -6,6 +6,7 @@
 /storage/*.key
 /vendor/*
 !/vendor/unisharp/
+.env.example
 .env
 .env.backup
 .env.production

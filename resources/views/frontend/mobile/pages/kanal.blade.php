@@ -1,62 +1,62 @@
 @extends('frontend.mobile.master.master-app')
 @section('content')
     <div class="mt-20">
-        <h3 class="card-headline-no-image-title ml-10 fw-bold">{{ $category->nama_kategori }}</h3>
+        <h3 class="card-headline-no-image-title ml-10 fw-bold">Lorem ipsum dolor sit amet.</h3>
     </div>
 
-    @if ($post->isNotEmpty())
-        @php $latestPost = $post->first(); @endphp
+    {{-- @if ($post->isNotEmpty()) --}}
+        {{-- @php $latestPost = $post->first(); @endphp --}}
         <div>
             <article class="card-headline">
-                <img alt="{{ $latestPost->title }}" class="card-headline-img" src="{{ is_array($latestPost->gambar) ? $latestPost->gambar[0] : $latestPost->gambar }}" />
+                <img alt="lorem ipsum dolor sit amet" class="card-headline-img" src="#" />
                 <div class="card-headline-info">
                     <h4 class="card-headline-title">
-                        <a href="{{ route('detail.desktop', ['slug' => $latestPost->slug]) }}">{{ $latestPost->title }}</a>
+                        <a href="#">lorem ipsum dolor sit amet</a>
                     </h4>
                     <div class="category-and-time">
-                        <div class="card-one-headline--desc">{!! Str::limit(strip_tags($latestPost->content), 60) !!}</div>
-                        <span>{{ \Carbon\Carbon::parse($latestPost->created_at)->format('Y-m-d') }}</span>
+                        <div class="card-one-headline--desc">Lorem ipsum, dolor sit amet consectetur adipisicing elit.</div>
+                        <span>Lorem, ipsum dolor.</span>
                     </div>
                 </div>
             </article>
         </div>
 
         <div class="card-headline-small-wrap">
-            @foreach ($post->skip(1)->take(4) as $item)
+            {{-- @foreach ($post->skip(1)->take(4) as $item) --}}
                 <article class="card-headline-small">
-                    <img alt="{{ $item->title }}" class="card-headline-small-img" src="{{ is_array($item->gambar) ? $item->gambar[0] : $item->gambar }}" />
+                    <img alt="lorem" class="card-headline-small-img" src="#" />
                     <div class="card-headline-small-info">
                         <h4 class="card-headline-small-title">
-                            <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
+                            <a href="#">lorem</a>
                         </h4>
                         <div class="category-and-time-head">
-                            <span>{{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</span>
+                            <span>Lorem ipsum dolor sit amet.</span>
                         </div>
                     </div>
                 </article>
-            @endforeach
+            {{-- @endforeach --}}
         </div>
-    @endif
+    {{-- @endif --}}
 
     <div>
-        @foreach ($post->skip(5)->sortByDesc('created_at') as $item)
+        {{-- @foreach ($post->skip(5)->sortByDesc('created_at') as $item) --}}
             <article class="main-card">
                 <div class="main-card-img-wrap">
-                    <img alt="{{ $item->title }}" class="main-card-img"
-                        src="{{ is_array($item->gambar) ? $item->gambar[0] : $item->gambar }}" />
+                    <img alt="lorem" class="main-card-img"
+                        src="#" />
                 </div>
                 <div class="main-card--info">
                     <h4 class="main-card--title">
-                        <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
+                        <a href="#">lorem</a>
                     </h4>
                     <div class="category-and-time">
-                        <a href="{{ route('kanal.desktop', ['slug' => $item->kategori->slug]) }}">
-                            {{ $item->kategori->nama_kategori }}
+                        <a href="#">
+                            Lorem ipsum dolor sit.
                         </a>
-                        <span>{{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</span>
+                        <span>Lorem ipsum dolor sit amet.</span>
                     </div>
                 </div>
             </article>
-        @endforeach
+        {{-- @endforeach --}}
     </div>
 @endsection

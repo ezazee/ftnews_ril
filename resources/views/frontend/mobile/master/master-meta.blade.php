@@ -1,21 +1,21 @@
 <meta charset="utf-8">
 <title>
-    {{ request()->is('/') ? 'Indopop.id | Berita Gosip Artis Terkini Di Indonesia' : ($post->title ?? 'Indopop.id | Berita Gosip Artis Terkini Di Indonesia') }}
+    {{ request()->is('/') ? 'FTNews |Akurat Menyajikan Informasi, Berita Terkini, Kabar Terbaru Indonesia dan Internasional' : ($post->title ?? 'FTNews |Akurat Menyajikan Informasi, Berita Terkini, Kabar Terbaru Indonesia dan Internasional') }}
 </title>
 <meta name="description" content="
-    {{ request()->is('/') ? 'Berita terkini dari kalangan selebritis ternama Tanah Air maupun Internasional' : ($post->description ?? 'Berita terkini dari kalangan selebritis ternama Tanah Air maupun Internasional') }}
+    {{ request()->is('/') ? 'FTNews - Berita terkini hari ini, nasional, hukum, politik, daerah, metropolitan, lifestyle, kesehatan' : ($post->description ?? 'FTNews - Berita terkini hari ini, nasional, hukum, politik, daerah, metropolitan, lifestyle, kesehatan') }}
 ">
 <meta name="keywords" content="
-    {{ request()->is('/') ? 'berita, gosip, selebriti, Indopop, Indonesia' : ($post->keyword ?? 'berita, gosip, selebriti, Indopop, Indonesia') }}
+    {{ request()->is('/') ? 'news, updates, FTNews' : ($post->keyword ?? 'news, updates, FTNews') }}
 ">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <!-- Open Graph Meta Tags -->
 <meta property="og:title" content="
-    {{ request()->is('/') ? 'Indopop.id' : ($post->title ?? 'Indopop.id') }}
+    {{ request()->is('/') ? 'FTNews' : ($post->title ?? 'FTNews') }}
 ">
 <meta property="og:description" content="
-    {{ request()->is('/') ? 'Berita terkini dari kalangan selebritis ternama Tanah Air maupun Internasional. Disajikan dengan cepat, tepat, ringan.' : ($post->description ?? 'Berita terkini dari kalangan selebritis ternama Tanah Air maupun Internasional. Disajikan dengan cepat, tepat, ringan.') }}
+    {{ request()->is('/') ? 'FTNews - Berita terkini hari ini, nasional, hukum, politik, daerah, metropolitan, lifestyle, kesehatan' : ($post->description ?? 'FTNews - Berita terkini hari ini, nasional, hukum, politik, daerah, metropolitan, lifestyle, kesehatan') }}
 ">
 <meta property="og:image" content="
     {{
@@ -25,24 +25,24 @@
                     ? (filter_var($post->gambar[0], FILTER_VALIDATE_URL)
                         ? $post->gambar[0]
                         : asset('storage/' . $post->gambar[0]))
-                    : asset('images/share.jpg'))
+                    : 'https://ftnews.co.id/images/icon-ftnews.png')
                 : (filter_var($post->gambar, FILTER_VALIDATE_URL)
                     ? $post->gambar
                     : asset('storage/' . $post->gambar)))
-            : asset('images/share.jpg')
+            : 'https://ftnews.co.id/images/icon-ftnews.png'
     }}
 ">
 <meta property="og:url" content="{{ url()->current() }}">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Indopop.id">
+<meta property="og:site_name" content="FTNews">
 
 <!-- Twitter Card Meta Tags -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="
-    {{ request()->is('/') ? 'Indopop.id' : ($post->title ?? 'Indopop.id') }}
+    {{ request()->is('/') ? 'FTNews' : ($post->title ?? 'FTNews') }}
 ">
 <meta name="twitter:description" content="
-    {{ request()->is('/') ? 'Berita terkini dari kalangan selebritis ternama Tanah Air maupun Internasional. Disajikan dengan cepat, tepat, ringan.' : ($post->description ?? 'Berita terkini dari kalangan selebritis ternama Tanah Air maupun Internasional. Disajikan dengan cepat, tepat, ringan.') }}
+    {{ request()->is('/') ? 'FTNews - Berita terkini hari ini, nasional, hukum, politik, daerah, metropolitan, lifestyle, kesehatan' : ($post->description ?? 'FTNews - Berita terkini hari ini, nasional, hukum, politik, daerah, metropolitan, lifestyle, kesehatan') }}
 ">
 <meta name="twitter:image" content="
     {{
@@ -52,16 +52,18 @@
                     ? (filter_var($post->gambar[0], FILTER_VALIDATE_URL)
                         ? $post->gambar[0]
                         : asset('storage/' . $post->gambar[0]))
-                    : asset('images/share.jpg'))
+                    : 'https://ftnews.co.id/images/icon-ftnews.png')
                 : (filter_var($post->gambar, FILTER_VALIDATE_URL)
                     ? $post->gambar
                     : asset('storage/' . $post->gambar)))
-            : asset('images/share.jpg')
+            : 'https://ftnews.co.id/images/icon-ftnews.png'
     }}
 ">
 
 <!-- Favicon -->
-<link rel="apple-touch-icon" href="{{ asset('frontend/logo/favicon.png') }}">
-<link rel="shortcut icon" href="{{ asset('frontend/logo/favicon.png') }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('frontend/logo/favicon/apple-touch-icon.png') }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('frontend/logo/favicon/favicon-32x32.png') }}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('frontend/logo/favicon/favicon-16x16.png') }}">
+<link rel="manifest" href="{{ asset('frontend/logo/favicon/site.webmanifest') }}">
 
 <meta name="theme-color" content="#030303">

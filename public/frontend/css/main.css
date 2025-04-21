@@ -210,7 +210,7 @@ header-container {
     left: 0;
     right: 0;
     position: fixed;
-    background: linear-gradient(90deg, var(--primary-gradient));
+    background: var(--white-color);
     display: flex;
     align-items: center;
     height: 50px;
@@ -242,7 +242,7 @@ li:last-child.menu-item {
 }
 
 .menu-item a {
-    color: var(--white-color);
+    color: var(--black-color);
     font-weight: 300;
     text-decoration: none;
     position: relative;
@@ -257,7 +257,7 @@ li:last-child.menu-item {
     left: 50%;
     width: 0%;
     height: 2px;
-    background-color: var(--white-color);
+    background-color: var(--blue-primary);
     transition: all 0.3s ease;
     transform: translateX(-50%);
 }
@@ -332,14 +332,14 @@ li:last-child.menu-item {
     justify-content: center;
     padding: 8px;
     /* background: #E47388; */
-    color: var(--white-color);
+    color: var(--blue-primary);
     margin-left: 10px;
     border-radius: 50%;
     cursor: pointer;
 }
 
 .search-wrap svg {
-    color: var(--white-color);
+    color: var(--blue-primary);
 }
 
 .main-content {

@@ -17,7 +17,7 @@
 
         <div class="header-logo--wrap">
             <a href="/">
-                <img src="{{ asset('frontend/logo/logo.svg') }}" width="155" height="24" alt="Indopop.id"
+                <img src="{{ asset('frontend/logo/logo.png') }}" width="155" height="24" alt="Indopop.id"
                     class="logo">
             </a>
         </div>
@@ -43,11 +43,32 @@
                 <li class="menu-item {{ Request::is('/') ? 'active' : '' }}">
                     <a href="/">Home</a>
                 </li>
-                @foreach ($categories as $item)
-                    <li class="menu-item {{ Request::is('category/' . $item->slug) ? 'active' : '' }}">
-                        <a href="{{ route('kanal.desktop', ['slug' => $item->slug]) }}">{{ $item->nama_kategori }}</a>
-                    </li>
-                @endforeach
+                {{-- @foreach ($categories as $item) --}}
+                <li class="menu-item">
+                    <a href="{{ route('staticat.desktop') }}"
+                        class="">Nasional</a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{ route('staticat.desktop') }}"
+                        class="">Daerah</a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{ route('staticat.desktop') }}"
+                        class="">Lifestyle</a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{ route('staticat.desktop') }}"
+                        class="">Teknologi</a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{ route('staticat.desktop') }}"
+                        class="">Olahraga</a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{ route('staticat.desktop') }}"
+                        class="">Otomotif</a>
+                </li>
+                {{-- @endforeach --}}
                 <li class="menu-item">
                     <a href="https://www.youtube.com/@indopopid" target="_blank">Video</a>
                 </li>
@@ -114,12 +135,32 @@
             <li class="menu-item-scroll {{ Request::is('/') ? 'active' : '' }}">
                 <a href="/">Home</a>
             </li>
-            @foreach ($categories as $item)
-                <li class="menu-item-scroll {{ Request::is('category/' . $item->slug) ? 'active' : '' }}">
-                    <a href="{{ route('kanal.desktop', ['slug' => $item->slug]) }}"
-                        class="">{{ $item->nama_kategori }}</a>
+            {{-- @foreach ($categories as $item) --}}
+                <li class="menu-item-scroll">
+                    <a href="{{ route('staticat.desktop') }}"
+                        class="">Nasional</a>
                 </li>
-            @endforeach
+                <li class="menu-item-scroll">
+                    <a href="{{ route('staticat.desktop') }}"
+                        class="">Daerah</a>
+                </li>
+                <li class="menu-item-scroll">
+                    <a href="{{ route('staticat.desktop') }}"
+                        class="">Lifestyle</a>
+                </li>
+                <li class="menu-item-scroll">
+                    <a href="{{ route('staticat.desktop') }}"
+                        class="">Teknologi</a>
+                </li>
+                <li class="menu-item-scroll">
+                    <a href="{{ route('staticat.desktop') }}"
+                        class="">Olahraga</a>
+                </li>
+                <li class="menu-item-scroll">
+                    <a href="{{ route('staticat.desktop') }}"
+                        class="">Otomotif</a>
+                </li>
+            {{-- @endforeach --}}
             <li class="menu-item-scroll">
                 <a href="https://www.youtube.com/@indopopid" target="_blank">Video</a>
             </li>

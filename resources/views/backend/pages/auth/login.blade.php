@@ -14,7 +14,7 @@
                 <div class="container container-tight my-5 px-lg-5">
                     <div class="text-center mb-4">
                         <a href="#" class="navbar-brand">
-                            <img src="{{ asset('backend/images/logo/favicon.png') }}"
+                            <img src="{{ asset('backend/images/logo/logo.png') }}"
                                 style="max-height: 50px; max-width: 100%;" alt="Botble Technologies">
                         </a>
                     </div>
@@ -86,7 +86,7 @@
             </div>
             <div class="position-relative col-12 col-lg-6 col-xl-8 d-none d-lg-block">
                 <div class="bg-cover bg-white h-100 min-vh-100"
-                    style="background-image: url('{{ asset('backend/images/indopop.id.jpg') }}')">
+                    style="background-image: url('{{ asset('backend/images/ftnews.png') }}')">
                 </div>
                 <div class="end-0 bottom-0 position-absolute">
                     <div class="text-white me-5 mb-4">

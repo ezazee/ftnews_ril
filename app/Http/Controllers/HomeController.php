@@ -417,7 +417,7 @@ class HomeController extends Controller
     public function staticat(){
 
         if ($this->agent->isMobile()) {
-            return view('frontend.mobile.pages.staticat');
+            return view('frontend.mobile.pages.kanal');
         } else {
             return view('frontend.dekstop.pages.kanal');
         }

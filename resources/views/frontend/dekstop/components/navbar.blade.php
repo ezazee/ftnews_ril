@@ -3,7 +3,7 @@
         <div class="header-container">
             <div class="logo-wrap">
                 <a href="/">
-                    <img alt="Indopop.id" width="120" height="30" src="{{ asset('frontend/logo/logo.svg') }}" />
+                    <img alt="FTNews" width="90" height="30" src="{{ asset('frontend/logo/logo.png') }}" />
                 </a>
             </div>
             <div class="fr">
