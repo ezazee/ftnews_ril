@@ -39,13 +39,15 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
-                        <form method="POST" action="{{ route('category.add') }}">
+                        <form method="POST" action="{{ route('subcateg.update', ['id' => $category->id]) }}">
                             @csrf
+                            @method('PUT')
                             <div class="mb-3 position-relative">
                                 <label for="name" class="form-label">Name</label>
                                 <input id="nama_kategori" class="form-control" data-counter="250" placeholder="Name"
                                     name="nama_kategori" type="text" value="{{ $category->nama_sub_kategori }}">
                             </div>
+                            <input type="hidden" name="parent_id" value="{{ $category->category_id }}">
                             <div class="mb-3">
                                 <div class="slug-field-wrapper">
                                     <div class="mb-3 position-relative">

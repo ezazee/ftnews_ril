@@ -76,17 +76,17 @@ class BlogController extends Controller
     }
 
     public function PostAdd(Request $request) {
-        $validatedData = $request->validate([
-            'short_description' => 'nullable|string',
-            'content' => 'required|string',
-            'headline' => 'nullable|string|in:yes,no',
-            'banner_image' => 'required|url',
-        ]);
+            // $validatedData = $request->validate([
+            //     'content' => 'required|string',
+            //     'headline' => 'nullable|string|in:yes,no',
+            //     'gambar' => 'required|url',
+            // ]);
+
+            // dd($request);
 
             $post = Post::create([
                 'title' => $request->input('title'),
                 'slug' => Str::slug($request->input('title')),
-                'short_description' => $request->input('short_description'),
                 'image_caption' => $request->input('image_caption'),
                 'content' => $request->input('content'),
                 'keyword' => $request->input('seo_meta.seo_title'),
@@ -95,7 +95,8 @@ class BlogController extends Controller
                 'start_time' => \Carbon\Carbon::parse($request->input('scheduled_time'))->format('H:i'),
                 'status' => $request->input('status'),
                 'headline' => $request->input('headline', 'no'),
-                'kategori_id' => $request->input('categories'),
+                'kategori_id' => $request->input('categories')[0] ?? null,
+                'sub_category_id' => $request->input('subcategories')[0] ?? null,
                 'gambar' => $request->input('banner_image'),
                 'user_id' => Auth::id(),
             ]);
@@ -196,12 +197,10 @@ class BlogController extends Controller
 
 
     public function PostUpdate(Request $request, $id) {
-        // dd($request);
         $post = Post::findOrFail($id);
 
         $post->update([
             'title' => $request->input('title'),
-            'short_description' => $request->input('short_description'),
             'content' => $request->input('content'),
             'image_caption' => $request->input('image_caption'),
             'keyword' => $request->input('seo_meta.seo_title'),
@@ -210,7 +209,8 @@ class BlogController extends Controller
             'start_time' => \Carbon\Carbon::parse($request->input('scheduled_time'))->format('H:i'),
             'status' => $request->input('status'),
             'headline' => $request->input('headline', 'no'),
-            'kategori_id' => $request->input('categories'),
+            'kategori_id' => $request->input('categories')[0] ?? null,
+            'sub_category_id' => $request->input('subcategories')[0] ?? null,
             'gambar' => $request->input('banner_image'),
         ]);
 

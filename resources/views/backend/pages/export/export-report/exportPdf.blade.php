@@ -35,7 +35,7 @@
             <tr>
                 <td>{{ $user['name'] }}</td>
                 <td>{{ $user['email'] }}</td>
-                <td>{{ $user['role']['name'] ?? 'N/A' }}</td> <!-- Access role name from the 'role' array -->
+                <td>{{ $user['role'] }}</td> <!-- Access role name from the 'role' array -->
                 <td>{{ $user['posts_count'] }}</td>
             </tr>
         @endforeach           

@@ -6,6 +6,7 @@ use Jenssegers\Agent\Agent;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Models\Categori;
+use App\Models\SubCategory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -23,13 +24,13 @@ class HomeController extends Controller
     {
         $usedPostIds = [];
 
-        $postheadline = Post::with('kategori', 'user')
+        $postheadline = Post::with('kategori', 'subCategory', 'user')
         ->where('headline', 'yes')
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->whereNotIn('id', $usedPostIds)
         ->orderBy('id', 'desc')
         ->take(15)
-        ->get();
+        ->get();    
 
         $topPostheadline = $postheadline->shift();
 
@@ -41,50 +42,26 @@ class HomeController extends Controller
             $usedPostIds[] = $topPostheadline->id;
         }
 
-        // if ($otherPostsheadline){
-        //     $usedPostIds[] = $otherPostsheadline->id;
-        // }
-
         $postTerkini = Post::with('kategori', 'user')
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->latest()
         ->take(5)
         ->get();
 
         $postTerpopuler = Post::with('kategori', 'user')
-        ->where('status', 'publish')
-        // ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
-        // ->where('created_at')
+        ->where('status', 'public')
         ->orderBy('view', 'desc')
         ->take(5)
         ->get();
 
-
-        // dd($postTerpopuler);
-        // if ($postTerpopuler->isEmpty()) {
-        //     $weekCounter = 1;
-        //     while ($postTerpopuler->isEmpty() && $weekCounter <= 4) {
-        //         $postTerpopuler = Post::with('kategori', 'user')
-        //             ->where('status', 'publish')
-        //             ->whereBetween('created_at', [
-        //                 Carbon::now()->subWeeks($weekCounter)->startOfWeek(),
-        //                 Carbon::now()->subWeeks($weekCounter)->endOfWeek()
-        //             ])
-        //             ->orderBy('view', 'desc')
-        //             ->take(5)
-        //             ->get();
-
-        //         $weekCounter++;
-        //     }
-        // }
-
         $getPostByCategory = function($categoryName, $limit = 6) use (&$usedPostIds) {
-            $posts = Post::with('kategori', 'user')
+            $posts = Post::with('kategori','user')
                 ->whereHas('kategori', function ($query) use ($categoryName) {
                     $query->where('nama_kategori', $categoryName);
                 })
                 ->whereNotIn('id', $usedPostIds)
-                ->where('status', 'publish')
+                ->where('sub_category_id', NULL)
+                ->where('status', 'public')
                 ->latest()
                 ->take($limit)
                 ->get();
@@ -93,40 +70,44 @@ class HomeController extends Controller
             return $posts;
         };
 
-       //kategori
-        $postDangdut = $getPostByCategory('Dangdut', 5);
-        $postFlexing = $getPostByCategory('Flexing', 5);
-        $postGosip = $getPostByCategory('Gosip', 5);
-        $postKPop = $getPostByCategory('K-POP', 5);
-        $postVibes = $getPostByCategory('Vibes', 5);
-        $postMeandmom = $getPostByCategory('Me and Moms', 5);
+        $postsByCategory = [];
+        
 
-        // data Dangdut
-        $topPostDangdut = $postDangdut->shift();
-        $otherPostsDangdut = $postDangdut;
+        $categoriesAll = Categori::pluck('nama_kategori');
+        //kategori
+        $postNasional = $getPostByCategory('Nasional', 5);
+        $postDaerah = $getPostByCategory('Daerah', 5);
+        $postLifestyle = $getPostByCategory('Lifestyle', 5);
+        $postTeknologi = $getPostByCategory('Teknologi', 5);
+        $postOlahraga = $getPostByCategory('Olahraga', 5);
+        $postOtomotif = $getPostByCategory('Otomotif', 5);
 
-        // data Flexing
-        $topPostFlexing = $postFlexing->shift();
-        $otherPostsFlexing = $postFlexing;
+        // data Nasional
+        $topPostNasional = $postNasional->shift();
+        $otherPostsNasional = $postNasional;
 
-        // data Gosip
-        $topPostGosip = $postGosip->shift();
-        $otherPostsGosip = $postGosip;
+        // data Daerah
+        $topPostDaerah = $postDaerah->shift();
+        $otherPostsDaerah = $postDaerah;
 
-        // data KPop
-        $topPostKPop = $postKPop->shift();
-        $otherPostsKPop = $postKPop;
+        // data Lifestyle
+        $topPostLifestyle = $postLifestyle->shift();
+        $otherPostsLifestyle = $postLifestyle;
 
-        // data Vibes
-        $topPostVibes = $postVibes->shift();
-        $otherPostsVibes = $postVibes;
+        // data Teknologi
+        $topPostTeknologi = $postTeknologi->shift();
+        $otherPostsTeknologi = $postTeknologi;
 
-        // data Meandmom
-        $topPostMeandmom = $postMeandmom->shift();
-        $otherPostsMeandmom = $postMeandmom;
-        // dd($otherPostsFlexing,$topPostGosip);
+        // data Olahraga
+        $topPostOlahraga = $postOlahraga->shift();
+        $otherPostsOlahraga = $postOlahraga;
 
-        $collections = [$otherPostsheadline,$topPostheadline,$postDangdut, $topPostDangdut, $otherPostsDangdut, $topPostFlexing, $otherPostsFlexing, $topPostGosip, $otherPostsGosip, $topPostKPop, $otherPostsKPop, $topPostVibes, $otherPostsVibes, $topPostMeandmom, $otherPostsMeandmom, $postTerkini, $postTerpopuler];
+        // data Otomotif
+        $topPostOtomotif = $postOtomotif->shift();
+        $otherPostsOtomotif = $postOtomotif;
+        // dd($otherPostsDaerah,$topPostLifestyle);
+
+        $collections = [$otherPostsheadline,$topPostheadline,$postNasional, $topPostNasional, $otherPostsNasional, $topPostDaerah, $otherPostsDaerah, $topPostLifestyle, $otherPostsLifestyle, $topPostTeknologi, $otherPostsTeknologi, $topPostOlahraga, $otherPostsOlahraga, $topPostOtomotif, $otherPostsOtomotif, $postTerkini, $postTerpopuler];
 
         foreach ($collections as &$collection) {
             if (empty($collection)) {
@@ -143,13 +124,12 @@ class HomeController extends Controller
         unset($collection);
 
 
-        // dd($postDangdut);
         if ($this->agent->isMobile()) {
-            return view('frontend.mobile.mobile', compact('otherPostsheadline','topPostheadline','postTerkini','postTerpopuler','topPostDangdut','otherPostsDangdut','topPostFlexing','otherPostsFlexing','topPostGosip','otherPostsGosip','topPostKPop','otherPostsKPop','topPostVibes','otherPostsVibes','topPostMeandmom','otherPostsMeandmom'))->with([
+            return view('frontend.mobile.mobile', compact('otherPostsheadline','topPostheadline','postTerkini','postTerpopuler','topPostNasional','otherPostsNasional','topPostDaerah','otherPostsDaerah','topPostLifestyle','otherPostsLifestyle','topPostTeknologi','otherPostsTeknologi','topPostOlahraga','otherPostsOlahraga','topPostOtomotif','otherPostsOtomotif'))->with([
                 'content' => 'frontend.mobile.pages.index',
             ]);
         } else {
-            return view('frontend.dekstop.dekstop', compact('otherPostsheadline','topPostheadline','postTerkini','postTerpopuler','topPostDangdut','otherPostsDangdut','topPostFlexing','otherPostsFlexing','topPostGosip','otherPostsGosip','topPostKPop','otherPostsKPop','topPostVibes','otherPostsVibes','topPostMeandmom','otherPostsMeandmom'))->with([
+            return view('frontend.dekstop.dekstop', compact('otherPostsheadline','topPostheadline','postTerkini','postTerpopuler','topPostNasional','otherPostsNasional','topPostDaerah','otherPostsDaerah','topPostLifestyle','otherPostsLifestyle','topPostTeknologi','otherPostsTeknologi','topPostOlahraga','otherPostsOlahraga','topPostOtomotif','otherPostsOtomotif'))->with([
                 'content' => 'frontend.desktop.pages.index',
             ]);
         }
@@ -158,16 +138,16 @@ class HomeController extends Controller
 
     public function detail($slug)
     {
-        $post = Post::with(['kategori', 'user'])->where('slug', $slug)->where('status', 'publish')->firstOrFail();
+        $post = Post::with(['kategori','subCategory','user'])->where('slug', $slug)->where('status', 'public')->firstOrFail();
 
         $postTerkini = Post::with('kategori', 'user')
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->latest()
         ->take(5)
         ->get();
 
         $postTerkiniBottom = Post::with('kategori', 'user')
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->latest()
         ->take(20)
         ->get();
@@ -176,14 +156,14 @@ class HomeController extends Controller
 
         $relatedPosts = Post::with(['kategori', 'user'])
         ->where('kategori_id', $kategoriId)
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->where('id', '!=', $post->id)
         ->take(5)
         ->get();
 
 
         // $postTerpopuler = Post::with('kategori', 'user')
-        // ->where('status', 'publish')
+        // ->where('status', 'public')
         // ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
         // ->orderBy('view', 'desc')
         // ->take(5)
@@ -193,7 +173,7 @@ class HomeController extends Controller
         //     $weekCounter = 1;
         //     while ($postTerpopuler->isEmpty() && $weekCounter <= 4) {
         //         $postTerpopuler = Post::with('kategori', 'user')
-        //             ->where('status', 'publish')
+        //             ->where('status', 'public')
         //             ->whereBetween('created_at', [
         //                 Carbon::now()->subWeeks($weekCounter)->startOfWeek(),
         //                 Carbon::now()->subWeeks($weekCounter)->endOfWeek()
@@ -207,7 +187,7 @@ class HomeController extends Controller
         // }
 
         $postTerpopuler = Post::with('kategori', 'user')
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->orderBy('view', 'desc')
         ->take(5)
         ->get();
@@ -234,13 +214,13 @@ class HomeController extends Controller
     public function redaksi()
     {
         $postTerkini = Post::with('kategori', 'user')
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->latest()
         ->take(5)
         ->get();
 
         $postTerpopuler = Post::with('kategori', 'user')
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->orderBy('view', 'desc')
         ->take(5)
         ->get();
@@ -265,13 +245,13 @@ class HomeController extends Controller
     {
 
         $postTerkini = Post::with('kategori', 'user')
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->latest()
         ->take(5)
         ->get();
 
         $postTerpopuler = Post::with('kategori', 'user')
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->orderBy('view', 'desc')
         ->take(5)
         ->get();
@@ -295,13 +275,13 @@ class HomeController extends Controller
     {
 
         $postTerkini = Post::with('kategori', 'user')
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->latest()
         ->take(5)
         ->get();
 
         $postTerpopuler = Post::with('kategori', 'user')
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->orderBy('view', 'desc')
         ->take(5)
         ->get();
@@ -324,13 +304,13 @@ class HomeController extends Controller
     public function visiMisi()
     {
         $postTerkini = Post::with('kategori', 'user')
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->latest()
         ->take(5)
         ->get();
 
         $postTerpopuler = Post::with('kategori', 'user')
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->orderBy('view', 'desc')
         ->take(5)
         ->get();
@@ -354,13 +334,13 @@ class HomeController extends Controller
     {
 
         $postTerkini = Post::with('kategori', 'user')
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->latest()
         ->take(5)
         ->get();
 
         $postTerpopuler = Post::with('kategori', 'user')
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->orderBy('view', 'desc')
         ->take(5)
         ->get();
@@ -383,17 +363,19 @@ class HomeController extends Controller
     {
         $category = Categori::where('slug', $slug)->firstOrFail();
         $postQuery = Post::with('kategori', 'user')->where('kategori_id', $category->id);
-        $post = $postQuery->where('status', 'publish')->orderBy('created_at', 'desc')->latest()->paginate(25);
+        $post = $postQuery->where('status', 'public')
+                ->where('sub_category_id', NULL)
+                ->orderBy('created_at', 'desc')->latest()->paginate(25);
 
         // dd($category);
         $postTerkini = Post::with('kategori', 'user')
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->latest()
         ->take(5)
         ->get();
 
         $postTerpopuler = Post::with('kategori', 'user')
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->orderBy('view', 'desc')
         ->take(5)
         ->get();
@@ -414,6 +396,44 @@ class HomeController extends Controller
         }
     }
 
+    public function subcateg($categ,$subcateg){
+
+        $category = SubCategory::whereHas('category', function ($query) use ($categ) {
+            $query->where('slug', $categ);
+        })->where('slug', $subcateg)->firstOrFail();
+    
+
+        $postQuery = Post::with('kategori', 'user')->where('sub_category_id', $category->id);
+        $post = $postQuery->where('status', 'public')->orderBy('created_at', 'desc')->latest()->paginate(25);
+
+        $postTerkini = Post::with('kategori', 'user')
+        ->where('status', 'public')
+        ->latest()
+        ->take(5)
+        ->get();
+
+        $postTerpopuler = Post::with('kategori', 'user')
+        ->where('status', 'public')
+        ->orderBy('view', 'desc')
+        ->take(5)
+        ->get();
+
+        $allPosts = collect([$post->items(), $postTerpopuler, $postTerkini])->flatten();
+
+        foreach ($allPosts as $singlePost) {
+            if ($singlePost->gambar) {
+                $singlePost->gambar = explode('|', $singlePost->gambar);
+            }
+        }
+
+
+        if ($this->agent->isMobile()) {
+            return view('frontend.mobile.pages.subkanal',compact('category','post','postTerkini','postTerpopuler', 'allPosts'));
+        } else {
+            return view('frontend.dekstop.pages.subkanal',compact('category','post','postTerkini','postTerpopuler',));
+        }
+    }
+
     public function staticat(){
 
         if ($this->agent->isMobile()) {
@@ -426,18 +446,18 @@ class HomeController extends Controller
     public function byIndex()
     {
         $postTerkini = Post::with('kategori', 'user')
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->latest()
         ->take(5)
         ->get();
 
         $postTerpopuler = Post::with('kategori', 'user')
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->orderBy('view', 'desc')
         ->take(5)
         ->get();
 
-        $post = Post::where('status', 'publish')
+        $post = Post::where('status', 'public')
         ->orderBy('created_at', 'desc')
         ->paginate(17);
 
@@ -458,16 +478,16 @@ class HomeController extends Controller
 
     public function byTag($slug){
         $tag = Tag::where('slug', $slug)->firstOrFail();
-        $post = $tag->posts()->where('status', 'publish')->orderBy('created_at', 'desc')->paginate(17);
+        $post = $tag->posts()->where('status', 'public')->orderBy('created_at', 'desc')->paginate(17);
 
         $postTerkini = Post::with('kategori', 'user')
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->latest()
         ->take(5)
         ->get();
 
         $postTerpopuler = Post::with('kategori', 'user')
-        ->where('status', 'publish')
+        ->where('status', 'public')
         ->orderBy('view', 'desc')
         ->take(5)
         ->get();
@@ -497,7 +517,7 @@ class HomeController extends Controller
         }
 
         $posts = Post::with(['kategori', 'user', 'tags'])
-            ->where('status', 'publish')
+            ->where('status', 'public')
             ->where(function ($q) use ($query) {
                 $q->where('title', 'ILIKE', "%{$query}%")
                   ->orWhereHas('kategori', function ($q) use ($query) {
@@ -511,13 +531,13 @@ class HomeController extends Controller
             ->paginate(25);
 
             $postTerkini = Post::with('kategori', 'user')
-            ->where('status', 'publish')
+            ->where('status', 'public')
             ->latest()
             ->take(5)
             ->get();
 
             $postTerpopuler = Post::with('kategori', 'user')
-            ->where('status', 'publish')
+            ->where('status', 'public')
             ->orderBy('view', 'desc')
             ->take(5)
             ->get();

@@ -45,27 +45,27 @@
                 </li>
                 {{-- @foreach ($categories as $item) --}}
                 <li class="menu-item">
-                    <a href="{{ route('staticat.desktop') }}"
+                    <a href="LINK"
                         class="">Nasional</a>
                 </li>
                 <li class="menu-item">
-                    <a href="{{ route('staticat.desktop') }}"
+                    <a href="LINK"
                         class="">Daerah</a>
                 </li>
                 <li class="menu-item">
-                    <a href="{{ route('staticat.desktop') }}"
+                    <a href="LINK"
                         class="">Lifestyle</a>
                 </li>
                 <li class="menu-item">
-                    <a href="{{ route('staticat.desktop') }}"
+                    <a href="LINK"
                         class="">Teknologi</a>
                 </li>
                 <li class="menu-item">
-                    <a href="{{ route('staticat.desktop') }}"
+                    <a href="LINK"
                         class="">Olahraga</a>
                 </li>
                 <li class="menu-item">
-                    <a href="{{ route('staticat.desktop') }}"
+                    <a href="LINK"
                         class="">Otomotif</a>
                 </li>
                 {{-- @endforeach --}}
@@ -137,27 +137,27 @@
             </li>
             {{-- @foreach ($categories as $item) --}}
                 <li class="menu-item-scroll">
-                    <a href="{{ route('staticat.desktop') }}"
+                    <a href="LINK"
                         class="">Nasional</a>
                 </li>
                 <li class="menu-item-scroll">
-                    <a href="{{ route('staticat.desktop') }}"
+                    <a href="LINK"
                         class="">Daerah</a>
                 </li>
                 <li class="menu-item-scroll">
-                    <a href="{{ route('staticat.desktop') }}"
+                    <a href="LINK"
                         class="">Lifestyle</a>
                 </li>
                 <li class="menu-item-scroll">
-                    <a href="{{ route('staticat.desktop') }}"
+                    <a href="LINK"
                         class="">Teknologi</a>
                 </li>
                 <li class="menu-item-scroll">
-                    <a href="{{ route('staticat.desktop') }}"
+                    <a href="LINK"
                         class="">Olahraga</a>
                 </li>
                 <li class="menu-item-scroll">
-                    <a href="{{ route('staticat.desktop') }}"
+                    <a href="LINK"
                         class="">Otomotif</a>
                 </li>
             {{-- @endforeach --}}

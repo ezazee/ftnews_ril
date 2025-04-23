@@ -118,7 +118,7 @@
                                 Posts
                             </span>
                         </a>
-                        @if(Auth::check() && Auth::user()->role && Auth::user()->role->name == 'Administrator')
+                        @if(Auth::check() && Auth::user()->role == 'admin')
                         <a class="dropdown-item nav-priority-20 {{ Request::is('dashboard/blog/category*') ? 'active' : '' }}"
                             href="{{ route('category.create') }}" id="cms-plugins-blog-categories" title="Categories">
                             <span class="nav-link-icon d-md-none d-lg-inline-block" title="Categories">
@@ -153,7 +153,7 @@
                         </a>
                     </div>
                 </li>
-                @if(Auth::check() && Auth::user()->role && Auth::user()->role->name == 'Administrator')
+                @if(Auth::check() && Auth::user()->role == 'admin')
                 <li
                     class="nav-item {{ Request::is('dashboard/member') || Request::is('dashboard/member/create') || Request::is('dashboard/member/edit/*') ? 'active' : '' }}">
                     <a class="nav-link nav-priority-50" href="{{ route('member.index') }}" id="cms-core-member"
@@ -192,7 +192,7 @@
                         </span>
                     </a>
                 </li>
-                @if(Auth::check() && Auth::user()->role && Auth::user()->role->name == 'Administrator')
+                @if(Auth::check() && Auth::user()->role == 'admin')
                 <li class="nav-item dropdown {{ Request::is('dashboard/export*') ? 'active' : '' }}">
                     <a class="nav-link dropdown-toggle nav-priority-3" href="#cms-plugins-blog" id="cms-plugins-blog"
                         data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false"
@@ -273,46 +273,7 @@
                             Settings
                         </span>
                     </a>
-                    <div
-                        class="dropdown-menu animate slideIn dropdown-menu-start {{ Request::is('dashboard/settings*') ? 'show' : '' }}">
-                        <a class="dropdown-item nav-priority-10 {{ Request::is('dashboard/settings/google-tag*') ? 'active' : '' }}"
-                            href="{{ route('settings.googletag') }}" id="cms-plugins-blog-post" title="Posts">
-                            <span class="nav-link-icon d-md-none d-lg-inline-block" title="Posts">
-                                <svg class="icon  svg-icon-ti-ti-world" xmlns="http://www.w3.org/2000/svg" width="24"
-                                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
-                                    <path d="M3.6 9h16.8" />
-                                    <path d="M3.6 15h16.8" />
-                                    <path d="M11.5 3a17 17 0 0 0 0 18" />
-                                    <path d="M12.5 3a17 17 0 0 1 0 18" />
-                                </svg>
-                            </span>
-                            <span class="nav-link-title text-truncate">
-                                Google Tag
-                            </span>
-                        </a>
-                        <a class="dropdown-item nav-priority-20 {{ Request::is('dashboard/settings/annalyics*') ? 'active' : '' }}"
-                            href="{{ route('settings.annalytic') }}" id="cms-plugins-blog-categories"
-                            title="Categories">
-                            <span class="nav-link-icon d-md-none d-lg-inline-block" title="Categories">
-                                <svg class="icon  svg-icon-ti-ti-brand-google-analytics"
-                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path
-                                        d="M10 9m0 1.105a1.105 1.105 0 0 1 1.105 -1.105h1.79a1.105 1.105 0 0 1 1.105 1.105v9.79a1.105 1.105 0 0 1 -1.105 1.105h-1.79a1.105 1.105 0 0 1 -1.105 -1.105z" />
-                                    <path
-                                        d="M17 3m0 1.105a1.105 1.105 0 0 1 1.105 -1.105h1.79a1.105 1.105 0 0 1 1.105 1.105v15.79a1.105 1.105 0 0 1 -1.105 1.105h-1.79a1.105 1.105 0 0 1 -1.105 -1.105z" />
-                                    <path d="M5 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-                                </svg>
-                            </span>
-                            <span class="nav-link-title text-truncate">
-                                Annalyics
-                            </span>
-                        </a>
+                    <div class="dropdown-menu animate slideIn dropdown-menu-start {{ Request::is('dashboard/settings*') ? 'show' : '' }}">
                         <a class="dropdown-item nav-priority-20 {{ Request::is('dashboard/settings/member-dashboard*') ? 'active' : '' }}"
                             href="{{ route('settings.memberDashboard') }}" id="cms-plugins-blog-categories"
                             title="Categories">

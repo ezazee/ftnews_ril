@@ -49,7 +49,6 @@
                                                 id="filter_columns[]">
                                                 <option value="username">Username</option>
                                                 <option value="email">Email</option>
-                                                <option value="status">Status</option>
                                                 <option value="created_at">Created At</option>
                                             </select>
                                         </div>
@@ -97,9 +96,7 @@
                                                 <select class="form-select filter-column-key" name="filter_columns[]" required>
                                                     <option value="" selected>Select field</option>
                                                     <option value="name">Name</option>
-                                                    <option value="role">Role</option>
                                                     <option value="email">Email</option>
-                                                    <option value="status">Status</option>
                                                     <option value="created_at">Created At</option>
                                                 </select>
                                             </div>
@@ -218,8 +215,6 @@
                                         <th title="Created At" width="100" class=" column-key-3">
                                             Created At
                                         </th>
-                                        <th title="Status" width="100" class=" column-key-4">Status
-                                        </th>
                                         <th class="text-center" title="Operations">Operations</th>
                                     </tr>
                                 </thead>
@@ -238,12 +233,10 @@
                                         <td class="  text-start  column-key-1"><a
                                                 href="mailto:{{ $item->email }}">{{ $item->email }}</a></td>
                                         <td class="   column-key-2">
-                                                {{ $item->role->name }}
+                                                {{ $item->role }}
                                             </a>
                                         </td>
                                         <td class="column-key-3">{{ date('Y-m-d', strtotime($item->created_at)) }}</td>
-                                        <td class="column-key-4"><span
-                                                class="badge bg-info text-info-fg">{{ $item->status }}</span></td>
                                         <td class="  text-center no-column-visibility text-nowrap">
                                             <div class="table-actions">
                                                 <a href="{{ route('settings.editMemberDashboard', ['id' => $item->id ]) }}"

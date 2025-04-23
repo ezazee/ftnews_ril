@@ -52,14 +52,8 @@
                                 <div class="row row-cols-lg-2">
                                     <div class="col-lg-6">
                                         <div class="mb-3 position-relative">
-                                            <label for="first_name" class="form-label">First Name</label>
-                                            <input class="form-control" data-counter="120" name="first_name" type="text" value="{{ $member->first_name }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3 position-relative">
-                                            <label for="last_name" class="form-label ">Last Name</label>
-                                            <input class="form-control" data-counter="120" name="last_name" type="text" value="{{ $member->last_name }} ">
+                                            <label for="first_name" class="form-label">Fullname</label>
+                                            <input class="form-control" data-counter="120" name="name" type="text" value="{{ $member->name }}">
                                         </div>
                                     </div>
 
@@ -68,24 +62,6 @@
                                             <label for="email" class="form-label ">Email</label>
                                             <input class="form-control" data-counter="60"
                                                 placeholder="e.g: example@domain.com" name="email" type="text" value="{{ $member->email }}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-6">
-                                        <div class="mb-3 position-relative">
-                                            <label for="phone" class="form-label">Phone</label>
-                                            <input class="form-control" data-counter="15"
-                                                placeholder="Phone" name="phone" type="text"  value="{{ $member->phone }}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-12">
-                                        <div class="mb-3 position-relative">
-                                            <label for="description"
-                                                class="form-label">Description</label>
-                                            <textarea class="form-control" data-counter="400" rows="4"
-                                                placeholder="Short description" name="description"
-                                                cols="50" value="{{ $member->description }}"></textarea>
                                         </div>
                                     </div>
 
@@ -157,28 +133,14 @@
                     <div class="card meta-boxes">
                         <div class="card-header">
                             <h4 class="card-title">
-                                <label for="status" class="form-label required">Status</label>
-                            </h4>
-                        </div>
-
-                        <div class="card-body">
-                            <select class="form-control form-select" name="status">
-                                <option value="active" {{ $member->status == 'active' ? 'selected' : '' }}>Active</option>
-                                <option value="block" {{ $member->status == 'block' ? 'selected' : '' }}>Block</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="card meta-boxes">
-                        <div class="card-header">
-                            <h4 class="card-title">
                                 <label for="status" class="form-label required">Role</label>
                             </h4>
                         </div>
 
                         <div class="card-body">
                             <select class="form-control form-select" name="role">
-                                <option value="1" {{ $member->role->name == 'Editor' ? 'selected' : '' }}>Editor</option>
-                                <option value="2" {{ $member->role->name== 'Administrator' ? 'selected' : '' }}>Administrator</option>
+                                <option value="author" {{ $member->role == 'author' ? 'selected' : '' }}>Editor</option>
+                                <option value="admin" {{ $member->role== 'admin' ? 'selected' : '' }}>Administrator</option>
                             </select>
                         </div>
                     </div>

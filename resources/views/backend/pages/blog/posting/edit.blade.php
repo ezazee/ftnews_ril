@@ -62,11 +62,6 @@
                                         </div>
                                     </div>
                                     <div class="mb-3 position-relative">
-                                        <label for="description" class="form-label">Description</label>
-                                        <textarea class="form-control" data-counter="400" rows="4"
-                                            placeholder="Short description" name="short_description" value="{{ $post->short_description }}" cols="50">{{ $post->short_description }}</textarea>
-                                    </div>
-                                    <div class="mb-3 position-relative">
                                         <label for="content" class="form-label">Content</label>
                                         <textarea class="form-control form-control editor-ckeditor ays-ignore"
                                             data-counter="100000" rows="4" placeholder="Write your content"
@@ -259,7 +254,7 @@
                         </div>
                         <div class="card-body">
                             <select class="form-control form-select" id="status" name="status">
-                                <option value="publish" {{ $post->status == 'publish' ? 'selected' : '' }}>Published
+                                <option value="public" {{ $post->status == 'public' ? 'selected' : '' }}>Published
                                 </option>
                                 <option value="schedule" {{ $post->status == 'schedule' ? 'selected' : '' }}>Scheduled
                                 </option>
@@ -284,14 +279,16 @@
                             </h4>
                         </div>
                         <div class="card-body">
-                            <div class="position-relative">
-                                <label class="form-check form-switch ">
-                                    <input name="is_featured" type="hidden" value="0" />
-                                    <input class="form-check-input" name="is_featured" type="checkbox" value="1"
-                                        id="is_featured" {{ $post->headline ? 'checked' : '' }}>
+                            <div class="card-body">
+                                <div class="position-relative">
+                                <label class="form-check form-switch">
+                                    <input name="headline" type="hidden" value="no" />
+                                    <input class="form-check-input" name="headline" type="checkbox" value="yes"
+                                    {{ $post->headline === 'yes' ? 'checked' : '' }}>
                                     <span class="form-check-label">Is headline?</span>
                                 </label>
-                            </div>
+                                </div>
+                            </div>                     
                         </div>
                     </div>
                     <div class="card meta-boxes">
@@ -306,25 +303,34 @@
                                     @foreach ($category as $item)
                                     <li>
                                         <label class="form-check">
-                                            <input type="checkbox" id="category-{{ $item->id }}" name="categories" class="form-check-input category-checkbox" value="{{ $item->id }}" {{ $post->kategori->id == $item->id ? 'checked' : '' }} onchange="toggleCategorySelection(this)">
-                                            <span class="form-check-label">
-                                                {{ $item->nama_kategori }}
-                                            </span>
+                                            <input type="checkbox" 
+                                                id="category-{{ $item->id }}" 
+                                                name="categories[]" 
+                                                class="form-check-input category-checkbox"
+                                                value="{{ $item->id }}"
+                                                onchange="toggleCategorySelection(this, {{ $item->id }})"
+                                                {{ $post->kategori && $post->kategori->id === $item->id ? 'checked' : '' }}>
+                                            <span class="form-check-label">{{ $item->nama_kategori }}</span>
                                         </label>
+                                
                                         <ul class="list-unstyled ms-4 mt-2">
                                             @foreach ($item->subCategories as $subItem)
                                             <li>
                                                 <label class="form-check">
-                                                    <input type="checkbox" id="subcategory-{{ $subItem->id }}" name="subcategories[]" class="form-check-input subcategory-checkbox" value="{{ $subItem->id }}" onchange="toggleSubCategorySelection(this)">
-                                                    <span class="form-check-label">
-                                                        {{ $subItem->nama_sub_kategori }}
-                                                    </span>
+                                                    <input type="checkbox" 
+                                                        id="subcategory-{{ $subItem->id }}" 
+                                                        name="subcategories[]" 
+                                                        value="{{ $subItem->id }}"
+                                                        class="form-check-input subcategory-checkbox sub-of-{{ $item->id }}"
+                                                        {{ $post->subCategory && $post->subCategory->id === $subItem->id ? 'checked' : '' }}
+                                                        {{ $post->kategori && $post->kategori->id === $item->id ? '' : 'disabled' }}>
+                                                    <span class="form-check-label">{{ $subItem->nama_sub_kategori }}</span>
                                                 </label>
                                             </li>
                                             @endforeach
                                         </ul>
                                     </li>
-                                    @endforeach
+                                @endforeach                                                               
                                 </ul>
                             </div>
                         </div>
@@ -488,45 +494,20 @@
 </script>
 
 <script>
-    function toggleCategorySelection(selectedCategory) {
-        let categoryCheckboxes = document.querySelectorAll('.category-checkbox');
-        categoryCheckboxes.forEach(function (checkbox) {
-            if (checkbox !== selectedCategory) {
-                checkbox.disabled = selectedCategory.checked;
+    // Fungsi untuk mengaktifkan atau menonaktifkan subkategori berdasarkan status checkbox kategori
+    function toggleCategorySelection(selectedCategory, categoryId) {
+        const isChecked = selectedCategory.checked;
+
+        // Menonaktifkan atau mengaktifkan checkbox subkategori terkait
+        const subcategoryCheckboxes = document.querySelectorAll('.sub-of-' + categoryId);
+        subcategoryCheckboxes.forEach(function(checkbox) {
+            checkbox.disabled = !isChecked;
+            if (!isChecked) {
+                checkbox.checked = false;
             }
         });
-
-        let subcategoryCheckboxes = document.querySelectorAll('.subcategory-checkbox');
-        subcategoryCheckboxes.forEach(function (checkbox) {
-            checkbox.disabled = !selectedCategory.checked;
-        });
-
-        if (!selectedCategory.checked) {
-            categoryCheckboxes.forEach(function (checkbox) {
-                checkbox.disabled = false;
-            });
-
-            subcategoryCheckboxes.forEach(function (checkbox) {
-                checkbox.disabled = false;
-            });
-        }
     }
-
-    function toggleSubCategorySelection(selectedSubCategory) {
-        let subcategoryCheckboxes = document.querySelectorAll('.subcategory-checkbox');
-        subcategoryCheckboxes.forEach(function (checkbox) {
-            if (checkbox !== selectedSubCategory) {
-                checkbox.disabled = selectedSubCategory.checked;
-            }
-        });
-
-        if (!selectedSubCategory.checked) {
-            subcategoryCheckboxes.forEach(function (checkbox) {
-                checkbox.disabled = false;
-            });
-        }
-    }
- </script>
+</script>
 
 <script>
     function convertSocialMediaLink(url) {

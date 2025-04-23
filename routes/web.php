@@ -61,7 +61,7 @@ Route::get('/sitemap.xml', function () {
     return $sitemap->toResponse(request());
 });
 
-Route::middleware(['auth', 'role:Administrator'])->group(function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
     // === {{ !! Member Page !! }} === //
     // Member
     Route::get('/dashboard/member', [MemberController::class, 'memberIndex'])->name('member.index');
@@ -109,10 +109,11 @@ Route::middleware(['auth', 'role:Administrator'])->group(function () {
 
     // subcateg
     Route::get('/dashboard/blog/subcateg/edit/{id}', [CategoryController::class, 'SubcategEdit'])->name('subcateg.edit');
+    Route::put('/dashboard/blog/subcateg/update/{id}', [CategoryController::class, 'subCategoryUpdate'])->name('subcateg.update');
     Route::delete('/dashboard/blog/subcateg/delete/{id}', [CategoryController::class, 'subcategDestroy'])->name('subcateg.destroy');
 });
 
-Route::middleware(['auth', 'role:Editor|Administrator'])->group(function () {
+Route::middleware(['auth', 'role:author|admin'])->group(function () {
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~  {{ !! DASHBOARD ROUTING !! }} ~~~~~~~~~~~~~~~~~~~~~~~~~~ //
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -162,7 +163,7 @@ Route::middleware(['auth', 'role:Editor|Administrator'])->group(function () {
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/staticat', [HomeController::class, 'staticat'])->name('staticat.desktop');
+// Route::get('/staticat', [HomeController::class, 'staticat'])->name('staticat.desktop');
 
 // === {{ !! Auth !! }} === //
 Route::get('/spring', [DashboardController::class, 'loginPage'])->name('login');
@@ -175,6 +176,7 @@ Route::get('/kode-etik', [HomeController::class, 'kodeEtik'])->name('kodeEtik.de
 Route::get('/visi-misi', [HomeController::class, 'visiMisi'])->name('visiMisi.desktop');
 Route::get('/site-map', [HomeController::class, 'siteMap'])->name('siteMap.desktop');
 Route::get('/category/{slug}', [HomeController::class, 'kanal'])->name('kanal.desktop');
+Route::get('/category/{categ}/{subcateg}', [HomeController::class, 'subcateg'])->name('subcateg.desktop');
 Route::get('/indeks', [HomeController::class, 'byIndex'])->name('byIndex.dekstop');
 Route::get('/search-result', [HomeController::class, 'searchResult'])->name('searchResult.dekstop');
 

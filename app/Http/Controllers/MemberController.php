@@ -14,28 +14,41 @@ class MemberController extends Controller
 {
     public function memberIndex(Request $request) {
         $query = User::query();
-
-        $query->whereHas('role', function ($query) {
-            $query->where('name', 'Editor');
-        });
+    
+        $query->where('role', 'author'); 
+    
+        $allowedColumns = ['name', 'email']; 
+        $allowedOperators = ['=', '>', '<', 'like'];
     
         if ($request->has('filter_columns')) {
             foreach ($request->input('filter_columns') as $index => $column) {
                 $operator = $request->input('filter_operators')[$index] ?? '=';
                 $value = $request->input('filter_values')[$index] ?? '';
-    
+            
+                if (!in_array($column, $allowedColumns)) {
+                    continue; 
+                }
+            
+                if (!in_array($operator, $allowedOperators)) {
+                    continue;
+                }
+            
                 if (!empty($column) && !empty($value)) {
                     if ($operator === 'like') {
                         $value = "%$value%";
                     }
-    
+            
                     $query->where($column, $operator, $value);
                 }
             }
+            
         }
-        $user = $query->orderBy('first_name', 'asc')->paginate(5);
+    
+        $user = $query->orderBy('name', 'asc')->paginate(10);
+    
         return view('backend.pages.member.index', compact('user'));
     }
+    
 
     public function memberCreate(){
         return view('backend.pages.member.create');
@@ -44,7 +57,6 @@ class MemberController extends Controller
     public function memberPost(Request $request){
         $request->validate([
             'password' => 'required|min:8|confirmed',
-            'images' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $emailExists = User::where('email', $request->email)->exists();
@@ -56,39 +68,20 @@ class MemberController extends Controller
                 ->withErrors(['email' => 'Email sudah ada di database.']);
         }
 
-        $imagePath = null;
-        if ($request->hasFile('images')) {
-            $directory = 'profile';
-
-            if (!Storage::exists($directory)) {
-                Storage::makeDirectory($directory);
-            }
-
-            $imagePath = $request->file('images')->store($directory, 'public');
-        } else {
-            $imagePath = '';
-        }
-
         User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'name' => $request->first_name . ' ' . $request->last_name,
-            'slug' => Str::slug($request->first_name . $request->last_name),
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
             'email' => $request->email,
-            'phone' => $request->phone,
-            'birthday' => $request->birthday,
-            'description' => $request->description,
             'password' => bcrypt($request->password),
-            'role_id' => 1,
-            'status' => $request->status,
-            'images' => $imagePath,
+            'role' => 'author',
         ]);
+
         Alert::success('Success', 'Member added successfully!!');
         return redirect()->route('member.index')->with('success', 'Member berhasil ditambahkan!');
     }
 
     public function memberEdit($id){
-        $member = User::with('role')->where('id', $id)->firstOrFail();
+        $member = User::where('id', $id)->firstOrFail();
         return view('backend.pages.member.edit',compact('member'));
     }
 
@@ -97,37 +90,11 @@ class MemberController extends Controller
     {
         $users = User::findOrFail($id);
 
-        if ($request->hasFile('images')) {
-            $directory = 'profile';
-
-            if (!Storage::exists($directory)) {
-                Storage::makeDirectory($directory);
-            }
-
-            if ($users->images && Storage::exists($users->images)) {
-                Storage::delete($users->images);
-            }
-
-            $imagePath = $request->file('images')->store($directory, 'public');
-        } else {
-            $imagePath = $users->images;
-        }
-
-        $fullName = $request->input('first_name') . ' ' . $request->input('last_name');
-        $newSlug = Str::slug($fullName);
-
         $updateData = [
-            'first_name' => $request->input('first_name'),
-            'last_name' => $request->input('last_name'),
-            'name' => $fullName,
-            'slug' => $newSlug,
+            'name' => $request->input('name'),
+            'slug' => Str::slug($request->name),
             'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'birthday' => $request->input('birthday'),
-            'description' => $request->input('description'),
-            'role_id' => $request->input('role'),
-            'status' => $request->input('status'),
-            'images' => $imagePath,
+            'role' => $request->input('role'),
         ];
 
         if ($request->filled('password')) {

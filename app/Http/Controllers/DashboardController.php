@@ -26,11 +26,11 @@ class DashboardController extends Controller
 
     public function index(Request $request)
     {
-        $userCount = User::where('role_id', 1)->count();
-        $postCount = Post::where('status', 'publish')->count();
+        $userCount = User::where('role', 'admin')->count();
+        $postCount = Post::where('status', 'public')->count();
         $tagcount = Tag::count();
         $categoryCount = Categori::count();
-        $recentPosts = Post::where('status', 'publish')
+        $recentPosts = Post::where('status', 'public')
         ->orderBy('created_at', 'desc')
         ->take(15)
         ->get();
@@ -220,7 +220,6 @@ class DashboardController extends Controller
         $authorIds = $request->author_id;
 
         $users = User::query()
-            ->with('role')
             ->withCount(['posts' => function ($query) use ($startDate, $endDate) {
                 if ($startDate && $endDate) {
                     $query->whereBetween('created_at', [$startDate, $endDate]);

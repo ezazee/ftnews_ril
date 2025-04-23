@@ -2,65 +2,68 @@
 @section('content')
     @include('frontend.dekstop.components.ads-1')
     <div class="mt-20">
-        <h3 class="card-headline-no-image-title">Lorem ipsum dolor sit amet.</h3>
+        <h3 class="card-headline-no-image-title">{{ $category->nama_kategori }}</h3>
     </div>
     <div class="content-home" id="content">
         <div class="content-article">
             <div>
-                {{-- @foreach ($post->take(1) as $item) --}}
+                @foreach ($post->take(1) as $item)
                 <article class="card-one-headline">
-                    <div class="card-one-headline-img"><a href="#"><img class="card-one-headline-img"
-                                src="#" /></a></div>
+                    <div class="card-one-headline-img"><a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}"><img class="card-one-headline-img"
+                                src="{{ is_array($item->gambar) ? $item->gambar[0] : $item->gambar }}" /></a></div>
                     <div class="card-one-headline--info">
                         <h4 class="card-one-headline--title">
-                            <a href="#">Lorem ipsum dolor sit amet.</a>
+                            <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
                         </h4>
                         <div class="category-and-time">
-                            <div class="card-one-headline--desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto, aperiam?</div>
-                            <span>{sadasd}</span>
+                            <div class="card-one-headline--desc">{!! Str::limit(strip_tags($item->content), 150) !!}</div>
+                            <span>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->isoFormat('DD MMMM, YYYY') : '' }} |</span>
+                            <span>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('H:i:s') : '' }}</span>
                         </div>
                     </div>
                 </article>
-                {{-- @endforeach --}}
+                @endforeach
                 <div class="card-two-wrap">
-                    {{-- @foreach ($post->slice(1, 4) as $item) --}}
+                    @foreach ($post->slice(1, 4) as $item)
                     <article class="card-two-headline">
                         <div class="card-two-headline-img-wrap">
-                            <img class="card-two-headline-img" src="#" />
+                            <img class="card-two-headline-img" src="{{ is_array($item->gambar) ? $item->gambar[0] : $item->gambar }}" />
                         </div>
                         <div class="card-two-headline--info">
                             <h4 class="card-two-headline--title">
-                                <a href="#"></a>
+                                <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
                             </h4>
                             <div class="category-and-time">
-                                <span>{sadasd}</span>
+                            <span>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->isoFormat('DD MMMM, YYYY') : '' }} |</span>
+                            <span>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('H:i:s') : '' }}</span>
                             </div>
                         </div>
                     </article>
-                    {{-- @endforeach --}}
+                    @endforeach
                 </div>
             </div>
             <div class="mt-20">
                 <div class="list">
-                    {{-- @foreach ($post->slice(4, 25) as $item) --}}
+                    @foreach ($post->slice(4, 25) as $item)
                     <div class="list-element">
                         <article class="main-card">
                             <div class="main-card-img-wrap">
                                 <img alt="image" class="main-card-img" width="213" height="130"
-                                    src="#" />
+                                    src="{{ is_array($item->gambar) ? $item->gambar[0] : $item->gambar }}" />
                             </div>
                             <div class="main-card--info">
                                 <h4 class="main-card--title">
-                                    <a href="#"</a>
+                                    <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
                                 </h4>
-                                <p class="main-card--desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem aspernatur quod officia unde sapiente consequatur.</p>
+                                <p class="main-card--desc">{!! Str::limit(strip_tags($item->content ), 150) !!} </p>
                                 <div class="category-and-time">
-                                    <span>{sadasd}</span>
+                                <span>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->isoFormat('DD MMMM, YYYY') : '' }} |</span>
+                                <span>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('H:i:s') : '' }}</span>
                                 </div>
                             </div>
                         </article>
                     </div>
-                    {{-- @endforeach --}}
+                    @endforeach
                 </div>
                 <div class="mb-20">
                     <button class="main-card-loadmore" id="loadmore">Tampilkan lebih banyak</button>

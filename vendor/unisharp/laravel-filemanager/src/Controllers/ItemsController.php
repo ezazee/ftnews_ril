@@ -7,6 +7,8 @@ use UniSharp\LaravelFilemanager\Events\FileIsMoving;
 use UniSharp\LaravelFilemanager\Events\FileWasMoving;
 use UniSharp\LaravelFilemanager\Events\FolderIsMoving;
 use UniSharp\LaravelFilemanager\Events\FolderWasMoving;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Http\Request;
 
 class ItemsController extends LfmController
 {
@@ -15,26 +17,53 @@ class ItemsController extends LfmController
      *
      * @return mixed
      */
-    public function getItems()
-    {
-        $currentPage = self::getCurrentPageFromRequest();
 
-        $perPage = $this->helper->getPaginationPerPage();
-        $items = array_merge($this->lfm->folders(), $this->lfm->files());
+     public function getItems(Request $request)
+     {
+         $currentPage = self::getCurrentPageFromRequest();
+         $perPage = 50;
+         
+         $items = array_merge($this->lfm->folders(), $this->lfm->files());
+     
+         $search = $request->input('search_query');
+         if (!empty($search)) {
+             $items = array_filter($items, function ($item) use ($search) {
+                 return stripos($item->name, $search) !== false;
+             });
+         }
+     
+        usort($items, function ($a, $b) {
+            return strcmp($a->name, $b->name);
+        });
 
-        return [
-            'items' => array_map(function ($item) {
-                return $item->fill()->attributes;
-            }, array_slice($items, ($currentPage - 1) * $perPage, $perPage)),
-            'paginator' => [
-                'current_page' => $currentPage,
-                'total' => count($items),
-                'per_page' => $perPage,
-            ],
-            'display' => $this->helper->getDisplayMode(),
-            'working_dir' => $this->lfm->path('working_dir'),
-        ];
-    }
+        usort($items, function ($a, $b) {
+            $timeA = filemtime($a->path);
+            $timeB = filemtime($b->path);
+
+            return $timeB <=> $timeA;
+        });
+     
+         $totalItems = count($items);
+         $offset = ($currentPage - 1) * $perPage;
+         $paginatedItems = array_slice($items, $offset, $perPage);
+     
+         return response()->json([
+             'items' => array_map(fn($item) => array_merge($item->fill()->attributes, [
+              'url' => str_replace('/storage/photos/shares/', '/storage/gambar/', $item->url),
+            ]), $paginatedItems),
+             'paginator' => [
+                 'current_page' => $currentPage,
+                 'total' => $totalItems,
+                 'per_page' => $perPage,
+                 'last_page' => ceil($totalItems / $perPage),
+             ],
+             'display' => $this->helper->getDisplayMode(),
+             'working_dir' => $this->lfm->path('working_dir'),
+         ]);
+     }
+     
+
+     
 
     public function move()
     {

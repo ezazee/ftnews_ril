@@ -231,7 +231,7 @@
                             <td class="text-start column-key-1"> {{ date('Y-m-d', strtotime($item->created_at)) }}</td>
                             <td class="  text-center no-column-visibility text-nowrap">
                                <div class="table-actions">
-                                  <a href="{{ route('tags.edit',['id' => $item->id ]) }}"
+                                  {{-- <a href="{{ route('tags.edit',['id' => $item->id ]) }}"
                                      class="btn btn-sm btn-icon btn-primary">
                                      <svg class="icon  svg-icon-ti-ti-edit" data-bs-toggle="tooltip"
                                         data-bs-title="Edit" xmlns="http://www.w3.org/2000/svg"
@@ -248,7 +248,7 @@
                                         <path d="M16 5l3 3"></path>
                                      </svg>
                                      <span class="sr-only">Edit</span>
-                                  </a>
+                                  </a> --}}
                                   <form action="{{ route('tags.delete', ['id' => $item->id]) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')

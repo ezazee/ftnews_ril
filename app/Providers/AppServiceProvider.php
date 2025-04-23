@@ -31,8 +31,8 @@ class AppServiceProvider extends ServiceProvider
                     ->take(5)
                     ->get();
                 
-                $categories = Categori::all();
-                $view->with(compact('postTerpopuler', 'categories'));
+                    $categories = Categori::with('subCategories')->get();
+                    $view->with(compact('postTerpopuler', 'categories'));
             });
         }
     }

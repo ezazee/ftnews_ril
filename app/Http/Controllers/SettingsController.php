@@ -83,17 +83,46 @@ class SettingsController extends Controller
     }
 
     // Member Dasboard
-    public function memberDashboard()
+    public function memberDashboard(Request $request)
     {
-        $user = User::whereHas('role', function ($query) {
-            $query->where('name', 'Administrator');
-        })->paginate(5);
+        $query = User::query();
+    
+        $query->where('role', 'admin'); 
+    
+        $allowedColumns = ['name', 'email']; 
+        $allowedOperators = ['=', '>', '<', 'like'];
+    
+        if ($request->has('filter_columns')) {
+            foreach ($request->input('filter_columns') as $index => $column) {
+                $operator = $request->input('filter_operators')[$index] ?? '=';
+                $value = $request->input('filter_values')[$index] ?? '';
+            
+                if (!in_array($column, $allowedColumns)) {
+                    continue; 
+                }
+            
+                if (!in_array($operator, $allowedOperators)) {
+                    continue;
+                }
+            
+                if (!empty($column) && !empty($value)) {
+                    if ($operator === 'like') {
+                        $value = "%$value%";
+                    }
+            
+                    $query->where($column, $operator, $value);
+                }
+            }
+            
+        }
+    
+        $user = $query->orderBy('name', 'asc')->paginate(10);
         return view('backend.pages.settings.memberDashboard.index',compact('user'));
     }
 
     public function editMemberDashboard($id)
     {
-        $member = User::with('role')->where('id', $id)->firstOrFail();
+        $member = User::where('id', $id)->firstOrFail();
         return view('backend.pages.settings.memberDashboard.edit',compact('member'));
     }
 
@@ -116,15 +145,11 @@ class SettingsController extends Controller
         }
 
         User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'name' => $request->first_name . ' ' . $request->last_name,
-            'slug' => Str::slug($request->first_name . $request->last_name),
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
             'email' => $request->email,
-            'phone' => $request->phone,
             'password' => bcrypt($request->password),
-            'role_id' => 2,
-            'status' => 'active',
+            'role' => 'admin',
         ]);
         Alert::success('Success', 'Member added successfully!!');
         return redirect()->route('settings.memberDashboard')->with('success', 'Admin berhasil ditambahkan!');

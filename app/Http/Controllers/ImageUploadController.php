@@ -20,7 +20,7 @@ class ImageUploadController extends Controller
     {
         $media = Media::find($id);
         return response()->json([
-            'url' => $media->getUrl() // Mengembalikan URL file yang dipilih
+            'url' => $media->getUrl()
         ]);
     }
 

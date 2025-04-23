@@ -20,7 +20,7 @@ class LfmPath
 
     private $helper;
 
-    public function __construct(Lfm $lfm)
+    public function __construct(Lfm $lfm = null)
     {
         $this->helper = $lfm;
     }

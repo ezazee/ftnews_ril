@@ -34,16 +34,19 @@
         @include('frontend.dekstop.components.ads-1')
 
         <div class="mt-20">
-            <h3 class="card-headline-no-image-title">{{ $post->kategori->nama_kategori }}</h3>
+            <h3 class="card-headline-no-image-title">
+                @if ($post->subCategory)
+                    {{ $post->subCategory->nama_sub_kategori }}
+                @else
+                    {{ $post->kategori->nama_kategori }}
+                @endif
+            </h3>
         </div>
 
         <div class="content-home" id="content">
             <div class="content-article">
                 <article class="article-detail">
                     <h1 class="article-detail--title">{{ $post->title }}</h1>
-                    @if ($post->description)
-                        <div class="article-detail--desc">{{ $post->description }}</div>
-                    @endif
                     <div class="article-detail--info">
                         <div class="author">
                             <strong>{{ $post->user->name }}</strong>
@@ -91,19 +94,29 @@
                         <p>{!! preg_replace_callback(
                             '/<img[^>]+alt="([^"]*)"[^>]*>/i',
                             function ($matches) {
-                                return $matches[0] . '<i>' . htmlspecialchars($matches[1]) . '</i><br>';
+                                return $matches[0] . '<i>' . htmlspecialchars($matches[1]) . '</i>';
                             },
                             preg_replace_callback(
-                                '/(?:<caption\b[^>]*>|\\[caption[^\]]*\\])(.*?)(?:<\\/caption>|\\[\\/caption\\])/is', 
+                                '/(?:<caption\b[^>]*>|\[caption[^\]]*\])(.*?)(?:<\/caption>|\[\/caption\])/is',
                                 function ($matches) {
                                     preg_match_all('/<img[^>]+>/i', $matches[1], $images);
-                                    return implode('', $images[0]); 
+                                    return implode('', $images[0]);
                                 },
-                                $post->content
+                                preg_replace_callback(
+                                    '/^(?!\s*<p\b|\s*<img|\s*<ul|\s*<ol|\s*<div|\s*<blockquote|\s*<h[1-6])(.+?)(?=<|$)/ism',
+                                    function ($matches) {
+                                        return '<p>' . trim($matches[1]) . '</p>';
+                                    },
+                                    preg_replace_callback(
+                                        '/<p>\s*(<br>|&nbsp;)\s*<\/p>/i',
+                                        function () {
+                                            return '';
+                                        },
+                                        $post->content
+                                    )
+                                )
                             )
-                        ) !!}
-                        </p>
-                        
+                        ) !!}</p>                                        
                     </div>
                     <div class="article-detail-tag">
                         <span class="label card-headline-no-image-title-detail2">Tag</span>

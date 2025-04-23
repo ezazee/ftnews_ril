@@ -73,7 +73,6 @@
                     </div>
                 </article>
             @endforeach
-
         </div>
 
         <!-- terpopuler -->
@@ -101,23 +100,23 @@
 
         @include('frontend.mobile.components.ads-3')
 
-        <!-- dangdut -->
+        <!-- Nasional -->
         <div class="mt-20">
-            <h3 class="base-title pl-20 mb-10 fw-bold">Dangdut</h3>
-            @if ($topPostDangdut)
+            <h3 class="base-title pl-20 mb-10 fw-bold">Nasional</h3>
+            @if ($topPostNasional)
                 @php
-                    $images = explode('|', $topPostDangdut->gambar);
+                    $images = explode('|', $topPostNasional->gambar);
                 @endphp
                 <article class="card-headline">
                     <img alt="image" class="card-headline-img" src="{{ isset($images[0]) ? $images[0] : '' }}" />
                     <div class="card-headline-info">
                         <h4 class="card-headline-title">
                             <a
-                                href="{{ route('detail.desktop', ['slug' => $topPostDangdut->slug]) }}">{{ $topPostDangdut->title }}</a>
+                                href="{{ route('detail.desktop', ['slug' => $topPostNasional->slug]) }}">{{ $topPostNasional->title }}</a>
                         </h4>
                         <div class="category-and-time">
-                            <p class="card-headline-desc">{!! Str::limit(strip_tags($topPostDangdut->content), 60) !!}</p>
-                            <span>{{ \Carbon\Carbon::parse($topPostDangdut->created_at)->format('d-m-Y') }}</span>
+                            <p class="card-headline-desc">{!! Str::limit(strip_tags($topPostNasional->content), 60) !!}</p>
+                            <span>{{ \Carbon\Carbon::parse($topPostNasional->created_at)->format('d-m-Y') }}</span>
                         </div>
                     </div>
                 </article>
@@ -125,7 +124,7 @@
                 <p>No post found.</p>
             @endif
             <div>
-                @foreach ($otherPostsDangdut as $post)
+                @foreach ($otherPostsNasional as $post)
                     <article class="main-card">
                         <div class="main-card-img-wrap">
                             <img alt="image" class="main-card-img"
@@ -142,32 +141,32 @@
                     </article>
                 @endforeach
                 <div class="t10-b20 mb-20">
-                    <a href="{{ route('kanal.desktop', ['slug' => 'dangdut']) }}">
+                    <a href="{{ route('kanal.desktop', ['slug' => 'Nasional']) }}">
                         <button class="main-card-loadmore">Selengkapnya</button>
                     </a>
                 </div>
             </div>
         </div>
-        <!-- end Dangdut -->
+        <!-- end Nasional -->
 
-        <!-- Flexing -->
+        <!-- Daerah -->
         <div class="mt-20">
-            <h3 class="base-title pl-20 mb-10 fw-bold">Flexing</h3>
-            @if ($topPostFlexing)
+            <h3 class="base-title pl-20 mb-10 fw-bold">Daerah</h3>
+            @if ($topPostDaerah)
                 @php
-                    $images = explode('|', $topPostFlexing->gambar);
+                    $images = explode('|', $topPostDaerah->gambar);
                 @endphp
                 <article class="card-headline">
                     <img alt="image" class="card-headline-img"
-                        src="{{ is_array($topPostFlexing->gambar) ? $topPostFlexing->gambar[0] : $topPostFlexing->gambar }}" />
+                        src="{{ is_array($topPostDaerah->gambar) ? $topPostDaerah->gambar[0] : $topPostDaerah->gambar }}" />
                     <div class="card-headline-info">
                         <h4 class="card-headline-title">
                             <a
-                                href="{{ route('detail.desktop', ['slug' => $topPostFlexing->slug]) }}">{{ $topPostFlexing->title }}</a>
+                                href="{{ route('detail.desktop', ['slug' => $topPostDaerah->slug]) }}">{{ $topPostDaerah->title }}</a>
                         </h4>
                         <div class="category-and-time">
-                            <p class="card-headline-desc">{!! Str::limit(strip_tags($topPostFlexing->content), 60) !!}</p>
-                            <span>{{ \Carbon\Carbon::parse($topPostFlexing->created_at)->format('d-m-Y') }}</span>
+                            <p class="card-headline-desc">{!! Str::limit(strip_tags($topPostDaerah->content), 60) !!}</p>
+                            <span>{{ \Carbon\Carbon::parse($topPostDaerah->created_at)->format('d-m-Y') }}</span>
                         </div>
                     </div>
                 </article>
@@ -175,7 +174,7 @@
                 <p>No post found.</p>
             @endif
             <div>
-                @foreach ($otherPostsFlexing as $post)
+                @foreach ($otherPostsDaerah as $post)
                     <article class="main-card">
                         <div class="main-card--infomr10">
                             <h4 class="main-card--title">
@@ -192,33 +191,33 @@
                     </article>
                 @endforeach
                 <div class="t10-b20 mb-20">
-                    <a href="{{ route('kanal.desktop', ['slug' => 'flexing']) }}">
+                    <a href="{{ route('kanal.desktop', ['slug' => 'Daerah']) }}">
                         <button class="main-card-loadmore" id="loadmore">Selengkapnya</button>
                     </a>
                 </div>
             </div>
         </div>
-        <!-- end Flexing -->
+        <!-- end Daerah -->
 
         @include('frontend.mobile.components.ads-4')
 
-        <!-- Gosip -->
+        <!-- Lifestyle -->
         <div class="mt-20">
-            <h3 class="base-title pl-20 mb-10 fw-bold">Gosip</h3>
-            @if ($topPostGosip)
+            <h3 class="base-title pl-20 mb-10 fw-bold">Lifestyle</h3>
+            @if ($topPostLifestyle)
                 @php
-                    $images = explode('|', $topPostGosip->gambar);
+                    $images = explode('|', $topPostLifestyle->gambar);
                 @endphp
                 <article class="card-headline">
                     <img alt="image" class="card-headline-img" src="{{ isset($images[0]) ? $images[0] : '' }}" />
                     <div class="card-headline-info">
                         <h4 class="card-headline-title">
                             <a
-                                href="{{ route('detail.desktop', ['slug' => $topPostGosip->slug]) }}">{{ $topPostGosip->title }}</a>
+                                href="{{ route('detail.desktop', ['slug' => $topPostLifestyle->slug]) }}">{{ $topPostLifestyle->title }}</a>
                         </h4>
                         <div class="category-and-time">
-                            <p class="card-headline-desc">{!! Str::limit(strip_tags($topPostGosip->content), 60) !!}</p>
-                            <span>{{ \Carbon\Carbon::parse($topPostGosip->created_at)->format('d-m-Y') }}</span>
+                            <p class="card-headline-desc">{!! Str::limit(strip_tags($topPostLifestyle->content), 60) !!}</p>
+                            <span>{{ \Carbon\Carbon::parse($topPostLifestyle->created_at)->format('d-m-Y') }}</span>
                         </div>
                     </div>
                 </article>
@@ -226,7 +225,7 @@
                 <p>No post found.</p>
             @endif
             <div>
-                @foreach ($otherPostsGosip as $post)
+                @foreach ($otherPostsLifestyle as $post)
                     <article class="main-card">
                         <div class="main-card-img-wrap">
                             <img alt="image" class="main-card-img"
@@ -245,25 +244,25 @@
                 @endforeach
             </div>
         </div>
-        <!-- end Gosip -->
+        <!-- end Lifestyle -->
 
         <!-- K-Pop -->
         <div class="mt-20">
-            <h3 class="base-title pl-20 mb-10 fw-bold">K-Pop</h3>
-            @if ($topPostKPop)
+            <h3 class="base-title pl-20 mb-10 fw-bold">Teknologi</h3>
+            @if ($topPostTeknologi)
                 @php
-                    $images = explode('|', $topPostKPop->gambar);
+                    $images = explode('|', $topPostTeknologi->gambar);
                 @endphp
                 <article class="card-headline">
                     <img alt="image" class="card-headline-img" src="{{ isset($images[0]) ? $images[0] : '' }}" />
                     <div class="card-headline-info">
                         <h4 class="card-headline-title">
                             <a
-                                href="{{ route('detail.desktop', ['slug' => $topPostKPop->slug]) }}">{{ $topPostKPop->title }}</a>
+                                href="{{ route('detail.desktop', ['slug' => $topPostTeknologi->slug]) }}">{{ $topPostTeknologi->title }}</a>
                         </h4>
                         <div class="category-and-time">
-                            <p class="card-headline-desc">{!! Str::limit(strip_tags($topPostKPop->content), 60) !!}</p>
-                            <span>{{ \Carbon\Carbon::parse($topPostKPop->created_at)->format('d-m-Y') }}</span>
+                            <p class="card-headline-desc">{!! Str::limit(strip_tags($topPostTeknologi->content), 60) !!}</p>
+                            <span>{{ \Carbon\Carbon::parse($topPostTeknologi->created_at)->format('d-m-Y') }}</span>
                         </div>
                     </div>
                 </article>
@@ -271,7 +270,7 @@
                 <p>No post found.</p>
             @endif
             <div>
-                @foreach ($otherPostsKPop as $post)
+                @foreach ($otherPostsTeknologi as $post)
                     <article class="main-card">
                         <div class="main-card--infomr10">
                             <h4 class="main-card--title">
@@ -298,23 +297,23 @@
 
         @include('frontend.mobile.components.ads-5')
 
-        <!-- Vibes -->
+        <!-- Olahraga -->
         <div class="mt-20">
-            <h3 class="base-title pl-20 mb-10 fw-bold">Vibes</h3>
-            @if ($topPostVibes)
+            <h3 class="base-title pl-20 mb-10 fw-bold">Olahraga</h3>
+            @if ($topPostOlahraga)
                 @php
-                    $images = explode('|', $topPostVibes->gambar);
+                    $images = explode('|', $topPostOlahraga->gambar);
                 @endphp
                 <article class="card-headline">
                     <img alt="image" class="card-headline-img" src="{{ isset($images[0]) ? $images[0] : '' }}" />
                     <div class="card-headline-info">
                         <h4 class="card-headline-title">
                             <a
-                                href="{{ route('detail.desktop', ['slug' => $topPostVibes->slug]) }}">{{ $topPostVibes->title }}</a>
+                                href="{{ route('detail.desktop', ['slug' => $topPostOlahraga->slug]) }}">{{ $topPostOlahraga->title }}</a>
                         </h4>
                         <div class="category-and-time">
-                            <p class="card-headline-desc">{!! Str::limit(strip_tags($topPostVibes->content), 60) !!}</p>
-                            <span>{{ \Carbon\Carbon::parse($topPostVibes->created_at)->format('d-m-Y') }}</span>
+                            <p class="card-headline-desc">{!! Str::limit(strip_tags($topPostOlahraga->content), 60) !!}</p>
+                            <span>{{ \Carbon\Carbon::parse($topPostOlahraga->created_at)->format('d-m-Y') }}</span>
                         </div>
                     </div>
                 </article>
@@ -322,7 +321,7 @@
                 <p>No post found.</p>
             @endif
             <div>
-                @foreach ($otherPostsVibes as $post)
+                @foreach ($otherPostsOlahraga as $post)
                     <article class="main-card">
                         <div class="main-card-img-wrap">
                             <img alt="image" class="main-card-img"
@@ -339,31 +338,31 @@
                     </article>
                 @endforeach
                 <div class="t10-b20 mb-20">
-                    <a href="{{ route('kanal.desktop', ['slug' => 'vibes']) }}">
+                    <a href="{{ route('kanal.desktop', ['slug' => 'Olahraga']) }}">
                         <button class="main-card-loadmore" id="loadmore">Selengkapnya</button>
                     </a>
                 </div>
             </div>
         </div>
-        <!-- end Vibes -->
+        <!-- end Olahraga -->
 
         <!-- Me And Moms -->
         <div class="mt-20">
-            <h3 class="base-title pl-20 mb-10 fw-bold">Me And Moms</h3>
-            @if ($topPostMeandmom)
+            <h3 class="base-title pl-20 mb-10 fw-bold">Otomotif</h3>
+            @if ($topPostOtomotif)
                 @php
-                    $images = explode('|', $topPostMeandmom->gambar);
+                    $images = explode('|', $topPostOtomotif->gambar);
                 @endphp
                 <article class="card-headline">
                     <img alt="image" class="card-headline-img" src="{{ isset($images[0]) ? $images[0] : '' }}" />
                     <div class="card-headline-info">
                         <h4 class="card-headline-title">
                             <a
-                                href="{{ route('detail.desktop', ['slug' => $topPostMeandmom->slug]) }}">{{ $topPostMeandmom->title }}</a>
+                                href="{{ route('detail.desktop', ['slug' => $topPostOtomotif->slug]) }}">{{ $topPostOtomotif->title }}</a>
                         </h4>
                         <div class="category-and-time">
-                            <p class="card-headline-desc">{!! Str::limit(strip_tags($topPostMeandmom->content), 60) !!}</p>
-                            <span>{{ \Carbon\Carbon::parse($topPostMeandmom->created_at)->format('d-m-Y') }}</span>
+                            <p class="card-headline-desc">{!! Str::limit(strip_tags($topPostOtomotif->content), 60) !!}</p>
+                            <span>{{ \Carbon\Carbon::parse($topPostOtomotif->created_at)->format('d-m-Y') }}</span>
                         </div>
                     </div>
                 </article>
@@ -371,7 +370,7 @@
                 <p>No post found.</p>
             @endif
             <div>
-                @foreach ($otherPostsMeandmom as $post)
+                @foreach ($otherPostsOtomotif as $post)
                     <article class="main-card">
                         <div class="main-card--infomr10">
                             <h4 class="main-card--title">

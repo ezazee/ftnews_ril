@@ -44,16 +44,10 @@
                                     <div class="row row-cols-lg-2">
                                         <div class="mb-3 position-relative">
                                             <label class="form-label form-label required" for="first_name">
-                                                First Name
+                                                Fullname
                                             </label>
                                             <input class="form-control" data-counter="30" required="required"
-                                                name="first_name" type="text">
-                                        </div>
-                                        <div class="mb-3 position-relative">
-                                            <label class="form-label form-label required" for="last_name">
-                                                Last Name
-                                            </label>
-                                            <input class="form-control" data-counter="30" name="last_name" type="text">
+                                                name="name" type="text">
                                         </div>
                                         <div class="mb-3 position-relative">
                                             <label class="form-label form-label required" for="email">
@@ -62,13 +56,6 @@
                                             <input class="form-control" data-counter="60"
                                                 placeholder="e.g: example@domain.com" required="required" name="email"
                                                 type="text">
-                                        </div>
-                                        <div class="mb-3 position-relative">    
-                                            <label class="form-label form-label required" for="phone">
-                                                Phone
-                                            </label>
-                                            <input class="form-control" data-counter="16" required="required"
-                                                name="phone" type="number">
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="mb-3 position-relative">

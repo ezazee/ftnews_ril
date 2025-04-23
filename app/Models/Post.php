@@ -15,7 +15,7 @@ class Post extends Model implements HasMedia
     protected $fillable = [
         'title', 'content', 'gambar', 'short_description', 
         'image_caption', 'slug', 'status', 'headline', 
-        'start_date', 'start_time', 'keyword', 
+        'start_date', 'start_time', 'keyword', 'sub_category_id',
         'description', 'kategori_id', 'user_id'
     ];
     
@@ -30,6 +30,11 @@ class Post extends Model implements HasMedia
         return $this->belongsTo(Categori::class, 'kategori_id');
     }
 
+    public function subCategory()
+    {
+        return $this->belongsTo(SubCategory::class, 'sub_category_id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -37,7 +42,7 @@ class Post extends Model implements HasMedia
 
     public function tags()
     {
-        return $this->belongsToMany(Tag::class, 'post_tags');
+        return $this->belongsToMany(Tag::class, 'post_tags', 'post_id', 'tags_id');
     }
 
 }

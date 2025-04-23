@@ -52,15 +52,8 @@
                                 <div class="row row-cols-lg-2">
                                     <div class="col-lg-6">
                                         <div class="mb-3 position-relative">
-                                            <label for="first_name" class="form-label required">First Name</label>
-                                            <input class="form-control" data-counter="120" required="required" name="first_name" type="text" id="first_name">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-6">
-                                        <div class="mb-3 position-relative">
-                                            <label for="last_name" class="form-label required">Last Name</label>
-                                            <input class="form-control" data-counter="120" required="required" name="last_name" type="text" id="last_name">
+                                            <label for="first_name" class="form-label required">Fullname</label>
+                                            <input class="form-control" data-counter="120" required="required" name="name" type="text" id="first_name">
                                         </div>
                                     </div>
 
@@ -73,23 +66,6 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-6">
-                                        <div class="mb-3 position-relative">
-                                            <label for="phone" class="form-label">Phone</label>
-                                            <input class="form-control" data-counter="15"
-                                                placeholder="Phone" name="phone" type="text" id="phone">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-12">
-                                        <div class="mb-3 position-relative">
-                                            <label for="description"
-                                                class="form-label">Description</label>
-                                            <textarea class="form-control" data-counter="400" rows="4"
-                                                placeholder="Short description" name="description"
-                                                cols="50" id="description"></textarea>
-                                        </div>
-                                    </div>
 
                                     <div class="col-lg-6">
                                         <div class="mb-3 position-relative" data-bb-collapse="true"
@@ -157,22 +133,6 @@
                                     Back
                                 </a>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="card meta-boxes">
-                        <div class="card-header">
-                            <h4 class="card-title">
-                                <label for="status" class="form-label required">Status</label>
-                            </h4>
-                        </div>
-
-                        <div class=" card-body">
-                            <select class="form-control form-select" required="required" id="status"
-                                name="status">
-                                <option value="active">Active</option>
-                                <option value="block">Block</option>
-                            </select>
                         </div>
                     </div>
                 </div>

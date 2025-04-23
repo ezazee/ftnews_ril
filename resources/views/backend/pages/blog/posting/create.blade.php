@@ -48,11 +48,6 @@
                                         @endif
                                     </div>
                                     <div class="mb-3 position-relative">
-                                        <label for="description" class="form-label">Description</label>
-                                        <textarea class="form-control" data-counter="400" rows="4" placeholder="Short description"
-                                            name="short_description" cols="50" id="description"></textarea>
-                                    </div>
-                                    <div class="mb-3 position-relative">
                                         <label for="content" class="form-label">Content</label>
                                         <textarea required class="form-control form-control editor-ckeditor ays-ignore" data-counter="100000" rows="4"
                                             placeholder="Write your content" with-short-code id="content" name="content" cols="50"></textarea>
@@ -236,7 +231,7 @@
                             </div>
                             <div class="card-body">
                                 <select class="form-control form-select" id="status" name="status">
-                                    <option value="publish">Published</option>
+                                    <option value="public">Published</option>
                                     <option value="schedule">Scheduled</option>
                                 </select>
                                 <div id="form-schedule" style="margin-top: 10px; display: none;">
@@ -274,27 +269,27 @@
                                 <div class="tree-categories-list-998852741">
                                     <ul class="list-unstyled">
                                         @foreach ($category as $item)
-                                        <li>
-                                            <label class="form-check">
-                                                <input type="checkbox" required id="category-{{ $item->id }}" name="categories" class="form-check-input category-checkbox" value="{{ $item->id }}" onchange="toggleCategorySelection(this)">
-                                                <span class="form-check-label">
-                                                    {{ $item->nama_kategori }}
-                                                </span>
-                                            </label>
-                                            <ul class="list-unstyled ms-4 mt-2">
-                                                @foreach ($item->subCategories as $subItem)
-                                                <li>
-                                                    <label class="form-check">
-                                                        <input required type="checkbox" id="subcategory-{{ $subItem->id }}" name="subcategories[]" class="form-check-input subcategory-checkbox" onchange="toggleSubCategorySelection(this)">
-                                                        <span class="form-check-label">
-                                                            {{ $subItem->nama_sub_kategori }}
-                                                        </span>
-                                                    </label>
-                                                </li>
-                                                @endforeach
-                                            </ul>
-                                        </li>
-                                        @endforeach
+                                            <li>
+                                                <label class="form-check">
+                                                    <input type="checkbox" id="category-{{ $item->id }}" name="categories[]" class="form-check-input category-checkbox" value="{{ $item->id }}" onchange="toggleCategorySelection(this, {{ $item->id }})">
+                                                    <span class="form-check-label">
+                                                        {{ $item->nama_kategori }}
+                                                    </span>
+                                                </label>
+                                                <ul class="list-unstyled ms-4 mt-2">
+                                                    @foreach ($item->subCategories as $subItem)
+                                                    <li>
+                                                        <label class="form-check">
+                                                            <input type="checkbox" id="subcategory-{{ $subItem->id }}" name="subcategories[]" value="{{ $subItem->id }}" class="form-check-input subcategory-checkbox sub-of-{{ $item->id }}" disabled>
+                                                            <span class="form-check-label">
+                                                                {{ $subItem->nama_sub_kategori }}
+                                                            </span>
+                                                        </label>
+                                                    </li>
+                                                    @endforeach
+                                                </ul>
+                                            </li>
+                                            @endforeach
                                     </ul>
                                 </div>
                                 @if ($errors->has('categories'))
@@ -484,45 +479,19 @@
     </script>
 
     <script>
-        function toggleCategorySelection(selectedCategory) {
-            let categoryCheckboxes = document.querySelectorAll('.category-checkbox');
-            categoryCheckboxes.forEach(function(checkbox) {
-                if (checkbox !== selectedCategory) {
-                    checkbox.disabled = selectedCategory.checked;
+        function toggleCategorySelection(selectedCategory, categoryId) {
+            const isChecked = selectedCategory.checked;
+
+            const subcategoryCheckboxes = document.querySelectorAll('.sub-of-' + categoryId);
+            subcategoryCheckboxes.forEach(function(checkbox) {
+                checkbox.disabled = !isChecked;
+                if (!isChecked) {
+                    checkbox.checked = false;
                 }
             });
-
-            let subcategoryCheckboxes = document.querySelectorAll('.subcategory-checkbox');
-            subcategoryCheckboxes.forEach(function(checkbox) {
-                checkbox.disabled = !selectedCategory.checked;
-            });
-
-            if (!selectedCategory.checked) {
-                categoryCheckboxes.forEach(function(checkbox) {
-                    checkbox.disabled = false;
-                });
-
-                subcategoryCheckboxes.forEach(function(checkbox) {
-                    checkbox.disabled = false;
-                });
-            }
-        }
-
-        function toggleSubCategorySelection(selectedSubCategory) {
-            let subcategoryCheckboxes = document.querySelectorAll('.subcategory-checkbox');
-            subcategoryCheckboxes.forEach(function(checkbox) {
-                if (checkbox !== selectedSubCategory) {
-                    checkbox.disabled = selectedSubCategory.checked;
-                }
-            });
-
-            if (!selectedSubCategory.checked) {
-                subcategoryCheckboxes.forEach(function(checkbox) {
-                    checkbox.disabled = false;
-                });
-            }
         }
     </script>
+
 
     <script>
         function convertSocialMediaLink(url) {

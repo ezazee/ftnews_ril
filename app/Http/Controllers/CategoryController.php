@@ -36,7 +36,6 @@ class CategoryController extends Controller
             Alert::success('Success', 'Sub Category updated successfully!!');
             return redirect()->back()->with('success', 'Sub Category updated successfully.');
         } else {
-            // Update Category
             $category = Categori::findOrFail($id);
             $category->nama_kategori = $request->nama_kategori;
             $category->slug = \Str::slug($request->nama_kategori);
@@ -53,6 +52,20 @@ class CategoryController extends Controller
         $category = SubCategory::where('id', $id)->firstOrFail();
         return view('backend.pages.blog.category.subcateg',compact('categories','category'));
     }
+
+    public function subCategoryUpdate(Request $request, $id) {
+        // dd($request);
+    
+        $subCategory = SubCategory::findOrFail($id);
+        $subCategory->nama_sub_kategori = $request->nama_kategori;
+        $subCategory->slug = \Str::slug($request->nama_kategori);
+        $subCategory->category_id = $request->parent_id;
+        $subCategory->save();
+    
+        Alert::success('Success', 'Sub Category updated successfully!');
+        return redirect()->back();
+    }
+    
 
     public function categoryAdd(Request $request) {
 

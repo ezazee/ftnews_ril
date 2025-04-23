@@ -13,35 +13,27 @@
                             <li class="menu-item">
                                 <a href="{{ url('/') }}" class="{{ Request::is('/') ? 'active' : '' }}">Home</a>
                             </li>
-                            {{-- @foreach ($categories as $item) --}}
-                            {{-- <li class="menu-item dropdown">
-                                {{-- <a href="{{ route('kanal.desktop', ['slug' => $item->slug]) }}" class="{{ Request::is('category/' . $item->slug) ? 'active' : '' }}">{{$item->nama_kategori}}</a> --}}
-                                {{-- <ul class="dropdown-menu">
-                                    <li><a href="{{ url('/kanal/sub1') }}">Sub Kanal 1</a></li>
-                                    <li><a href="{{ url('/kanal/sub2') }}">Sub Kanal 2</a></li>
-                                    <li><a href="{{ url('/kanal/sub3') }}">Sub Kanal 3</a></li>
-                                    <li><a href="{{ url('/kanal/sub4') }}">Sub Kanal 4</a></li>
-                                </ul>
-                            </li> --}}
-                            <li class="menu-item">
-                                <a href="{{ route('staticat.desktop') }}" class="">Nasional</a>
+                            @foreach ($categories as $item)
+                            <li class="menu-item dropdown">
+                                <a href="{{ route('kanal.desktop', ['slug' => $item->slug]) }}"
+                                   class="{{ Request::is('category/' . $item->slug) ? 'active' : '' }}">
+                                    {{ $item->nama_kategori }}
+                                </a>
+                        
+                                @if($item->subCategories->count())
+                                    <ul class="dropdown-menu">
+                                        @foreach ($item->subCategories as $sub)
+                                            <li>
+                                                <a href="{{ route('subcateg.desktop', ['categ' => $item->slug, 'subcateg' => $sub->slug]) }}">
+                                                    {{ $sub->nama_sub_kategori }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @endif
                             </li>
-                            <li class="menu-item">
-                                <a href="{{ route('staticat.desktop') }}" class="">Daerah</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="{{ route('staticat.desktop') }}" class="">Lifestyle</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="{{ route('staticat.desktop') }}" class="">Teknologi</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="{{ route('staticat.desktop') }}" class="">Olahraga</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="{{ route('staticat.desktop') }}" class="">Otomotif</a>
-                            </li>
-                            {{-- @endforeach --}}
+                        @endforeach                        
+                            
                             <li class="menu-item">
                                 <a href="https://www.youtube.com/@indopopid" target="_blank">Video</a>
                             </li>
