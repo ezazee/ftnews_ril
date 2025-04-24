@@ -2,7 +2,7 @@
 @section('content')
     @include('frontend.dekstop.components.ads-1')
     <div class="mt-20">
-        <h3 class="card-headline-no-image-title">{{ $category->nama_kategori }}</h3>
+        <h3 class="card-headline-no-image-title">{{ $category->nama_sub_kategori }}</h3>
     </div>
     <div class="content-home" id="content">
         <div class="content-article">

@@ -25,7 +25,17 @@
                                     </h4>
                                     <p class="main-card--desc">{!! Str::limit(strip_tags($item->content), 150) !!}</p>
                                     <div class="category-and-time">
-                                        <span class="text-primary fw-bold">{{ $item->kategori->nama_kategori }}</span>
+                                        <span class="text-primary fw-bold">
+                                            @if ($item->subCategory)
+                                            <a href="">
+                                                {{ $item->subCategory->nama_sub_kategori }}
+                                            </a>
+                                            @else
+                                            <a href="">
+                                                {{ $item->kategori->nama_kategori }}
+                                            </a>
+                                            @endif
+                                        </span>
                                         <span>{{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }} WIB</span>
                                     </div>
                                 </div>

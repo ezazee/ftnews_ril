@@ -31,15 +31,18 @@
 </style>
 @section('content')
     <div class="kanal-wrap">
-        <h3 class="base-title-desc">{{ $post->kategori->nama_kategori }}</h3>
+        <h3 class="base-title-desc">
+            @if ($post->subCategory)
+                {{ $post->subCategory->nama_sub_kategori }}
+            @else
+                {{ $post->kategori->nama_kategori }}
+            @endif
+        </h3>
         <div class="date">{{ \Carbon\Carbon::parse($post->created_at)->translatedFormat('l, d F Y | H:i') }} WIB </div>
     </div>
     <article class="article-detail">
         <div class="t5-b20">
             <h1 class="article-detail--title">{{ $post->title }}</h1>
-            @if ($post->description)
-                <div class="article-detail--desc">{{ $post->description }}</div>
-            @endif
             <div class="article-detail--info">
                 <div class="author"> {{ $post->user->name }} </div>
             </div>
@@ -86,18 +89,29 @@
                 <p>{!! preg_replace_callback(
                     '/<img[^>]+alt="([^"]*)"[^>]*>/i',
                     function ($matches) {
-                        return $matches[0] . '<i>' . htmlspecialchars($matches[1]) . '</i><br>';
+                        return $matches[0] . '<i>' . htmlspecialchars($matches[1]) . '</i>';
                     },
                     preg_replace_callback(
-                        '/(?:<caption\b[^>]*>|\\[caption[^\]]*\\])(.*?)(?:<\\/caption>|\\[\\/caption\\])/is', 
+                        '/(?:<caption\b[^>]*>|\[caption[^\]]*\])(.*?)(?:<\/caption>|\[\/caption\])/is',
                         function ($matches) {
                             preg_match_all('/<img[^>]+>/i', $matches[1], $images);
-                            return implode('', $images[0]); 
+                            return implode('', $images[0]);
                         },
-                        $post->content
+                        preg_replace_callback(
+                            '/^(?!\s*<p\b|\s*<img|\s*<ul|\s*<ol|\s*<div|\s*<blockquote|\s*<h[1-6])(.+?)(?=<|$)/ism',
+                            function ($matches) {
+                                return '<p>' . trim($matches[1]) . '</p>';
+                            },
+                            preg_replace_callback(
+                                '/<p>\s*(<br>|&nbsp;)\s*<\/p>/i',
+                                function () {
+                                    return '';
+                                },
+                                $post->content
+                            )
+                        )
                     )
-                ) !!}
-                </p>                
+                ) !!}</p>               
             </div>
 
             <div class="article-detail-tag">
@@ -217,7 +231,15 @@
                                         href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
                                 </h4>
                                 <div class="category-and-time">
-                                    <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->kategori->nama_kategori }}</a>
+                                    @if ($item->subCategory)
+                                    <a href="">
+                                        {{ $item->subCategory->nama_sub_kategori }}
+                                    </a>
+                                    @else
+                                    <a href="">
+                                        {{ $item->kategori->nama_kategori }}
+                                    </a>
+                                    @endif
                                     <span>{{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }} WIB</span>
                                 </div>
                             </div>

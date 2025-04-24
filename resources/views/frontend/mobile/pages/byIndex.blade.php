@@ -12,9 +12,15 @@
                         <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
                     </h4>
                     <div class="category-and-time">
-                        <a href="{{ route('kanal.desktop', ['slug' => $item->kategori->slug]) }}">
+                        @if ($item->subCategory)
+                        <a href="">
+                            {{ $item->subCategory->nama_sub_kategori }}
+                        </a>
+                        @else
+                        <a href="">
                             {{ $item->kategori->nama_kategori }}
                         </a>
+                        @endif
                         <span>{{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }} WIB</span>
                     </div>
                 </div>
