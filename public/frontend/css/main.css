@@ -205,7 +205,7 @@ header-container {
 
 .main-header {
     width: 100%;
-    z-index: 9998;
+    z-index: 9999;
     top: 0;
     left: 0;
     right: 0;
@@ -1356,7 +1356,7 @@ li:last-child.menu-item {
     font-style: normal;
     font-weight: 400;
     font-size: 15px;
-    line-height: 28px;
+    line-height: 22px;
     align-items: center;
     color:var(--gray-color);
 }

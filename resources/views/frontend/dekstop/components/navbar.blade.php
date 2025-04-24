@@ -19,7 +19,7 @@
                                    class="{{ Request::is('category/' . $item->slug) ? 'active' : '' }}">
                                     {{ $item->nama_kategori }}
                                 </a>
-                        
+
                                 @if($item->subCategories->count())
                                     <ul class="dropdown-menu">
                                         @foreach ($item->subCategories as $sub)
@@ -32,8 +32,8 @@
                                     </ul>
                                 @endif
                             </li>
-                        @endforeach                        
-                            
+                        @endforeach
+
                             <li class="menu-item">
                                 <a href="https://www.youtube.com/@indopopid" target="_blank">Video</a>
                             </li>
@@ -69,7 +69,7 @@
             </button>
         </div>
     </form>
-    <div class="today-news-container" style="position: fixed; margin-top:50px; z-index: 9999;">
+    <div class="today-news-container" style="position: fixed; margin-top:50px; z-index: 9998;">
         <div class="today-headline">Terpopuler</div>
         <div class="news-marquee-container">
             <div class="news-marquee-text">
