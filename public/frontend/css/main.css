@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
+/* linear-gradient(180deg,rgba(220, 239, 255, 1) 0%, rgba(176, 215, 255, 1) 100%); */
 :root{
     --primary-gradient: rgba(37,150,190,1) 0%, rgba(37,70,133,1);
     --blue-primary: rgba(37, 150, 190, 1);
