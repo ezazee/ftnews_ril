@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <title>
-    {{ request()->is('/') ? 'FTNews | Akurat Menyajikan Informasi, Berita Terkini, Kabar Terbaru Indonesia dan Internasional' : ($post->title ?? 'FTNews |Akurat Menyajikan Informasi, Berita Terkini, Kabar Terbaru Indonesia dan Internasional') }}
+    {{ request()->is('/') ? 'FTNews | Akurat Menyajikan Informasi, Berita Terkini, Kabar Terbaru Indonesia dan Internasional' : ($post->title ?? 'FTNews | Akurat Menyajikan Informasi, Berita Terkini, Kabar Terbaru Indonesia dan Internasional') }}
 </title>
 <meta name="description" content="
     {{ request()->is('/') ? 'FTNews - Berita terkini hari ini, nasional, hukum, politik, daerah, metropolitan, lifestyle, kesehatan' : ($post->description ?? 'FTNews - Berita terkini hari ini, nasional, hukum, politik, daerah, metropolitan, lifestyle, kesehatan') }}

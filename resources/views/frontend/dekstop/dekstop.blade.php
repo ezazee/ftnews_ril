@@ -18,11 +18,11 @@
                     <div class="category-and-time">
                         <span>
                             @if ($topPostheadline->subCategory)
-                            <a href="">
+                            <a href="{{ route('subcateg.desktop', ['categ' => $topPostheadline->kategori->slug, 'subcateg' => $topPostheadline->subCategory->slug]) }}">
                                 {{ $topPostheadline->subCategory->nama_sub_kategori }}
                             </a>
                             @else
-                            <a href="">
+                            <a href="{{ route('kanal.desktop', ['slug' => $topPostheadline->slug]) }}">
                                 {{ $topPostheadline->kategori->nama_kategori }}
                             </a>
                             @endif
@@ -78,11 +78,11 @@
                             <a href="">
                                 <span>
                                     @if ($item->subCategory)
-                                    <a href="">
+                                    <a href="{{ route('subcateg.desktop', ['categ' => $item->kategori->slug, 'subcateg' => $item->subCategory->slug]) }}">
                                         {{ $item->subCategory->nama_sub_kategori }}
                                     </a>
                                     @else
-                                    <a href="">
+                                    <a href="{{ route('kanal.desktop', ['slug' => $item->slug]) }}">
                                         {{ $item->kategori->nama_kategori }}
                                     </a>
                                     @endif
@@ -378,11 +378,11 @@
                             <div class="category-and-time">
                                 <span>
                                     @if ($post->subCategory)
-                                    <a href="">
+                                    <a href="{{ route('subcateg.desktop', ['categ' => $post->kategori->slug, 'subcateg' => $post->subCategory->slug]) }}">
                                         {{ $post->subCategory->nama_sub_kategori }}
                                     </a>
                                     @else
-                                    <a href="">
+                                    <a href="{{ route('kanal.desktop', ['slug' => $post->slug]) }}">
                                         {{ $post->kategori->nama_kategori }}
                                     </a>
                                     @endif

@@ -43,32 +43,13 @@
                 <li class="menu-item {{ Request::is('/') ? 'active' : '' }}">
                     <a href="/">Home</a>
                 </li>
-                {{-- @foreach ($categories as $item) --}}
-                <li class="menu-item">
-                    <a href="LINK"
-                        class="">Nasional</a>
+                @foreach ($categories as $item)
+                <li class="menu-item {{ Request::is('category/' . $item->slug) ? 'active' : '' }}">
+                    <a href="{{ route('kanal.desktop', ['slug' => $item->slug]) }}">
+                        {{ $item->nama_kategori }}
+                    </a>
                 </li>
-                <li class="menu-item">
-                    <a href="LINK"
-                        class="">Daerah</a>
-                </li>
-                <li class="menu-item">
-                    <a href="LINK"
-                        class="">Lifestyle</a>
-                </li>
-                <li class="menu-item">
-                    <a href="LINK"
-                        class="">Teknologi</a>
-                </li>
-                <li class="menu-item">
-                    <a href="LINK"
-                        class="">Olahraga</a>
-                </li>
-                <li class="menu-item">
-                    <a href="LINK"
-                        class="">Otomotif</a>
-                </li>
-                {{-- @endforeach --}}
+                @endforeach
                 <li class="menu-item">
                     <a href="https://www.youtube.com/@indopopid" target="_blank">Video</a>
                 </li>
@@ -135,32 +116,13 @@
             <li class="menu-item-scroll {{ Request::is('/') ? 'active' : '' }}">
                 <a href="/">Home</a>
             </li>
-            {{-- @foreach ($categories as $item) --}}
-                <li class="menu-item-scroll">
-                    <a href="LINK"
-                        class="">Nasional</a>
-                </li>
-                <li class="menu-item-scroll">
-                    <a href="LINK"
-                        class="">Daerah</a>
-                </li>
-                <li class="menu-item-scroll">
-                    <a href="LINK"
-                        class="">Lifestyle</a>
-                </li>
-                <li class="menu-item-scroll">
-                    <a href="LINK"
-                        class="">Teknologi</a>
-                </li>
-                <li class="menu-item-scroll">
-                    <a href="LINK"
-                        class="">Olahraga</a>
-                </li>
-                <li class="menu-item-scroll">
-                    <a href="LINK"
-                        class="">Otomotif</a>
-                </li>
-            {{-- @endforeach --}}
+            @foreach ($categories as $item)
+            <li class="menu-item-scroll {{ Request::is('category/' . $item->slug) ? 'active' : '' }}">
+                <a href="{{ route('kanal.desktop', ['slug' => $item->slug]) }}">
+                    {{ $item->nama_kategori }}
+                </a>
+            </li>
+            @endforeach
             <li class="menu-item-scroll">
                 <a href="https://www.youtube.com/@indopopid" target="_blank">Video</a>
             </li>
