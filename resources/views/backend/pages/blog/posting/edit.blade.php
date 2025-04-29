@@ -254,7 +254,7 @@
                         </div>
                         <div class="card-body">
                             <select class="form-control form-select" id="status" name="status">
-                                <option value="public" {{ $post->status == 'public' ? 'selected' : '' }}>Published
+                                <option value="publish" {{ $post->status == 'public' ? 'selected' : '' }}>Published
                                 </option>
                                 <option value="schedule" {{ $post->status == 'schedule' ? 'selected' : '' }}>Scheduled
                                 </option>
@@ -263,8 +263,7 @@
                             <div id="form-scheduled" style="margin-top: 10px;">
                                 <label class="form-label">Date</label>
                                 <input type="date" class="form-control" name="scheduled_date"
-                                    value="{{ isset($post->start_date) ? \Carbon\Carbon::parse($post->start_date)->format('Y-m-d') : '' }}"
-                                    min="{{ date('Y-m-d') }}">
+                                    value="{{ isset($post->start_date) ? \Carbon\Carbon::parse($post->start_date)->format('Y-m-d') : '' }}">
 
                                 <label class="form-label">Time</label>
                                 <input type="time" class="form-control" name="scheduled_time"

@@ -40,10 +40,9 @@ class DashboardController extends Controller
 
     public function getTopPages(Request $request)
     {
-        $settings = Settings::first();
-        $propertyId = $settings->analytics;
+        $propertyId = env('PROPERTIES_ID');
 
-        $startDate = $request->query('start_date', now()->subDays(7)->format('Y-m-d'));
+        $startDate = $request->query('start_date', now()->subDays(30)->format('Y-m-d'));
         $endDate = $request->query('end_date', now()->format('Y-m-d'));
 
         try {
@@ -69,10 +68,9 @@ class DashboardController extends Controller
     }
 
     public function gettopBrowsers(Request $request){
-        $settings = Settings::first();
-        $propertyId = $settings->analytics;
+        $propertyId = env('PROPERTIES_ID');
 
-        $startDate = $request->query('start_date', now()->subDays(7)->format('Y-m-d'));
+        $startDate = $request->query('start_date', now()->subDays(30)->format('Y-m-d'));
         $endDate = $request->query('end_date', now()->format('Y-m-d'));
 
         try {
@@ -98,10 +96,9 @@ class DashboardController extends Controller
     }
 
     public function gettopReferrers(Request $request){
-        $settings = Settings::first();
-        $propertyId = $settings->analytics;
+        $propertyId = env('PROPERTIES_ID');
 
-        $startDate = $request->query('start_date', now()->subDays(7)->format('Y-m-d'));
+        $startDate = $request->query('start_date', now()->subDays(30)->format('Y-m-d'));
         $endDate = $request->query('end_date', now()->format('Y-m-d'));
 
         try {
@@ -128,10 +125,9 @@ class DashboardController extends Controller
 
     public function getSiteAnalytics(Request $request)
     {
-        $settings = Settings::first();
-        $propertyId = $settings->analytics;
+        $propertyId = env('PROPERTIES_ID');
     
-        $startDate = $request->query('start_date', now()->subDays(7)->format('Y-m-d'));
+        $startDate = $request->query('start_date', now()->subDays(30)->format('Y-m-d'));
         $endDate = $request->query('end_date', now()->format('Y-m-d'));
     
         try {

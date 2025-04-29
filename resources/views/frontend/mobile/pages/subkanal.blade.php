@@ -1,8 +1,8 @@
 @extends('frontend.mobile.master.master-app')
 @section('content')
-    <div class="mt-20">
-        <h3 class="card-headline-no-image-title ml-10 fw-bold">{{ $category->nama_sub_kategori }}</h3>
-    </div>
+    <div style="margin-top: 120px">
+        <h2 class="card-headline-no-image-title text-center fw-bold">{{ $category->nama_sub_kategori }}</h2>
+    </ul>
 
     @if ($post->isNotEmpty())
         @php $latestPost = $post->first(); @endphp

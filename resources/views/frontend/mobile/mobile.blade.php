@@ -2,14 +2,6 @@
 
 @section('content')
     <div>
-        <div id="div-ad-top" data-ad-type="msite_top" class="ads ads--top_home">
-            <script type="text/javascript">
-                googletag.cmd.push(function() {
-                    googletag.display('div-ad-top');
-                });
-            </script>
-        </div>
-        <!-- Headline -->
         <div>
             @if ($topPostheadline)
                 @php
@@ -21,9 +13,21 @@
                     </a>
                     <div class="card-headline-info">
                         <div class="category-and-time">
-                            <a
-                                href="{{ route('kanal.desktop', ['slug' => $topPostheadline->slug]) }}">{{ $topPostheadline->kategori->nama_kategori }}</a>
-                            <span>{{ \Carbon\Carbon::parse($topPostheadline->created_at)->format('Y-m-d') }}</span>
+                            <span>
+                                @if ($topPostheadline->subCategory)
+                                <a href="{{ route('kanal.desktop', ['slug' => $topPostheadline->slug]) }}">
+                                    {{ $topPostheadline->kategori->nama_kategori }}
+                                </a>| 
+                                <a href="{{ route('subcateg.desktop', ['categ' => $topPostheadline->kategori->slug, 'subcateg' => $topPostheadline->subCategory->slug]) }}">
+                                    {{ $topPostheadline->subCategory->nama_sub_kategori }}
+                                </a>
+                                @else
+                                <a href="{{ route('kanal.desktop', ['slug' => $topPostheadline->slug]) }}">
+                                    {{ $topPostheadline->kategori->nama_kategori }}
+                                </a>|
+                                @endif| 
+                                {{ \Carbon\Carbon::parse($topPostheadline->created_at)->format('Y-m-d') }}
+                            </span>
                         </div>
                         <h4 class="card-headline-title">
                             <a
@@ -44,7 +48,6 @@
                             <h4 class="card-headline-small-title">
                                 <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
                             </h4>
-                            <!-- <span class="card-headline-small-category">Seleb</span> -->
                             <div class="category-and-time-head">
                                 <span>{{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</span>
                             </div>
@@ -66,9 +69,21 @@
                             <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
                         </h4>
                         <div class="category-and-time">
-                            <a
-                                href="{{ route('kanal.desktop', ['slug' => $item->slug]) }}">{{ $item->kategori->nama_kategori }}</a>
-                            <span>{{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</span>
+                            <span>
+                                @if ($item->subCategory)
+                                <a href="{{ route('kanal.desktop', ['slug' => $item->slug]) }}">
+                                    {{ $item->kategori->nama_kategori }}
+                                </a>| 
+                                <a href="{{ route('subcateg.desktop', ['categ' => $item->kategori->slug, 'subcateg' => $item->subCategory->slug]) }}">
+                                    {{ $item->subCategory->nama_sub_kategori }}
+                                </a>
+                                @else
+                                <a href="{{ route('kanal.desktop', ['slug' => $item->slug]) }}">
+                                    {{ $item->kategori->nama_kategori }}
+                                </a>|
+                                @endif
+                                {{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}
+                            </span>
                         </div>
                     </div>
                 </article>
@@ -416,9 +431,21 @@
                                             href="{{ route('detail.desktop', ['slug' => $post->slug]) }}">{{ $post->title }}</a>
                                     </h4>
                                     <div class="category-and-time">
-                                        <a
-                                            href="{{ route('kanal.desktop', ['slug' => $item->slug]) }}">{{ $post->kategori->nama_kategori }}</a>
-                                        <span>{{ \Carbon\Carbon::parse($post->created_at)->format('Y-m-d') }}</span>
+                                        <span>
+                                            @if ($post->subCategory)
+                                            <a href="{{ route('kanal.desktop', ['slug' => $post->slug]) }}">
+                                                {{ $post->kategori->nama_kategori }}
+                                            </a>| 
+                                            <a href="{{ route('subcateg.desktop', ['categ' => $post->kategori->slug, 'subcateg' => $post->subCategory->slug]) }}">
+                                                {{ $post->subCategory->nama_sub_kategori }}
+                                            </a>
+                                            @else
+                                            <a href="{{ route('kanal.desktop', ['slug' => $post->slug]) }}">
+                                                {{ $post->kategori->nama_kategori }}
+                                            </a>|
+                                            @endif
+                                            {{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}
+                                        </span>
                                     </div>
                                 </div>
                             </article>

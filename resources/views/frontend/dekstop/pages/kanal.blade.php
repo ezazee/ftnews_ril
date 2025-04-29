@@ -17,6 +17,20 @@
                         </h4>
                         <div class="category-and-time">
                             <div class="card-one-headline--desc">{!! Str::limit(strip_tags($item->content), 150) !!}</div>
+                            <span>
+                                @if ($item->subCategory)
+                                <a href="{{ route('kanal.desktop', ['slug' => $item->slug]) }}">
+                                    {{ $item->kategori->nama_kategori }}
+                                </a>| 
+                                <a href="{{ route('subcateg.desktop', ['categ' => $item->kategori->slug, 'subcateg' => $item->subCategory->slug]) }}">
+                                    {{ $item->subCategory->nama_sub_kategori }}
+                                </a>
+                                @else
+                                <a href="{{ route('kanal.desktop', ['slug' => $item->slug]) }}">
+                                    {{ $item->kategori->nama_kategori }}
+                                </a>
+                                @endif
+                            </span>
                             <span>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->isoFormat('DD MMMM, YYYY') : '' }} |</span>
                             <span>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('H:i:s') : '' }}</span>
                         </div>

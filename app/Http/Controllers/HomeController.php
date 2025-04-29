@@ -60,7 +60,6 @@ class HomeController extends Controller
                     $query->where('nama_kategori', $categoryName);
                 })
                 ->whereNotIn('id', $usedPostIds)
-                ->where('sub_category_id', NULL)
                 ->where('status', 'public')
                 ->latest()
                 ->take($limit)
@@ -361,13 +360,11 @@ class HomeController extends Controller
     }
     public function kanal($slug)
     {
-        $category = Categori::where('slug', $slug)->firstOrFail();
+        $category = Categori::with('subCategories')->where('slug', $slug)->firstOrFail();
         $postQuery = Post::with('kategori', 'user')->where('kategori_id', $category->id);
         $post = $postQuery->where('status', 'public')
-                ->where('sub_category_id', NULL)
                 ->orderBy('created_at', 'desc')->latest()->paginate(25);
 
-        // dd($category);
         $postTerkini = Post::with('kategori', 'user')
         ->where('status', 'public')
         ->latest()

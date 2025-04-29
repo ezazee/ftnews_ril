@@ -15,13 +15,13 @@ class GoogleAnalyticsService
 
     public function __construct()
     {
-        // try {
-        //     $this->analytics = new BetaAnalyticsDataClient([
-        //         'credentials' => storage_path('app/google/analityc-ftnews-8437fc4bb81f.json'),
-        //     ]);
-        // } catch (Exception $e) {
-        //     throw new Exception("Error initializing Google Analytics client: " . $e->getMessage());
-        // }
+        try {
+            $this->analytics = new BetaAnalyticsDataClient([
+                'credentials' => storage_path('app/google/analityc-ftnews-8437fc4bb81f.json'),
+            ]);
+        } catch (Exception $e) {
+            throw new Exception("Error initializing Google Analytics client: " . $e->getMessage());
+        }
     }
 
     /**

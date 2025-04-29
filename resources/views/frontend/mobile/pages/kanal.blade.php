@@ -2,13 +2,10 @@
 @section('content')
     <div style="margin-top: 150px">
         <h2 class="card-headline-no-image-title text-center fw-bold">{{ $category->nama_kategori }}</h2>
-        <ul class="scrollable-subtitles"
-            style="display: flex; overflow-x: auto; white-space: nowrap; padding: 10px 0; margin-bottom: 30px">
-            <li class="menu-item-scroll active" style="padding: 0 15px; font-size: 14px; color: #333;"><a href="#">Hukum</a></li>
-            <li class="menu-item-scroll" style="padding: 0 15px; font-size: 14px; color: #333;"><a href="#">Ekonomi Bisnis</a></li>
-            <li class="menu-item-scroll" style="padding: 0 15px; font-size: 14px; color: #333;"><a href="#">Metropolitan</a></li>
-            <li class="menu-item-scroll" style="padding: 0 15px; font-size: 14px; color: #333;"><a href="#">Politik</a></li>
-            <li class="menu-item-scroll" style="padding: 0 15px; font-size: 14px; color: #333;"><a href="#">Sosial Budaya</a></li>
+        <ul class="scrollable-subtitles" style="display: flex; overflow-x: auto; white-space: nowrap; padding: 10px 0; margin-bottom: 30px">
+            @foreach ($category->subCategories as $item)
+            <li class="menu-item-scroll {{ Request::is('category/'.$category->slug.'/'. $item->slug) ? 'active' : '' }}" style="padding: 0 15px; font-size: 14px; color: #333;"><a href="{{ route('subcateg.desktop', ['categ' => $category->slug, 'subcateg' => $item->slug]) }}">{{ $item->nama_sub_kategori }}</a></li>
+            @endforeach
         </ul>
     </ul>
 
@@ -24,7 +21,22 @@
                     </h4>
                     <div class="category-and-time">
                         <div class="card-one-headline--desc">{!! Str::limit(strip_tags($latestPost->content), 60) !!}</ul>
-                        <span>{{ \Carbon\Carbon::parse($latestPost->created_at)->format('Y-m-d') }}</span>
+                        
+                        <span>                                
+                            @if ($latestPost->subCategory)
+                            <a href="{{ route('kanal.desktop', ['slug' => $latestPost->slug]) }}">
+                                {{ $latestPost->kategori->nama_kategori }}
+                            </a>| 
+                            <a href="{{ route('subcateg.desktop', ['categ' => $latestPost->kategori->slug, 'subcateg' => $latestPost->subCategory->slug]) }}">
+                                {{ $latestPost->subCategory->nama_sub_kategori }}
+                            </a>
+                            @else
+                            <a href="{{ route('kanal.desktop', ['slug' => $latestPost->slug]) }}">
+                                {{ $latestPost->kategori->nama_kategori }}
+                            </a>|
+                            @endif
+                            {{ \Carbon\Carbon::parse($latestPost->created_at)->format('Y-m-d') }}
+                        </span>
                     </ul>
                 </ul>
             </article>
