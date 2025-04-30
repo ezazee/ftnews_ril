@@ -84,28 +84,30 @@
                         </div>
                         <li>Alamat Redaksi:</li>
                         <div class="list-nama">
-                            <p>Jl. Raya Ragunan No.T.05, RT.8/RW.6, Jati Padang, Ps. Minggu, Jakarta Selatan, DKI Jakarta 12540
+                            <p>Jl. Raya Ragunan No.T.05, RT.8/RW.6, Jati Padang, Ps. Minggu, Jakarta Selatan, DKI Jakarta
+                                12540
                                 Telepon: +62812-822-81-822</p>
                         </div>
                         <li>Email:</li>
                         <div class="list-nama">
-                            <p>indopopdigital@gmail.com</p>
+                            <p>redaksi@ftnews.co.id</p>
+                            <p>ptforumterkinimedia@gmail.com</p>
                         </div>
                         <li>Facebook:</li>
                         <div class="list-nama">
-                            <p>Indopop.id</p>
+                            <p>FTNewscoid</p>
                         </div>
                         <li>Tiktok:</li>
                         <div class="list-nama">
-                            <p>@indopopdotid</p>
+                            <p>@ftnews.co.id</p>
                         </div>
                         <li>YouTube:</li>
                         <div class="list-nama">
-                            <p>@indopopid</p>
+                            <p>@FTNewscoid</p>
                         </div>
                         <li>Instagram:</li>
                         <div class="list-nama">
-                            <p>@Indopop.id</p>
+                            <p>@ftnews.co.id</p>
                         </div>
                         <li>Rekening Bank:</li>
                         <div class="list-nama">
