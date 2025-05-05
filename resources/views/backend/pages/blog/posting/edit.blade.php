@@ -254,7 +254,7 @@
                         </div>
                         <div class="card-body">
                             <select class="form-control form-select" id="status" name="status">
-                                <option value="publish" {{ $post->status == 'public' ? 'selected' : '' }}>Published
+                                <option value="public" {{ $post->status == 'public' ? 'selected' : '' }}>Published
                                 </option>
                                 <option value="schedule" {{ $post->status == 'schedule' ? 'selected' : '' }}>Scheduled
                                 </option>
