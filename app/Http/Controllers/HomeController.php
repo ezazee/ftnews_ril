@@ -30,7 +30,7 @@ class HomeController extends Controller
         ->whereNotIn('id', $usedPostIds)
         ->orderBy('id', 'desc')
         ->take(15)
-        ->get();    
+        ->get();
 
         $topPostheadline = $postheadline->shift();
 
@@ -70,7 +70,7 @@ class HomeController extends Controller
         };
 
         $postsByCategory = [];
-        
+
 
         $categoriesAll = Categori::pluck('nama_kategori');
         //kategori
@@ -398,7 +398,7 @@ class HomeController extends Controller
         $category = SubCategory::whereHas('category', function ($query) use ($categ) {
             $query->where('slug', $categ);
         })->where('slug', $subcateg)->firstOrFail();
-    
+
 
         $postQuery = Post::with('kategori', 'user')->where('sub_category_id', $category->id);
         $post = $postQuery->where('status', 'public')->orderBy('created_at', 'desc')->latest()->paginate(25);
@@ -552,4 +552,25 @@ class HomeController extends Controller
             return view('frontend.dekstop.pages.search-result',compact('postTerkini','posts','postTerpopuler'));
         }
     }
+
+    public function by404(){
+        $postTerkini = Post::with('kategori', 'user')
+        ->where('status', 'public')
+        ->latest()
+        ->take(5)
+        ->get();
+
+        $postTerkiniBottom = Post::with('kategori', 'user')
+        ->where('status', 'public')
+        ->latest()
+        ->take(20)
+        ->get();
+
+        if ($this->agent->isMobile()) {
+            return view('frontend.mobile.pages.404', compact('postTerkini', 'postTerkiniBottom'));
+        } else {
+            return view('frontend.dekstop.pages.404', compact('postTerkini', 'postTerkiniBottom'));
+        }
+    }
+
 }

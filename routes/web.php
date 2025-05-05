@@ -182,4 +182,4 @@ Route::get('/search-result', [HomeController::class, 'searchResult'])->name('sea
 
 Route::get('/{slug}', [HomeController::class, 'detail'])->name('detail.desktop');
 
-
+Route::get('/404/not-found', [HomeController::class, 'by404'])->name('by404');
