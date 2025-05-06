@@ -10,7 +10,7 @@
                 @foreach ($post->take(1) as $item)
                 <article class="card-one-headline">
                     <div class="card-one-headline-img"><a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}"><img class="card-one-headline-img"
-                                src="{{ is_array($item->gambar) ? $item->gambar[0] : $item->gambar }}" /></a></div>
+                                src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" /></a></div>
                     <div class="card-one-headline--info">
                         <h4 class="card-one-headline--title">
                             <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
@@ -27,7 +27,7 @@
                     @foreach ($post->slice(1, 4) as $item)
                     <article class="card-two-headline">
                         <div class="card-two-headline-img-wrap">
-                            <img class="card-two-headline-img" src="{{ is_array($item->gambar) ? $item->gambar[0] : $item->gambar }}" />
+                            <img class="card-two-headline-img" src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />
                         </div>
                         <div class="card-two-headline--info">
                             <h4 class="card-two-headline--title">
@@ -49,7 +49,7 @@
                         <article class="main-card">
                             <div class="main-card-img-wrap">
                                 <img alt="image" class="main-card-img" width="213" height="130"
-                                    src="{{ is_array($item->gambar) ? $item->gambar[0] : $item->gambar }}" />
+                                    src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />
                             </div>
                             <div class="main-card--info">
                                 <h4 class="main-card--title">

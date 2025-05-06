@@ -8,7 +8,7 @@
         <article class="main-card">
             <div class="main-card-img-wrap">
                 <img alt="{{ $item->title }}" class="main-card-img"
-                    src="{{ is_array($item->gambar) ? $item->gambar[0] : $item->gambar }}" />
+                    src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />
             </div>
             <div class="main-card--info">
                 <h4 class="main-card--title">
