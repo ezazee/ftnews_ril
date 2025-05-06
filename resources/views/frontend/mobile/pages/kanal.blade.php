@@ -14,7 +14,7 @@
         <div>
             <article class="card-headline">
                 <img alt="{{ $latestPost->title }}" class="card-headline-img"
-                    src="{{ is_array($latestPost->gambar) ? $latestPost->gambar[0] : $latestPost->gambar }}" />
+                    src="{{ asset('storage/comp/' . (is_array($latestPost->gambar) ? basename($latestPost->gambar[0]) : basename($latestPost->gambar))) }}" />
                 <div class="card-headline-info">
                     <h4 class="card-headline-title">
                         <a href="{{ route('detail.desktop', ['slug' => $latestPost->slug]) }}">{{ $latestPost->title }}</a>
@@ -46,7 +46,7 @@
             @foreach ($post->skip(1)->take(4) as $item)
                 <article class="card-headline-small">
                     <img alt="{{ $item->title }}" class="card-headline-small-img"
-                        src="{{ is_array($item->gambar) ? $item->gambar[0] : $item->gambar }}" />
+                        src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />
                     <div class="card-headline-small-info">
                         <h4 class="card-headline-small-title">
                             <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
@@ -68,7 +68,7 @@
             <article class="main-card">
                 <div class="main-card-img-wrap">
                     <img alt="{{ $item->title }}" class="main-card-img"
-                        src="{{ is_array($item->gambar) ? $item->gambar[0] : $item->gambar }}" />
+                        src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />
                 </ul>
                 <div class="main-card--info">
                     <h4 class="main-card--title">

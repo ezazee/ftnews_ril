@@ -153,12 +153,29 @@ class HomeController extends Controller
 
         $kategoriId = $post->kategori_id;
 
-        $relatedPosts = Post::with(['kategori', 'user'])
-        ->where('kategori_id', $kategoriId)
-        ->where('status', 'public')
-        ->where('id', '!=', $post->id)
-        ->take(5)
+        $relatedPosts = Post::whereHas('tags', function ($q) use ($post) {
+            $q->whereIn('tags.id', $post->tags->pluck('id'));
+        })
+        ->where('posts.id', '!=', $post->id)
+        ->select('posts.*')
+        ->take(2)
         ->get();
+    
+        $firstRelated = $relatedPosts->get(0);
+        $secondRelated = $relatedPosts->get(1);
+        
+        $injectAt3 = '';
+        $injectAt6 = '';
+        
+        if ($firstRelated) {
+            $injectAt3 = '<p><strong>Baca Juga: <a href="' . route('detail.desktop', ['slug' => $firstRelated->slug]) . '">' . htmlspecialchars($firstRelated->title) . '</a></strong></p>';
+        }
+        
+        if ($secondRelated) {
+            $injectAt6 = '<p><strong>Baca Juga: <a href="' . route('detail.desktop', ['slug' => $secondRelated->slug]) . '">' . htmlspecialchars($secondRelated->title) . '</a></strong></p>';
+        }
+
+        // dd($relatedPosts);
 
 
         // $postTerpopuler = Post::with('kategori', 'user')
@@ -192,7 +209,7 @@ class HomeController extends Controller
         ->get();
 
 
-        $allPosts = collect([$post, $postTerpopuler,$postTerkini,$relatedPosts,$postTerkiniBottom])->flatten();
+        $allPosts = collect([$postTerpopuler,$postTerkini,$relatedPosts,$postTerkiniBottom])->flatten();
 
         foreach ($allPosts as $singlePost) {
             if ($singlePost && $singlePost->gambar) {
@@ -204,9 +221,9 @@ class HomeController extends Controller
         $tagsdetail = $post->tags;
 
         if ($this->agent->isMobile()) {
-            return view('frontend.mobile.pages.detail',compact('relatedPosts','postTerkiniBottom','post','postTerkini','postTerpopuler','tagsdetail'));
+            return view('frontend.mobile.pages.detail',compact('relatedPosts','injectAt3', 'injectAt6','postTerkiniBottom','post','postTerkini','postTerpopuler','tagsdetail'));
         } else {
-            return view('frontend.dekstop.pages.detail',compact('relatedPosts','postTerkiniBottom','post','postTerkini','postTerpopuler','tagsdetail'));
+            return view('frontend.dekstop.pages.detail',compact('relatedPosts','injectAt3', 'injectAt6','postTerkiniBottom','post','postTerkini','postTerpopuler','tagsdetail'));
         }
     }
 

@@ -15,7 +15,7 @@
                                     <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">
 
                                         <img alt="image" class="main-card-img" width="213" height="130"
-                                            src="{{ is_array($item->gambar) ? $item->gambar[0] : $item->gambar }}" />
+                                        src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />                                    
                                     </a>
                                 </div>
                                 <div class="main-card--info">

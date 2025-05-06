@@ -35,23 +35,26 @@ class UploadController extends LfmController
             try {
                 $originalName = preg_replace('/\s+/', '-', pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
                 $extension = $file->getClientOriginalExtension();
-
+        
                 $filename = $originalName . '.' . $extension;
                 $thumbFilename = $originalName . '.' . $extension;
-    
-                $resizeResult = ImageResizeHelper::resizeImage($file, $filename, $thumbFilename);
-    
+                $compFilename = $originalName . '.' . $extension;
+        
+                $resizeResult = ImageResizeHelper::resizeImage($file, $filename, $thumbFilename, $compFilename);
+        
                 if (isset($resizeResult['error'])) {
                     array_push($error_bag, 'Some error occurred during uploading.');
                     continue;
                 }
-    
+        
                 $url = Storage::url($resizeResult['path']);
                 $thumbUrl = Storage::url($resizeResult['thumb_path']);
-    
+                $compUrl = Storage::url($resizeResult['comp_path']); 
+        
                 $response = [
                     'url' => $url,
                     'thumb_url' => $thumbUrl,
+                    'comp_url' => $compUrl, 
                     'uploaded' => $url
                 ];
             } catch (\Exception $e) {
@@ -63,7 +66,7 @@ class UploadController extends LfmController
                 $error_bag[] = $e->getMessage();
             }
         }
-    
+        
         return response()->json($error_bag ? ['error' => $error_bag] : $response);
     }
     

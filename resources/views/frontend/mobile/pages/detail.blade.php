@@ -75,7 +75,7 @@
                         </a>
         </div>
         <figure class="article-detail-figure">
-            <img alt="image" src="{{ is_array($post->gambar) ? $post->gambar[0] : $post->gambar }}"
+            <img alt="image" src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}"
                 class="card-headline-img" />
             <figcaption>{{ $post->image_caption }}</figcaption>
         </figure>
@@ -107,11 +107,26 @@
                                 function () {
                                     return '';
                                 },
-                                $post->content
+                                preg_replace_callback(
+                                    '/<p\b[^>]*>.*?<\/p>/is',
+                                    function ($matches) use (&$paragraphIndex, $injectAt3, $injectAt6) {
+                                        static $paragraphIndex = 0;
+                                        $paragraphIndex++;
+                
+                                        if ($paragraphIndex == 3 && $injectAt3) {
+                                            return $matches[0] . $injectAt3;
+                                        } elseif ($paragraphIndex == 8 && $injectAt6) {
+                                            return $matches[0] . $injectAt6;
+                                        }
+                
+                                        return $matches[0];
+                                    },
+                                    $post->content
+                                )
                             )
                         )
                     )
-                ) !!}</p>               
+                ) !!}</p>              
             </div>
 
             <div class="article-detail-tag">
@@ -181,7 +196,7 @@
         @foreach ($relatedPosts->take(1) as $item)
             <article class="card-headline">
                 <img alt="image" class="card-headline-img"
-                    src="{{ is_array($item->gambar) ? $item->gambar[0] : $item->gambar }}" />
+                    src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />
                 <div class="card-headline-info">
                     <h4 class="card-headline-title">
                         <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
@@ -195,7 +210,8 @@
                 <article class="main-card">
                     <div class="main-card-img-wrap">
                         <img alt="image" class="main-card-img"
-                            src="{{ is_array($item->gambar) ? $item->gambar[0] : $item->gambar }}" />
+                            src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}
+" />
                     </div>
                     <div class="main-card--info">
                         <h4 class="main-card--title">
@@ -223,7 +239,8 @@
                         <article class="main-card">
                             <div class="main-card-img-wrap">
                                 <img alt="image" class="main-card-img"
-                                    src="{{ is_array($item->gambar) ? $item->gambar[0] : $item->gambar }}" />
+                                    src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}
+" />
                             </div>
                             <div class="main-card--info">
                                 <h4 class="main-card--title">

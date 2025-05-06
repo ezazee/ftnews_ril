@@ -29,21 +29,42 @@ class ImageResizeHelper
         return false;
     }
 
-    public static function resizeImage($image, $filename, $thumbFilename)
+    public static function resizeImage($image, $filename, $thumbFilename, $compFilename)
     {
         $extension = $image->getClientOriginalExtension();
-
+        
         $path = $image->storeAs('public/gambar', $filename);
-
         $filePath = $image->getRealPath();
-
+    
         list($width, $height) = getimagesize($image);
-
+    
         $newWidth = 123;
         $newHeight = 123;
-
+        
+        $compWidth = 651;
+        $compHeight = 360;
+    
+        $aspectRatio = $width / $height;
+    
+        if ($width > $height) {
+            $newWidth = 123;
+            $newHeight = round($newWidth / $aspectRatio);
+        } else {
+            $newHeight = 123;
+            $newWidth = round($newHeight * $aspectRatio);
+        }
+    
+        if ($width > $height) {
+            $compWidth = 651;
+            $compHeight = round($compWidth / $aspectRatio);
+        } else {
+            $compHeight = 360;
+            $compWidth = round($compHeight * $aspectRatio);
+        }
+    
         $thumb = imagecreatetruecolor($newWidth, $newHeight);
-
+        $compImage = imagecreatetruecolor($compWidth, $compHeight);
+    
         if ($extension == 'jpeg' || $extension == 'jpg') {
             $source = imagecreatefromjpeg($image);
         } elseif ($extension == 'png') {
@@ -52,30 +73,38 @@ class ImageResizeHelper
             $source = imagecreatefromgif($image);
         } elseif ($extension == 'webp') {
             $source = imagecreatefromwebp($image);
-        }else {
+        } else {
             return ['error' => 'Tipe file tidak valid.'];
         }
-
+    
         imagecopyresampled($thumb, $source, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-
+        imagecopyresampled($compImage, $source, 0, 0, 0, 0, $compWidth, $compHeight, $width, $height);
+    
         $thumbPath = storage_path('app/public/photos/shares/' . $thumbFilename);
-
+        $compPath = storage_path('app/public/comp/' . $compFilename);
+    
         if ($extension == 'jpeg' || $extension == 'jpg') {
             imagejpeg($thumb, $thumbPath, 60);
+            imagejpeg($compImage, $compPath, 85);
         } elseif ($extension == 'png') {
             imagepng($thumb, $thumbPath, 6);
+            imagepng($compImage, $compPath, 6);
         }
-
+    
         imagedestroy($thumb);
+        imagedestroy($compImage);
         imagedestroy($source);
-
+    
         return [
             'path' => 'gambar/' . $filename,
             'thumb_path' => 'photos/shares/' . $thumbFilename,
+            'comp_path' => 'comp/' . $compFilename,
             'error' => 'File sudah ada di sistem.',
             'success' => 'Success'
         ];
     }
+    
+    
 
     public static function MigrasiResize($image, $filename, $thumbFilename)
     {

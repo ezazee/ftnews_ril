@@ -12,7 +12,7 @@
             <article class="card-one-headline">
                 <a href="{{ route('detail.desktop', ['slug' => $topPostheadline->slug]) }}">
                     <img alt="image" class="card-one-headline-img" width="310" height="230"
-                        src="{{ isset($images[0]) ? $images[0] : '' }}" />
+                        src="{{ isset($images[0]) ? asset('storage/comp/' . basename($images[0])) : '' }}" />
                 </a>
                 <div class="card-one-headline--info">
                     <div class="category-and-time">
@@ -50,7 +50,7 @@
                 <article class="card-two-headline">
                     <div class="card-two-headline-img-wrap">
                         <img alt="image" class="card-two-headline-img" width="100" height="74"
-                            src="{{ is_array($item->gambar) ? $item->gambar[0] : $item->gambar }}" />
+                            src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />
                     </div>
                     <div class="card-two-headline--info">
                         <h4 class="card-two-headline--title">
@@ -70,7 +70,7 @@
                 <article class="main-card">
                     <div class="main-card-img-wrap">
                         <img alt="image" class="main-card-img" width="213" height="130"
-                            src="{{ is_array($item->gambar) ? $item->gambar[0] : $item->gambar }}" />
+                            src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />
                     </div>
                     <div class="main-card--info">
                         <h4 class="main-card--title">
@@ -112,7 +112,7 @@
             @endphp
             <article class="card-one-headline">
                 <img alt="image" class="card-one-headline-img" width="310" height="230"
-                    src="{{ isset($images[0]) ? $images[0] : '' }}" />
+                    src="{{ isset($images[0]) ? asset('storage/comp/' . basename($images[0])) : '' }}" />
                 <div class="card-one-headline--info">
                     <h2 class="card-one-headline--title">
                         <a
@@ -134,7 +134,7 @@
                 <article class="card-two-headline">
                     <div class="card-two-headline-img-wrap">
                         <img alt="image" class="card-two-headline-img" width="100" height="74"
-                            src="{{ is_array($post->gambar) ? $post->gambar[0] : $post->gambar }}" />
+                            src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}" />
                     </div>
                     <div class="card-two-headline--info">
                         <h4 class="card-two-headline--title">
@@ -156,7 +156,7 @@
             @endphp
             <article class="card-kanal-headline">
                 <img alt="image" class="card-kanal-headline-img" width="310" height="230"
-                    src="{{ isset($images[0]) ? $images[0] : '' }}" />
+                    src="{{ isset($images[0]) ? asset('storage/comp/' . basename($images[0])) : '' }}" />
                 <div class="card-kanal-headline--info">
                     <h2 class="card-kanal-headline--title">
                         <a
@@ -177,7 +177,7 @@
                 <article class="card-two-headline">
                     <div class="card-two-headline-img-wrap">
                         <img alt="image" class="card-two-headline-img" width="100" height="74"
-                            src="{{ is_array($post->gambar) ? $post->gambar[0] : $post->gambar }}" />
+                            src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}" />
                     </div>
                     <div class="card-two-headline--info">
                         <h4 class="card-two-headline--title">
@@ -199,7 +199,7 @@
             @endphp
             <article class="card-one-headline">
                 <img alt="image" class="card-one-headline-img" width="310" height="230"
-                    src="{{ isset($images[0]) ? $images[0] : '' }}" />
+                    src="{{ isset($images[0]) ? asset('storage/comp/' . basename($images[0])) : '' }}" />
                 <div class="card-one-headline--info">
                     <h2 class="card-one-headline--title">
                         <a
@@ -220,7 +220,7 @@
                 <article class="card-two-headline">
                     <div class="card-two-headline-img-wrap">
                         <img alt="image" class="card-two-headline-img" width="100" height="74"
-                            src="{{ is_array($post->gambar) ? $post->gambar[0] : $post->gambar }}" />
+                            src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}" />
                     </div>
                     <div class="card-two-headline--info">
                         <h4 class="card-two-headline--title">
@@ -243,7 +243,7 @@
             @endphp
             <article class="card-kanal-headline">
                 <img alt="image" class="card-kanal-headline-img" width="310" height="230"
-                    src="{{ isset($images[0]) ? $images[0] : '' }}" />
+                    src="{{ isset($images[0]) ? asset('storage/comp/' . basename($images[0])) : '' }}" />
                 <div class="card-kanal-headline--info">
                     <h2 class="card-kanal-headline--title">
                         <a
@@ -264,7 +264,7 @@
                 <article class="card-two-headline">
                     <div class="card-two-headline-img-wrap">
                         <img alt="image" class="card-two-headline-img" width="100" height="74"
-                            src="{{ is_array($post->gambar) ? $post->gambar[0] : $post->gambar }}" />
+                            src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}" />
                     </div>
                     <div class="card-two-headline--info">
                         <h4 class="card-two-headline--title">
@@ -287,7 +287,7 @@
             @endphp
             <article class="card-one-headline">
                 <img alt="image" class="card-one-headline-img" width="310" height="230"
-                    src="{{ isset($images[0]) ? $images[0] : '' }}" />
+                    src="{{ isset($images[0]) ? asset('storage/comp/' . basename($images[0])) : '' }}" />
                 <div class="card-one-headline--info">
                     <h2 class="card-one-headline--title">
                         <a
@@ -308,7 +308,7 @@
                 <article class="card-two-headline">
                     <div class="card-two-headline-img-wrap">
                         <img alt="image" class="card-two-headline-img" width="100" height="74"
-                            src="{{ is_array($post->gambar) ? $post->gambar[0] : $post->gambar }}" />
+                            src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}" />
                     </div>
                     <div class="card-two-headline--info">
                         <h4 class="card-two-headline--title">
@@ -331,7 +331,7 @@
             @endphp
             <article class="card-kanal-headline">
                 <img alt="image" class="card-kanal-headline-img" width="310" height="230"
-                    src="{{ isset($images[0]) ? $images[0] : '' }}" />
+                    src="{{ isset($images[0]) ? asset('storage/comp/' . basename($images[0])) : '' }}" />
                 <div class="card-kanal-headline--info">
                     <h2 class="card-kanal-headline--title">
                         <a
@@ -352,7 +352,7 @@
                 <article class="card-two-headline">
                     <div class="card-two-headline-img-wrap">
                         <img alt="image" class="card-two-headline-img" width="100" height="74"
-                            src="{{ is_array($post->gambar) ? $post->gambar[0] : $post->gambar }}" />
+                            src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}" />
                     </div>
                     <div class="card-two-headline--info">
                         <h4 class="card-two-headline--title">
@@ -374,7 +374,7 @@
                     <article class="main-card">
                         <div class="main-card-img-wrap">
                             <img alt="image" class="main-card-img" width="350" height="261"
-                                src="{{ is_array($post->gambar) ? $post->gambar[0] : $post->gambar }}" />
+                                src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}" />
                         </div>
                         <div class="main-card--info">
                             <h4 class="main-card--title">
