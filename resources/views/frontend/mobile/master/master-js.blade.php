@@ -1,6 +1,6 @@
-<script src="{{ asset('frontend/mobile/js/jquery.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script async src='https://securepubads.g.doubleclick.net/tag/js/gpt.js'></script>
-<script src="{{ asset('frontend/mobile/js/splide.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/splidejs/4.1.4/js/splide.min.js" integrity="sha512-4TcjHXQMLM7Y6eqfiasrsnRCc8D/unDeY1UGKGgfwyLUCTsHYMxF7/UHayjItKQKIoP6TTQ6AMamb9w2GMAvNg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <!-- parallax -->
 <script type="text/javascript" src="{{ asset('frontend/mobile/js/main.js') }}"></script>
 <!-- end parallax -->
