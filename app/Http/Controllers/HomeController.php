@@ -177,31 +177,6 @@ class HomeController extends Controller
 
         // dd($relatedPosts);
 
-
-        // $postTerpopuler = Post::with('kategori', 'user')
-        // ->where('status', 'public')
-        // ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
-        // ->orderBy('view', 'desc')
-        // ->take(5)
-        // ->get();
-
-                // if ($postTerpopuler->isEmpty()) {
-        //     $weekCounter = 1;
-        //     while ($postTerpopuler->isEmpty() && $weekCounter <= 4) {
-        //         $postTerpopuler = Post::with('kategori', 'user')
-        //             ->where('status', 'public')
-        //             ->whereBetween('created_at', [
-        //                 Carbon::now()->subWeeks($weekCounter)->startOfWeek(),
-        //                 Carbon::now()->subWeeks($weekCounter)->endOfWeek()
-        //             ])
-        //             ->orderBy('view', 'desc')
-        //             ->take(5)
-        //             ->get();
-
-        //         $weekCounter++;
-        //     }
-        // }
-
         $postTerpopuler = Post::with('kategori', 'user')
         ->where('status', 'public')
         ->orderBy('view', 'desc')
