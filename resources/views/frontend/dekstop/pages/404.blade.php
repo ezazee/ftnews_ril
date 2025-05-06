@@ -39,9 +39,6 @@
                         </div>
                     @endforeach
                 </div>
-                <div>
-                    <button class="main-card-loadmore" id="loadmore" style="padding: 12px 24px; border-radius: 8px; background-color: #2563eb; color: white; font-weight: 500; transition: all 0.2s ease-in-out;" onmouseover="this.style.backgroundColor='#1d4ed8'" onmouseout="this.style.backgroundColor='#2563eb'">Tampilkan lebih banyak</button>
-                </div>
             </div>
         </div>
         @include('frontend.dekstop.components.sidebar')

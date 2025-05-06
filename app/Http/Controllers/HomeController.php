@@ -563,7 +563,7 @@ class HomeController extends Controller
         $postTerkiniBottom = Post::with('kategori', 'user')
         ->where('status', 'public')
         ->latest()
-        ->take(20)
+        ->take(5)
         ->get();
 
         if ($this->agent->isMobile()) {
