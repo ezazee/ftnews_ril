@@ -558,10 +558,16 @@ class HomeController extends Controller
         ->take(5)
         ->get();
 
+        $postTerpopuler = Post::with('kategori', 'user')
+            ->where('status', 'public')
+            ->orderBy('view', 'desc')
+            ->take(5)
+            ->get();
+
         if ($this->agent->isMobile()) {
-            return view('frontend.mobile.pages.404', compact('postTerkini', 'postTerkiniBottom'));
+            return view('frontend.mobile.pages.404', compact('postTerkini', 'postTerkiniBottom', 'postTerpopuler'));
         } else {
-            return view('frontend.dekstop.pages.404', compact('postTerkini', 'postTerkiniBottom'));
+            return view('frontend.dekstop.pages.404', compact('postTerkini', 'postTerkiniBottom', 'postTerpopuler'));
         }
     }
 
