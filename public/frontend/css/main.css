@@ -566,7 +566,8 @@ li:last-child.menu-item {
 
 .category-and-time {
     color: #868585;
-    font-size: 12px;
+    font-size: 15px;
+    font-weight: bold;
 }
 
 .category-and-time a {

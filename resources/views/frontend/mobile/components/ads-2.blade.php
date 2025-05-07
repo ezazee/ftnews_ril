@@ -1,5 +1,5 @@
-<a href="#!" rel="">
+<a href="https://peskinpro.id/">
     <div class="banner-ads--big">
-        <img src="{{ asset('frontend/images/ads/320_x_100.jpg') }}" alt="" width="320px" height="100px">
+        <img src="{{ asset('frontend/images/ads/321_x_101_2.jpg') }}" alt="" width="320px" height="100px">
     </div>
 </a>
