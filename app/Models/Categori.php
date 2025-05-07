@@ -9,7 +9,7 @@ class Categori extends Model
 {
     protected $table = 'categories';
 
-    protected $fillable = ['nama_kategori', 'slug'];
+    protected $fillable = ['nama_kategori', 'slug','created_at'];
     use HasFactory;
 
     public function subCategories()
