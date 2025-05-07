@@ -9,7 +9,7 @@
                 @endphp
                 <article class="card-headline">
                     <a href="{{ route('detail.desktop', ['slug' => $topPostheadline->slug]) }}">
-                        <img alt="image" class="card-headline-img" src="{{ isset($images[0]) ? asset('storage/comp/' . basename($images[0])) : '' }}" />
+                        <img alt="{{ $topPostheadline->title }}" class="card-headline-img" src="{{ isset($images[0]) ? asset('storage/comp/' . basename($images[0])) : '' }}" />
                     </a>
                     <div class="card-headline-info">
                         <div class="category-and-time">
@@ -17,7 +17,7 @@
                                 @if ($topPostheadline->subCategory)
                                 <a href="{{ route('kanal.desktop', ['slug' => $topPostheadline->slug]) }}">
                                     {{ $topPostheadline->kategori->nama_kategori }}
-                                </a>| 
+                                </a>|
                                 <a href="{{ route('subcateg.desktop', ['categ' => $topPostheadline->kategori->slug, 'subcateg' => $topPostheadline->subCategory->slug]) }}">
                                     {{ $topPostheadline->subCategory->nama_sub_kategori }}
                                 </a>
@@ -25,7 +25,7 @@
                                 <a href="{{ route('kanal.desktop', ['slug' => $topPostheadline->slug]) }}">
                                     {{ $topPostheadline->kategori->nama_kategori }}
                                 </a>|
-                                @endif| 
+                                @endif|
                                 {{ \Carbon\Carbon::parse($topPostheadline->created_at)->format('Y-m-d') }}
                             </span>
                         </div>
@@ -42,7 +42,7 @@
             <div class="card-headline-small-wrap">
                 @foreach ($otherPostsheadline->take(4) as $item)
                     <article class="card-headline-small">
-                        <img alt="image" class="card-headline-small-img"
+                        <img alt="{{ $item->title }}" class="card-headline-small-img"
                             src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />
                         <div class="card-headline-small-info">
                             <h4 class="card-headline-small-title">
@@ -61,7 +61,7 @@
             @foreach ($otherPostsheadline->slice(4, 5) as $item)
                 <article class="main-card">
                     <div class="main-card-img-wrap">
-                        <img alt="image" class="main-card-img"
+                        <img alt="{{ $item->title }}" class="main-card-img"
                             src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />
                     </div>
                     <div class="main-card--info">
@@ -73,7 +73,7 @@
                                 @if ($item->subCategory)
                                 <a href="{{ route('kanal.desktop', ['slug' => $item->slug]) }}">
                                     {{ $item->kategori->nama_kategori }}
-                                </a>| 
+                                </a>|
                                 <a href="{{ route('subcateg.desktop', ['categ' => $item->kategori->slug, 'subcateg' => $item->subCategory->slug]) }}">
                                     {{ $item->subCategory->nama_sub_kategori }}
                                 </a>
@@ -123,7 +123,7 @@
                     $images = explode('|', $topPostNasional->gambar);
                 @endphp
                 <article class="card-headline">
-                    <img alt="image" class="card-headline-img" src="{{ isset($images[0]) ? asset('storage/comp/' . basename($images[0])) : '' }}" />
+                    <img alt="{{ $topPostNasional->title }}" class="card-headline-img" src="{{ isset($images[0]) ? asset('storage/comp/' . basename($images[0])) : '' }}" />
                     <div class="card-headline-info">
                         <h4 class="card-headline-title">
                             <a
@@ -142,7 +142,7 @@
                 @foreach ($otherPostsNasional as $post)
                     <article class="main-card">
                         <div class="main-card-img-wrap">
-                            <img alt="image" class="main-card-img"
+                            <img alt="{{ $post->title }}" class="main-card-img"
                                 src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}" />
                         </div>
                         <div class="main-card--info">
@@ -172,7 +172,7 @@
                     $images = explode('|', $topPostDaerah->gambar);
                 @endphp
                 <article class="card-headline">
-                    <img alt="image" class="card-headline-img"
+                    <img alt="{{ $topPostDaerah->title }}" class="card-headline-img"
                         src="{{ is_array($topPostDaerah->gambar) ? $topPostDaerah->gambar[0] : $topPostDaerah->gambar }}" />
                     <div class="card-headline-info">
                         <h4 class="card-headline-title">
@@ -200,7 +200,7 @@
                             </div>
                         </div>
                         <div class="main-card-img-wrap">
-                            <img alt="image" class="main-card-img"
+                            <img alt="{{ $post->title }}" class="main-card-img"
                                 src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}" />
                         </div>
                     </article>
@@ -224,7 +224,7 @@
                     $images = explode('|', $topPostLifestyle->gambar);
                 @endphp
                 <article class="card-headline">
-                    <img alt="image" class="card-headline-img" src="{{ isset($images[0]) ? asset('storage/comp/' . basename($images[0])) : '' }}" />
+                    <img alt="{{ $topPostLifestyle->title }}" class="card-headline-img" src="{{ isset($images[0]) ? asset('storage/comp/' . basename($images[0])) : '' }}" />
                     <div class="card-headline-info">
                         <h4 class="card-headline-title">
                             <a
@@ -243,7 +243,7 @@
                 @foreach ($otherPostsLifestyle as $post)
                     <article class="main-card">
                         <div class="main-card-img-wrap">
-                            <img alt="image" class="main-card-img"
+                            <img alt="{{ $post->title }}" class="main-card-img"
                                 src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}" />
                         </div>
                         <div class="main-card--info">
@@ -269,7 +269,7 @@
                     $images = explode('|', $topPostTeknologi->gambar);
                 @endphp
                 <article class="card-headline">
-                    <img alt="image" class="card-headline-img" src="{{ isset($images[0]) ? asset('storage/comp/' . basename($images[0])) : '' }}" />
+                    <img alt="{{ $topPostTeknologi->title }}" class="card-headline-img" src="{{ isset($images[0]) ? asset('storage/comp/' . basename($images[0])) : '' }}" />
                     <div class="card-headline-info">
                         <h4 class="card-headline-title">
                             <a
@@ -296,7 +296,7 @@
                             </div>
                         </div>
                         <div class="main-card-img-wrap">
-                            <img alt="image" class="main-card-img"
+                            <img alt="{{ $post->title }}" class="main-card-img"
                                 src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}" />
                         </div>
                     </article>
@@ -320,7 +320,7 @@
                     $images = explode('|', $topPostOlahraga->gambar);
                 @endphp
                 <article class="card-headline">
-                    <img alt="image" class="card-headline-img" src="{{ isset($images[0]) ? asset('storage/comp/' . basename($images[0])) : '' }}" />
+                    <img alt="{{ $topPostOlahraga->title }}" class="card-headline-img" src="{{ isset($images[0]) ? asset('storage/comp/' . basename($images[0])) : '' }}" />
                     <div class="card-headline-info">
                         <h4 class="card-headline-title">
                             <a
@@ -339,7 +339,7 @@
                 @foreach ($otherPostsOlahraga as $post)
                     <article class="main-card">
                         <div class="main-card-img-wrap">
-                            <img alt="image" class="main-card-img"
+                            <img alt="{{ $post->title }}" class="main-card-img"
                                 src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}" />
                         </div>
                         <div class="main-card--info">
@@ -369,7 +369,7 @@
                     $images = explode('|', $topPostOtomotif->gambar);
                 @endphp
                 <article class="card-headline">
-                    <img alt="image" class="card-headline-img" src="{{ isset($images[0]) ? asset('storage/comp/' . basename($images[0])) : '' }}" />
+                    <img alt="{{ $topPostOtomotif->title }}" class="card-headline-img" src="{{ isset($images[0]) ? asset('storage/comp/' . basename($images[0])) : '' }}" />
                     <div class="card-headline-info">
                         <h4 class="card-headline-title">
                             <a
@@ -396,7 +396,7 @@
                             </div>
                         </div>
                         <div class="main-card-img-wrap">
-                            <img alt="image" class="main-card-img"
+                            <img alt="{{ $post->title }}" class="main-card-img"
                                 src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}" />
                         </div>
                     </article>
@@ -422,7 +422,7 @@
                         <div class="list-element">
                             <article class="main-card">
                                 <div class="main-card-img-wrap">
-                                    <img alt="image" class="main-card-img"
+                                    <img alt="{{ $post->title }}" class="main-card-img"
                                         src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}" />
                                 </div>
                                 <div class="main-card--info">
@@ -435,7 +435,7 @@
                                             @if ($post->subCategory)
                                             <a href="{{ route('kanal.desktop', ['slug' => $post->slug]) }}">
                                                 {{ $post->kategori->nama_kategori }}
-                                            </a>| 
+                                            </a>|
                                             <a href="{{ route('subcateg.desktop', ['categ' => $post->kategori->slug, 'subcateg' => $post->subCategory->slug]) }}">
                                                 {{ $post->subCategory->nama_sub_kategori }}
                                             </a>

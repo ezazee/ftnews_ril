@@ -7,7 +7,7 @@
                 <article class="card-four">
                     <div class="card-four-img-wrap">
                         <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">
-                            <img alt="image" width="660" height="497" src="{{ is_array($item->gambar) ? (strpos($item->gambar[0], 'storage') !== false ? str_replace('storage/gambar', 'storage/photos/shares', $item->gambar[0]) : $item->gambar[0]) : (strpos($item->gambar, 'storage') !== false ? str_replace('storage/gambar', 'storage/photos/shares', $item->gambar) : $item->gambar) }}" alt="image" class="card-four-img" />
+                            <img alt="{{ $item->title }}" width="660" height="497" src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" alt="{{ $item->title }}" class="card-four-img" />
                         </a>
                     </div>
                     <div class="card-four--info">
@@ -36,17 +36,22 @@
             <h3 class="card-headline-no-image-title">Terpopuler</h3>
             @foreach ($postTerpopuler as $item)
             @php
-                $images = is_string($item->gambar) ? explode('|', $item->gambar) : [];
-                $firstImage = !empty($images[0]) ? $images[0] : asset('default.jpg');
-        
-                if (strpos($firstImage, 'storage') !== false) {
-                    $firstImage = str_replace('storage/gambar', 'storage/photos/shares', $firstImage);
-                }
-            @endphp
+            $images = is_array($item->gambar)
+                ? $item->gambar
+                : (is_string($item->gambar) ? explode('|', $item->gambar) : []);
+
+            $firstImage = !empty($images[0])
+                ? asset('storage/comp/' . basename($images[0]))
+                : asset('default.jpg');
+
+            if (strpos($firstImage, 'storage/gambar') !== false) {
+                $firstImage = str_replace('storage/gambar', 'storage/photos/shares', $firstImage);
+            }
+        @endphp
                 <article class="card-four">
                     <div class="card-four-img-wrap">
                         <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">
-                            <img alt="image" class="card-four-img"
+                            <img alt="{{ $item->title }}" class="card-four-img"
                                 src="{{ $firstImage }}" />
                         </a>
                     </div>

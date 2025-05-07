@@ -75,7 +75,7 @@
                         </a>
         </div>
         <figure class="article-detail-figure">
-            <img alt="image" src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}"
+            <img alt="{{ $post->title }}" src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}"
                 class="card-headline-img" />
             <figcaption>{{ $post->image_caption }}</figcaption>
         </figure>
@@ -112,13 +112,13 @@
                                     function ($matches) use (&$paragraphIndex, $injectAt3, $injectAt6) {
                                         static $paragraphIndex = 0;
                                         $paragraphIndex++;
-                
+
                                         if ($paragraphIndex == 3 && $injectAt3) {
                                             return $matches[0] . $injectAt3;
                                         } elseif ($paragraphIndex == 8 && $injectAt6) {
                                             return $matches[0] . $injectAt6;
                                         }
-                
+
                                         return $matches[0];
                                     },
                                     $post->content
@@ -126,7 +126,7 @@
                             )
                         )
                     )
-                ) !!}</p>              
+                ) !!}</p>
             </div>
 
             <div class="article-detail-tag">
@@ -195,7 +195,7 @@
         <h3 class="base-title pl-20 mb-10">{{ $post->kategori->nama_kategori }}</h3>
         @foreach ($relatedPosts->take(1) as $item)
             <article class="card-headline">
-                <img alt="image" class="card-headline-img"
+                <img alt="{{ $item->title }}" class="card-headline-img"
                     src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />
                 <div class="card-headline-info">
                     <h4 class="card-headline-title">
@@ -209,9 +209,8 @@
             @foreach ($relatedPosts->slice(1, 5) as $item)
                 <article class="main-card">
                     <div class="main-card-img-wrap">
-                        <img alt="image" class="main-card-img"
-                            src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}
-" />
+                        <img alt="{{ $item->title }}" class="main-card-img"
+                            src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />
                     </div>
                     <div class="main-card--info">
                         <h4 class="main-card--title">
@@ -238,9 +237,8 @@
                     <div class="list-element">
                         <article class="main-card">
                             <div class="main-card-img-wrap">
-                                <img alt="image" class="main-card-img"
-                                    src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}
-" />
+                                <img alt="{{ $item->title }}" class="main-card-img"
+                                    src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />
                             </div>
                             <div class="main-card--info">
                                 <h4 class="main-card--title">

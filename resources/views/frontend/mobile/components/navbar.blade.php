@@ -18,7 +18,7 @@
         <div class="header-logo--wrap">
             <a href="/">
                 <img src="{{ asset('frontend/logo/logo.png') }}" width="155" height="24"
-                    alt="PT Forum Terkini Media" class="logo">
+                    alt="FTNews" class="logo">
             </a>
         </div>
 

@@ -48,7 +48,7 @@
                     <div class="list-element">
                         <article class="main-card">
                             <div class="main-card-img-wrap">
-                                <img alt="image" class="main-card-img" width="213" height="130"
+                                <img alt="{{ $item->title }}" class="main-card-img" width="213" height="130"
                                     src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />
                             </div>
                             <div class="main-card--info">

@@ -21,7 +21,7 @@
                                 @if ($item->subCategory)
                                 <a href="{{ route('kanal.desktop', ['slug' => $item->slug]) }}">
                                     {{ $item->kategori->nama_kategori }}
-                                </a>| 
+                                </a>|
                                 <a href="{{ route('subcateg.desktop', ['categ' => $item->kategori->slug, 'subcateg' => $item->subCategory->slug]) }}">
                                     {{ $item->subCategory->nama_sub_kategori }}
                                 </a>
@@ -62,7 +62,7 @@
                     <div class="list-element">
                         <article class="main-card">
                             <div class="main-card-img-wrap">
-                                <img alt="image" class="main-card-img" width="213" height="130"
+                                <img alt="{{ $item->title }}" class="main-card-img" width="213" height="130"
                                     src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />
                             </div>
                             <div class="main-card--info">

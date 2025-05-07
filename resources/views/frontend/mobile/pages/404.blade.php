@@ -6,7 +6,7 @@
                 <div class="container max-w-lg">
                     <div class="error-container" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
                         <div>
-                            <img src="{{ asset('frontend/images/Lost_in_Space_1.gif') }}" alt="" width="500" height="350">
+                            <img src="{{ asset('frontend/images/Lost_in_Space_1.gif') }}" alt="FTNews" width="500" height="350">
                         </div>
                         <button style="padding: 12px 24px; border-radius: 8px; background-color: #2493BA; color: white; font-weight: 500; transition: all 0.2s ease-in-out; border: none;" onmouseover="this.style.backgroundColor='#2493BA'" onmouseout="this.style.backgroundColor='#2493BA'">
                             <a href="{{ url('/') }}" style="color: white; text-decoration: none;">Kembali ke Beranda</a>
@@ -22,7 +22,7 @@
                         <div class="list-element">
                             <article class="main-card">
                                 <div class="main-card-img-wrap">
-                                    <img alt="image" class="main-card-img" width="213" height="130"
+                                    <img alt="{{ $item->title }}" class="main-card-img" width="213" height="130"
                                         src="{{ is_array($item->gambar) ? $item->gambar[0] : $item->gambar }}" />
                                 </div>
                                 <div class="main-card--info">

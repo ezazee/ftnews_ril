@@ -84,7 +84,7 @@
                 </div>
 
                 <figure class="article-detail-figure">
-                    <img alt="image" width="660" height="497" src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}" class="card-headline-img" />
+                    <img alt="{{ $post->title }}" width="660" height="497" src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}" class="card-headline-img" />
                     <figcaption>{{ $post->image_caption }}</figcaption>
                 </figure>
                 <div class="article-detail--body">
@@ -114,13 +114,13 @@
                                         function ($matches) use (&$paragraphIndex, $injectAt3, $injectAt6) {
                                             static $paragraphIndex = 0;
                                             $paragraphIndex++;
-                    
+
                                             if ($paragraphIndex == 3 && $injectAt3) {
                                                 return $matches[0] . $injectAt3;
                                             } elseif ($paragraphIndex == 8 && $injectAt6) {
                                                 return $matches[0] . $injectAt6;
                                             }
-                    
+
                                             return $matches[0];
                                         },
                                         $post->content
@@ -128,7 +128,7 @@
                                 )
                             )
                         )
-                    ) !!}</p>                    
+                    ) !!}</p>
                 </div>
                 <div class="article-detail-tag">
                     <span class="label card-headline-no-image-title-detail2">Tag</span>
@@ -176,7 +176,7 @@
                         <div class="list-element">
                             <article class="main-card">
                                 <div class="main-card-img-wrap">
-                                    <img alt="image" class="main-card-img" width="213" height="130"
+                                    <img alt="{{ $item->title }}" class="main-card-img" width="213" height="130"
                                         src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />
                                 </div>
                                 <div class="main-card--info">
