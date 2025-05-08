@@ -175,6 +175,7 @@ Route::get('/kebijakan-privasi', [HomeController::class, 'kebijakanPrivasi'])->n
 Route::get('/kode-etik', [HomeController::class, 'kodeEtik'])->name('kodeEtik.desktop');
 Route::get('/visi-misi', [HomeController::class, 'visiMisi'])->name('visiMisi.desktop');
 Route::get('/site-map', [HomeController::class, 'siteMap'])->name('siteMap.desktop');
+Route::get('/jaringan', [HomeController::class, 'jaringan'])->name('jaringan');
 Route::get('/category/{slug}', [HomeController::class, 'kanal'])->name('kanal.desktop');
 Route::get('/category/{categ}/{subcateg}', [HomeController::class, 'subcateg'])->name('subcateg.desktop');
 Route::get('/indeks', [HomeController::class, 'byIndex'])->name('byIndex.dekstop');
@@ -183,3 +184,4 @@ Route::get('/search-result', [HomeController::class, 'searchResult'])->name('sea
 Route::get('/{slug}', [HomeController::class, 'detail'])->name('detail.desktop');
 
 Route::get('/404/not-found', [HomeController::class, 'by404'])->name('by404');
+

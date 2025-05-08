@@ -56,6 +56,9 @@
                 <li class="footer-menu--item">
                     <a href="/site-map">Sitemap</a>
                 </li>
+                <li class="footer-menu--item">
+                    <a href="/jaringan">Jaringan</a>
+                </li>
             </ul>
         </div>
     </div>

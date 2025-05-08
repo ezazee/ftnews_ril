@@ -160,17 +160,17 @@ class HomeController extends Controller
         ->select('posts.*')
         ->take(2)
         ->get();
-    
+
         $firstRelated = $relatedPosts->get(0);
         $secondRelated = $relatedPosts->get(1);
-        
+
         $injectAt3 = '';
         $injectAt6 = '';
-        
+
         if ($firstRelated) {
             $injectAt3 = '<p><strong>Baca Juga: <a href="' . route('detail.desktop', ['slug' => $firstRelated->slug]) . '">' . htmlspecialchars($firstRelated->title) . '</a></strong></p>';
         }
-        
+
         if ($secondRelated) {
             $injectAt6 = '<p><strong>Baca Juga: <a href="' . route('detail.desktop', ['slug' => $secondRelated->slug]) . '">' . htmlspecialchars($secondRelated->title) . '</a></strong></p>';
         }
@@ -568,6 +568,33 @@ class HomeController extends Controller
             return view('frontend.mobile.pages.404', compact('postTerkini', 'postTerkiniBottom', 'postTerpopuler'));
         } else {
             return view('frontend.dekstop.pages.404', compact('postTerkini', 'postTerkiniBottom', 'postTerpopuler'));
+        }
+    }
+
+
+    public function jaringan(){
+        $postTerkini = Post::with('kategori', 'user')
+        ->where('status', 'public')
+        ->latest()
+        ->take(5)
+        ->get();
+
+        $postTerkiniBottom = Post::with('kategori', 'user')
+        ->where('status', 'public')
+        ->latest()
+        ->take(5)
+        ->get();
+
+        $postTerpopuler = Post::with('kategori', 'user')
+            ->where('status', 'public')
+            ->orderBy('view', 'desc')
+            ->take(5)
+            ->get();
+
+        if ($this->agent->isMobile()) {
+            return view('frontend.mobile.pages.jaringan', compact('postTerkini', 'postTerkiniBottom', 'postTerpopuler'));
+        } else {
+            return view('frontend.dekstop.pages.jaringan', compact('postTerkini', 'postTerkiniBottom', 'postTerpopuler'));
         }
     }
 
