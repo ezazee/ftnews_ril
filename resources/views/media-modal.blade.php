@@ -24,12 +24,11 @@
 
 <script>
     $(document).ready(function() {
-        // When an image is clicked
         $('#media-list img').on('click', function() {
-            var mediaUrl = $(this).attr('src'); // Get the URL of the selected image
-            var editor = CKEDITOR.instances.content; // Get CKEditor instance
-            editor.insertHtml('<img src="' + mediaUrl + '" />'); // Insert image into CKEditor
-            $('#mediaModal').modal('hide'); // Close the modal
+            var mediaUrl = $(this).attr('src');
+            var editor = CKEDITOR.instances.content;
+            editor.insertHtml('<img src="' + mediaUrl + '" />');
+            $('#mediaModal').modal('hide');
         });
     });
 </script>
