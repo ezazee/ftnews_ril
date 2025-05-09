@@ -6,6 +6,5 @@
 <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('frontend/logo/favicon/apple-touch-icon.png') }}">
 <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('frontend/logo/favicon/favicon-32x32.png') }}">
 <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('frontend/logo/favicon/favicon-16x16.png') }}">
-<meta name="description" content="Copyright 2025 © Indopop Technologies. Version 7.4.7">
-<meta property="og:description" content="Copyright 2025 © Botble Technologies. Version 7.4.7">
- 
+<meta name="description" content="Copyright 2025 ©FTNews - PT Forum Media Terkini">
+<meta property="og:description" content="Copyright 2025 ©FTNews - PT Forum Media Terkini">

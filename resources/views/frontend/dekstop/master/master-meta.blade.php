@@ -20,15 +20,7 @@
 <meta property="og:image" content="
     {{
         !empty($post->gambar)
-            ? (is_array($post->gambar)
-                ? (isset($post->gambar[0])
-                    ? (filter_var($post->gambar[0], FILTER_VALIDATE_URL)
-                        ? $post->gambar[0]
-                        : asset('storage/' . $post->gambar[0]))
-                    : 'https://ftnews.co.id/images/icon-ftnews.png')
-                : (filter_var($post->gambar, FILTER_VALIDATE_URL)
-                    ? $post->gambar
-                    : asset('storage/' . $post->gambar)))
+            ? asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar)))
             : 'https://ftnews.co.id/images/icon-ftnews.png'
     }}
 ">
@@ -47,15 +39,7 @@
 <meta name="twitter:image" content="
     {{
         !empty($post->gambar)
-            ? (is_array($post->gambar)
-                ? (isset($post->gambar[0])
-                    ? (filter_var($post->gambar[0], FILTER_VALIDATE_URL)
-                        ? $post->gambar[0]
-                        : asset('storage/' . $post->gambar[0]))
-                    : 'https://ftnews.co.id/images/icon-ftnews.png')
-                : (filter_var($post->gambar, FILTER_VALIDATE_URL)
-                    ? $post->gambar
-                    : asset('storage/' . $post->gambar)))
+            ? asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar)))
             : 'https://ftnews.co.id/images/icon-ftnews.png'
     }}
 ">
