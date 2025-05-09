@@ -425,7 +425,6 @@ function createPagination(paginationSetting) {
 $(document).ready(function () {
   $('#search-input').on('keyup', function () {
     var query = $(this).val().trim();
-    console.log("Searching for:", query); // Debugging
     loadItems(1, query);
 });
 });

@@ -6,6 +6,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use UniSharp\LaravelFilemanager\Lfm;
 use App\Helpers\ImageResizeHelper;
+use Illuminate\Support\Facades\Cache;
 
 class UploadController extends LfmController
 {
@@ -30,8 +31,12 @@ class UploadController extends LfmController
         $error_bag = [];
         $new_filename = null;
         $success_messages = [];
+        // $cache = Cache::(env('CACHE_DRIVER'));
+
     
         foreach (is_array($uploaded_files) ? $uploaded_files : [$uploaded_files] as $file) {
+
+            
             try {
                 $originalName = preg_replace('/\s+/', '-', pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
                 $extension = $file->getClientOriginalExtension();
@@ -50,7 +55,7 @@ class UploadController extends LfmController
                 $url = Storage::url($resizeResult['path']);
                 $thumbUrl = Storage::url($resizeResult['thumb_path']);
                 $compUrl = Storage::url($resizeResult['comp_path']); 
-        
+                // begitu susccess remove cache image
                 $response = [
                     'url' => $url,
                     'thumb_url' => $thumbUrl,
@@ -66,7 +71,6 @@ class UploadController extends LfmController
                 $error_bag[] = $e->getMessage();
             }
         }
-        
         return response()->json($error_bag ? ['error' => $error_bag] : $response);
     }
     

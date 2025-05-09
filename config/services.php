@@ -31,4 +31,12 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'plausible' => [
+        'api_key' => env('PLAUSIBLE_API_KEY'),
+        'site' => env('PLAUSIBLE_SITE'),
+        'base_url' => env('PLAUSIBLE_BASE_URL', 'https://plausible.io'),
+    ],
+
+
+
 ];

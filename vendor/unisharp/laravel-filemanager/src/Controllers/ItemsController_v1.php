@@ -9,8 +9,6 @@ use UniSharp\LaravelFilemanager\Events\FolderIsMoving;
 use UniSharp\LaravelFilemanager\Events\FolderWasMoving;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
-use FilesystemIterator;
-use Illuminate\Support\Collection;
 
 
 class ItemsController extends LfmController
@@ -22,73 +20,52 @@ class ItemsController extends LfmController
      */
 
      public function getItems(Request $request)
-    {
+     {
          $currentPage = self::getCurrentPageFromRequest();
-         $perPage = $this->helper->getPaginationPerPage();
+         $perPage = 50;
+        $items = Cache::get('lfmimages');
+
+         if (empty($items)){
+            $items = array_merge($this->lfm->folders(), $this->lfm->files());
+            Cache::set('lfmimages',$items,$second = 3600);
+         }
+
          $search = $request->input('search_query');
- 
-         $workingDir = $this->lfm->path('public');
-        
-         if (!file_exists($workingDir)) {
-             return response()->json([
-                 'items' => [],
-                 'paginator' => [
-                     'current_page' => $currentPage,
-                     'total' => 0,
-                     'per_page' => $perPage,
-                     'last_page' => 0,
-                 ],
-                 'display' => $this->helper->getDisplayMode(),
-                 'working_dir' => $workingDir,
-             ]);
+         if (!empty($search)) {
+             $items = array_filter($items, function ($item) use ($search) {
+                 return stripos($item->name, $search) !== false;
+             });
          }
- 
-         $iterator = new FilesystemIterator($workingDir);
-         $matchingFiles = [];
- 
-         foreach ($iterator as $fileInfo) {
-             $name = $fileInfo->getFilename();
- 
-             if ($search && stripos($name, $search) === false) {
-                 continue;
-             }
- 
-             $extension = strtolower($fileInfo->getExtension());
-             $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
- 
-             $isImage = in_array($extension, $imageExtensions);
-             $icon = $isImage ? 'fa-image' : 'fa-file';
- 
-             $matchingFiles[] = (object)[
-                 'name' => $name,
-                 'path' => $fileInfo->getPathname(),
-                 'url' => str_replace('/storage/photos/shares/', '/storage/comp/', $this->lfm->url($name)."/".$name),
-                 'time' => $fileInfo->getMTime(),
-                 'icon' => $icon,
-                 'is_file' => $fileInfo->isFile(),
-                 'is_image' => $isImage,
-                 'thumb_url' => $isImage ? asset($this->lfm->url($name)."/".$name) : null,
-             ];
-         }
- 
-         usort($matchingFiles, fn($a, $b) => $b->time <=> $a->time);
- 
-         $totalFound = count($matchingFiles);
-         $sliced = array_slice($matchingFiles, ($currentPage - 1) * $perPage, $perPage);
-         $items = collect($sliced)->values();
- 
+     
+        usort($items, function ($a, $b) {
+            return strcmp($a->name, $b->name);
+        });
+
+        usort($items, function ($a, $b) {
+            $timeA = filemtime($a->path);
+            $timeB = filemtime($b->path);
+
+            return $timeB <=> $timeA;
+        });
+     
+         $totalItems = count($items);
+         $offset = ($currentPage - 1) * $perPage;
+         $paginatedItems = array_slice($items, $offset, $perPage);
+     
          return response()->json([
-             'items' => $items,
+             'items' => array_map(fn($item) => array_merge($item->fill()->attributes, [
+              'url' => str_replace('/storage/photos/shares/', '/storage/comp/', $item->url),
+            ]), $paginatedItems),
              'paginator' => [
                  'current_page' => $currentPage,
-                 'total' => $totalFound,
+                 'total' => $totalItems,
                  'per_page' => $perPage,
-                 'last_page' => ceil($totalFound / $perPage),
+                 'last_page' => ceil($totalItems / $perPage),
              ],
              'display' => $this->helper->getDisplayMode(),
-             'working_dir' => '/shares',
+             'working_dir' => $this->lfm->path('working_dir'),
          ]);
-    }
+     }
      
     public function move()
     {

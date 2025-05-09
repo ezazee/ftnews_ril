@@ -401,32 +401,27 @@
 
     <!-- Initialize the chart -->
     <script>
-        $(document).ready(function() {
-
+        $(document).ready(function () {
             $('#loading-spinner').show();
             $.ajax({
                 url: "/getSiteAnalytics",
                 type: "GET",
-                success: function(response) {
+                success: function (response) {
                     if (response.siteAnalytics.length > 0) {
                         let trafficData = response.trafficData;
+    
+                        let dates = trafficData.map(item => item.date);
+                        let visitorsData = trafficData.map(item => item.visitors);
+    
                         let sessionsData = response.siteAnalytics.map(item => item.sessions);
                         let bounceRateData = response.siteAnalytics.map(item => item.bouncerate);
                         let activeUsersData = response.siteAnalytics.map(item => item.activeusers);
-
-                        let dates = [];
-                        let startDate = new Date();
-                        startDate.setDate(startDate.getDate() - trafficData.length);
-                        for (let i = 0; i < trafficData.length; i++) {
-                            let date = new Date(startDate);
-                            date.setDate(startDate.getDate() + i);
-                            dates.push(date.toISOString().split("T")[0]);
-                        }
-
+    
                         var options = {
-                            series: [{
-                                    name: "Pageviews",
-                                    data: trafficData
+                            series: [
+                                {
+                                    name: "Visitors",
+                                    data: visitorsData
                                 },
                                 {
                                     name: "Sessions",
@@ -452,13 +447,14 @@
                                 curve: 'smooth'
                             },
                             xaxis: {
-                                type: 'datetime',
+                                type: 'category',
                                 categories: dates
                             },
                             tooltip: {
                                 shared: true
                             }
                         };
+    
                         var chart = new ApexCharts(document.querySelector("#trafficChart"), options);
                         chart.render();
                     } else {
@@ -466,14 +462,14 @@
                     }
                     $('#loading-spinner').hide();
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error("Error fetching analytics:", error);
-
                     $('#loading-spinner').hide();
                 }
             });
         });
     </script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             fetchTopPages();
@@ -483,135 +479,131 @@
         });
 
         function fetchTopPages() {
-            const tableBody = document.querySelector('.table-body-getTopPages');
-            const loadingRow = document.createElement('tr');
-            loadingRow.classList.add('loading-row');
-            loadingRow.innerHTML = `
-                <td colspan="3" class="text-center">
-                    <div class="loading-spinner"></div>
-                </td>
-            `;
-            tableBody.innerHTML = '';
-            tableBody.appendChild(loadingRow);
+                const tableBody = document.querySelector('.table-body-getTopPages');
+                const loadingRow = document.createElement('tr');
+                loadingRow.classList.add('loading-row');
+                loadingRow.innerHTML = `
+                    <td colspan="3" class="text-center">
+                        <div class="loading-spinner"></div>
+                    </td>
+                `;
+                tableBody.innerHTML = '';
+                tableBody.appendChild(loadingRow);
 
-            fetch('/top-pages')
-                .then(response => response.json())
-                .then(data => {
-                    const loadingRow = document.querySelector('.loading-row');
-                    if (loadingRow) {
-                        loadingRow.remove();
-                    }
-                    if (data.topPages && data.topPages.length > 0) {
-                        const tableBody = document.querySelector('.table-body-getTopPages');
-                        data.topPages.forEach((page, index) => {
-                            let row = document.createElement('tr');
-                            row.innerHTML = `
-                     <td>${index + 1}</td>
-                     <td>{{ config('app.url') }}${page.page}</td>
-                     <td>${page.sessions}</td>
-                  `;
+                fetch('/top-pages')
+                    .then(response => response.json())
+                    .then(data => {
+                        const loadingRow = document.querySelector('.loading-row');
+                        if (loadingRow) {
+                            loadingRow.remove();
+                        }
+
+                        if (data.topBrowsers && data.topBrowsers.length > 0) {
+                            data.topBrowsers.forEach((item, index) => {
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                                    <td>${index + 1}</td>
+                                    <td>{{ config('app.url') }}${item.page}</td>
+                                    <td>${item.visitors}</td>
+                                `;
+                                tableBody.appendChild(row);
+                            });
+                        } else {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `<td colspan="3" class="text-center">No data received</td>`;
                             tableBody.appendChild(row);
-                        });
-                    } else {
-                        const tableBody = document.querySelector('.table-body-getTopPages');
-                        let row = document.createElement('tr');
-                        row.innerHTML = `<td colspan="3" class="text-center">No data received</td>`;
-                        tableBody.appendChild(row);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        tableBody.innerHTML = `<tr><td colspan="3" class="text-center">Failed to load data</td></tr>`;
+                    });
+            }
 
-        }
 
-        function fetchTopBrowsers() {
-            const tableBody = document.querySelector('.table-body-gettopBrowsers');
-            const loadingRow = document.createElement('tr');
-            loadingRow.classList.add('loading-row');
-            loadingRow.innerHTML = `
-                <td colspan="3" class="text-center">
-                    <div class="loading-spinner"></div>
-                </td>
-            `;
-            tableBody.innerHTML = '';
-            tableBody.appendChild(loadingRow);
+            function fetchTopBrowsers() {
+                const tableBody = document.querySelector('.table-body-gettopBrowsers');
+                const loadingRow = document.createElement('tr');
+                loadingRow.classList.add('loading-row');
+                loadingRow.innerHTML = `
+                    <td colspan="3" class="text-center">
+                        <div class="loading-spinner"></div>
+                    </td>
+                `;
+                tableBody.innerHTML = '';
+                tableBody.appendChild(loadingRow);
 
-            fetch('/top-browsers')
-                .then(response => response.json())
-                .then(data => {
-                    const loadingRow = document.querySelector('.loading-row');
-                    if (loadingRow) {
-                        loadingRow.remove();
-                    }
-                    if (data.topBrowsers && data.topBrowsers.length > 0) {
-                        const tableBody = document.querySelector('.table-body-gettopBrowsers');
-                        data.topBrowsers.forEach((browser, index) => {
+                fetch('/top-browsers')
+                    .then(response => response.json())
+                    .then(data => {
+                        const loadingRow = document.querySelector('.loading-row');
+                        if (loadingRow) {
+                            loadingRow.remove();
+                        }
+
+                        if (data.topBrowsers && data.topBrowsers.length > 0) {
+                            data.topBrowsers.forEach((browser, index) => {
+                                let row = document.createElement('tr');
+                                row.innerHTML = `
+                                    <td>${index + 1}</td>
+                                    <td>${browser.page}</td>
+                                    <td>${browser.visitors}</td>
+                                `;
+                                tableBody.appendChild(row);
+                            });
+                        } else {
                             let row = document.createElement('tr');
-                            row.innerHTML = `
-                     <td>${index + 1}</td>
-                     <td>${browser.browser}</td>
-                     <td>${browser.sessions}</td>
-                  `;
+                            row.innerHTML = `<td colspan="3" class="text-center">No data received</td>`;
                             tableBody.appendChild(row);
-                        });
-                    } else {
-                        const tableBody = document.querySelector('.table-body-gettopBrowsers');
-                        let row = document.createElement('tr');
-                        row.innerHTML = `<td colspan="3" class="text-center">No data received</td>`;
-                        tableBody.appendChild(row);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                    tableBody.innerHTML = `<tr><td colspan="3" class="text-center">Failed to load data</td></tr>`;
-                });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        tableBody.innerHTML = `<tr><td colspan="3" class="text-center">Failed to load data</td></tr>`;
+                    });
+            }
 
-        }
+            function fetchTopReferrers() {
+                const tableBody = document.querySelector('.table-body-gettopReferrers');
+                const loadingRow = document.createElement('tr');
+                loadingRow.classList.add('loading-row');
+                loadingRow.innerHTML = `
+                    <td colspan="3" class="text-center">
+                        <div class="loading-spinner"></div>
+                    </td>
+                `;
+                tableBody.innerHTML = '';
+                tableBody.appendChild(loadingRow);
 
-        function fetchTopReferrers() {
-            const tableBody = document.querySelector('.table-body-gettopReferrers');
-            const loadingRow = document.createElement('tr');
-            loadingRow.classList.add('loading-row');
-            loadingRow.innerHTML = `
-                <td colspan="3" class="text-center">
-                    <div class="loading-spinner"></div>
-                </td>
-            `;
-            tableBody.innerHTML = '';
-            tableBody.appendChild(loadingRow);
+                fetch('/top-referer')
+                    .then(response => response.json())
+                    .then(data => {
+                        const loadingRow = document.querySelector('.loading-row');
+                        if (loadingRow) {
+                            loadingRow.remove();
+                        }
 
-            fetch('/top-referer')
-                .then(response => response.json())
-                .then(data => {
-                    const loadingRow = document.querySelector('.loading-row');
-                    if (loadingRow) {
-                        loadingRow.remove();
-                    }
-                    if (data.topReferrers && data.topReferrers.length > 0) {
-                        const tableBody = document.querySelector('.table-body-gettopReferrers');
-                        data.topReferrers.forEach((referrer, index) => {
+                        if (data.topReferrers && data.topReferrers.length > 0) {
+                            data.topReferrers.forEach((referer, index) => {
+                                let row = document.createElement('tr');
+                                row.innerHTML = `
+                                    <td>${index + 1}</td>
+                                    <td>${referer.page}</td>
+                                    <td>${referer.visitors}</td>
+                                `;
+                                tableBody.appendChild(row);
+                            });
+                        } else {
                             let row = document.createElement('tr');
-                            row.innerHTML = `
-                     <td>${index + 1}</td>
-                     <td>${referrer.referrer}</td>
-                     <td>${referrer.sessions}</td>
-                  `;
+                            row.innerHTML = `<td colspan="3" class="text-center">No data received</td>`;
                             tableBody.appendChild(row);
-                        });
-                    } else {
-                        const tableBody = document.querySelector('.table-body-gettopReferrers');
-                        let row = document.createElement('tr');
-                        row.innerHTML = `<td colspan="3" class="text-center">No data received</td>`;
-                        tableBody.appendChild(row);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                    tableBody.innerHTML = `<tr><td colspan="3" class="text-center">Failed to load data</td></tr>`;
-                });
-
-        }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        tableBody.innerHTML = `<tr><td colspan="3" class="text-center">Failed to load data</td></tr>`;
+                    });
+            }
 
         function fetchSiteAnalytics() {
             // Menampilkan loader sebelum permintaan fetch dimulai

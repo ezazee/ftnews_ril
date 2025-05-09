@@ -170,84 +170,133 @@ class ResizeImages extends Command
     //     $this->info('📦 Proses resize gambar selesai.');
     // }
     
-
-
-    public function handle()
+        public function handle()
     {
         ini_set('memory_limit', '-1');
-    
-        $sourceDir = public_path('storage/gambar');
+
+        $srcList = [
+            'storage/old_image/2022/01',
+            'storage/old_image/2022/02',
+            'storage/old_image/2022/03',
+            'storage/old_image/2022/04',
+            'storage/old_image/2022/05',
+            'storage/old_image/2022/06',
+            'storage/old_image/2022/07',
+            'storage/old_image/2022/08',
+            'storage/old_image/2022/09',
+            'storage/old_image/2022/10',
+            'storage/old_image/2022/11',
+            'storage/old_image/2022/12',
+            'storage/old_image/2023/01',
+            'storage/old_image/2023/02',
+            'storage/old_image/2023/03',
+            'storage/old_image/2023/04',
+            'storage/old_image/2023/05',
+            'storage/old_image/2023/06',
+            'storage/old_image/2023/07',
+            'storage/old_image/2023/08',
+            'storage/old_image/2023/09',
+            'storage/old_image/2023/10',
+            'storage/old_image/2023/11',
+            'storage/old_image/2023/12',
+            'storage/old_image/2024/01',
+            'storage/old_image/2024/02',
+            'storage/old_image/2024/03',
+            'storage/old_image/2024/04',
+            'storage/old_image/2024/05',
+            'storage/old_image/2024/06',
+            'storage/old_image/2024/07',
+            'storage/old_image/2024/08',
+            'storage/old_image/2024/09',
+            'storage/old_image/2024/10',
+            'storage/old_image/images',
+        ];
+
         $destinationDir = public_path('storage/comp');
         $thumbDir = public_path('storage/photos/shares');
-    
-        if (!File::exists($sourceDir)) {
-            $this->error("❌ Folder sumber tidak ditemukan di: $sourceDir");
-            return;
-        }
-    
-        $this->info("📂 Memeriksa folder sumber: $sourceDir");
-    
+
         if (!File::exists($destinationDir)) {
             $this->info("📂 Membuat folder tujuan gambar: $destinationDir");
             File::makeDirectory($destinationDir, 0777, true);
         }
-    
+
         if (!File::exists($thumbDir)) {
             $this->info("📂 Membuat folder tujuan thumbnail: $thumbDir");
             File::makeDirectory($thumbDir, 0777, true);
         }
-    
-        $allFiles = File::allFiles($sourceDir);
-        $imagePaths = [];
-    
-        foreach ($allFiles as $file) {
-            if (preg_match('/\.(jpg|jpeg|png)$/i', $file->getFilename())) {
-                $imagePaths[] = $file->getRealPath();
+
+        foreach ($srcList as $src) {
+            $sourceDir = public_path($src);
+
+            if (!File::exists($sourceDir)) {
+                $this->error("❌ Folder sumber tidak ditemukan di: $sourceDir");
+                continue;
             }
-        }
-    
-        $this->info("🔍 Jumlah file ditemukan: " . count($imagePaths));
-    
-        if (empty($imagePaths)) {
-            $this->info("❌ Tidak ada file gambar di folder sumber.");
-            return;
-        }
-    
-        foreach ($imagePaths as $imagePath) {
-            $filename = basename($imagePath);
-    
-            $destImagePath = $destinationDir . '/' . $filename;
-            $destThumbPath = $thumbDir . '/' . $filename;
-    
-            $this->info("🔄 Resize ke 651x360 → $destImagePath");
-            $resizeMain = $this->resizeImage($imagePath, $destImagePath, 651, 360);
-    
-            if ($resizeMain) {
-                $this->info("✅ Berhasil simpan gambar di: $destImagePath");
-            } else {
-                $this->error("❌ Gagal resize ke gambar: $filename");
+
+            $this->info("📂 Memeriksa folder sumber: $sourceDir");
+
+            $allFiles = File::allFiles($sourceDir);
+            $imagePaths = [];
+
+            foreach ($allFiles as $file) {
+                if (preg_match('/\.(jpg|jpeg|png|webp)$/i', $file->getFilename())) {
+                    $imagePaths[] = $file->getRealPath();
+                }
             }
-    
-            $this->info("🔄 Resize thumbnail 123x123 → $destThumbPath");
-            $resizeThumb = $this->resizeImage($imagePath, $destThumbPath, 123, 123);
-    
-            if ($resizeThumb) {
-                $this->info("✅ Berhasil simpan thumbnail di: $destThumbPath");
-            } else {
-                $this->error("❌ Gagal resize thumbnail: $filename");
+
+            $this->info("🔍 Jumlah file ditemukan di [$src]: " . count($imagePaths));
+
+            if (empty($imagePaths)) {
+                $this->info("❌ Tidak ada file gambar di folder sumber [$src].");
+                continue;
             }
+
+            foreach ($imagePaths as $imagePath) {
+                $filename = basename($imagePath);
+
+                $destImagePath = $destinationDir . '/' . $filename;
+                $destThumbPath = $thumbDir . '/' . $filename;
+
+                $this->info("🔄 Resize ke 651x360 → $destImagePath");
+                $resizeMain = $this->resizeImage($imagePath, $destImagePath, 651, 360);
+
+                if ($resizeMain) {
+                    $this->info("✅ Berhasil simpan gambar di: $destImagePath");
+                } else {
+                    $this->error("❌ Gagal resize ke gambar: $filename");
+                }
+
+                $this->info("🔄 Resize thumbnail 123x123 → $destThumbPath");
+                $resizeThumb = $this->resizeImage($imagePath, $destThumbPath, 123, 123);
+
+                if ($resizeThumb) {
+                    $this->info("✅ Berhasil simpan thumbnail di: $destThumbPath");
+                } else {
+                    $this->error("❌ Gagal resize thumbnail: $filename");
+                }
+            }
+
+            $this->info("✅ Selesai memproses folder: $src");
         }
-    
+
         $this->info('📦 Semua proses resize selesai.');
     }
-    
+
     private function resizeImage($srcPath, $destPath, $newWidth, $newHeight)
     {
-        $info = getimagesize($srcPath);
-        if (!$info) return false;
+        $info = @getimagesize($srcPath); // suppress warning
+        if (!$info) {
+            $this->error("❌ Tidak bisa membaca informasi gambar: $srcPath (mungkin corrupt)");
+            return false;
+        }
     
         [$width, $height] = $info;
         $mime = $info['mime'];
+    
+        if (!in_array($mime, ['image/jpeg', 'image/png', 'image/webp'])) {
+            $this->error("❌ Format tidak didukung: $mime ($srcPath)");
+            return false;
+        }
     
         $aspectRatio = $width / $height;
     
@@ -261,16 +310,22 @@ class ResizeImages extends Command
     
         switch ($mime) {
             case 'image/jpeg':
-                $srcImage = imagecreatefromjpeg($srcPath);
+                $srcImage = @imagecreatefromjpeg($srcPath);
                 break;
             case 'image/png':
-                $srcImage = imagecreatefrompng($srcPath);
+                $srcImage = @imagecreatefrompng($srcPath);
                 break;
             case 'image/webp':
-                $srcImage = imagecreatefromwebp($srcPath);
+                $srcImage = @imagecreatefromwebp($srcPath);
                 break;
             default:
+                $this->error("❌ Tidak bisa buat resource gambar dari: $srcPath");
                 return false;
+        }
+    
+        if (!$srcImage) {
+            $this->error("❌ Gagal membaca resource gambar: $srcPath");
+            return false;
         }
     
         $resizedImage = imagecreatetruecolor($newWidth, $newHeight);
