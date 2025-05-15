@@ -8,7 +8,7 @@
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
     }
 
-    .article-detail--body  iframe {
+    .article-detail--body iframe {
         width: 100% !important;
         height: 800px !important;
         margin: 10px 0 !important;
@@ -17,7 +17,7 @@
     }
 
     .article-detail--body i {
-        display: flex ;
+        display: flex;
         justify-content: center;
         padding: 10px;
         font-style: normal;
@@ -30,183 +30,172 @@
 
 </style>
 @section('content')
-    <div class="kanal-wrap">
-        <h3 class="base-title-desc">
-            @if ($post->subCategory)
-                {{ $post->subCategory->nama_sub_kategori }}
-            @else
-                {{ $post->kategori->nama_kategori }}
-            @endif
-        </h3>
-        <div class="date">{{ \Carbon\Carbon::parse($post->created_at)->translatedFormat('l, d F Y | H:i') }} WIB </div>
+<div class="kanal-wrap">
+    <h3 class="base-title-desc">
+        @if ($post->subCategory)
+        {{ $post->subCategory->nama_sub_kategori }}
+        @else
+        {{ $post->kategori->nama_kategori }}
+        @endif
+    </h3>
+    <div class="date">{{ \Carbon\Carbon::parse($post->created_at)->translatedFormat('l, d F Y | H:i') }} WIB </div>
+</div>
+<article class="article-detail">
+    <div class="t5-b20">
+        <h1 class="article-detail--title">{{ $post->title }}</h1>
+        <div class="article-detail--info">
+            <div class="author"> {{ $post->user->name }} </div>
+        </div>
     </div>
-    <article class="article-detail">
-        <div class="t5-b20">
-            <h1 class="article-detail--title">{{ $post->title }}</h1>
-            <div class="article-detail--info">
-                <div class="author"> {{ $post->user->name }} </div>
-            </div>
-        </div>
-        <div class="share-baru-header">
-            <?php $url = urlencode(url()->current()); ?>
+    <div class="share-baru-header">
+        <?php $url = urlencode(url()->current()); ?>
 
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ $url }}" target="_blank">
-                            <img src="{{ asset('frontend/icons/fb.svg') }}" alt="Facebook">
-                        </a>
-
-                        <!-- Twitter -->
-                        <a href="https://twitter.com/intent/tweet?url={{ $url }}" target="_blank">
-                            <img src="{{ asset('frontend/icons/twitter.svg') }}" alt="Twitter">
-                        </a>
-
-                        <!-- Telegram -->
-                        <a href="https://t.me/share/url?url={{ $url }}" target="_blank">
-                            <img src="{{ asset('frontend/icons/tele.svg') }}" alt="Telegram">
-                        </a>
-
-                        <!-- WhatsApp -->
-                        <a href="https://api.whatsapp.com/send?text={{ $url }}" target="_blank">
-                            <img src="{{ asset('frontend/icons/wa.svg') }}" alt="WhatsApp">
-                        </a>
-
-                        <!-- Copy Link -->
-                        <a href="javascript:void(0);" onclick="copyToClipboard()">
-                            <img src="{{ asset('frontend/icons/link.svg') }}" alt="Copy Link">
-                        </a>
-        </div>
-        <figure class="article-detail-figure">
-            <img alt="{{ $post->title }}" src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}"
-                class="card-headline-img" />
-            <figcaption>{{ $post->image_caption }}</figcaption>
-        </figure>
-        <a href="#!" rel="">
-            <div class="banner-ads--big">
-                @include('frontend.mobile.components.ads-7')
-            </div>
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ $url }}" target="_blank">
+            <img src="{{ asset('frontend/icons/fb.svg') }}" alt="Facebook">
         </a>
-        <div class="t0-b20">
-            <div class="article-detail--body">
-                <p>{!! preg_replace_callback(
-                    '/<img[^>]+alt="([^"]*)"[^>]*>/i',
-                    function ($matches) {
-                        return $matches[0] . '<i>' . htmlspecialchars($matches[1]) . '</i>';
-                    },
-                    preg_replace_callback(
-                        '/(?:<caption\b[^>]*>|\[caption[^\]]*\])(.*?)(?:<\/caption>|\[\/caption\])/is',
-                        function ($matches) {
-                            preg_match_all('/<img[^>]+>/i', $matches[1], $images);
-                            return implode('', $images[0]);
-                        },
-                        preg_replace_callback(
-                            '/^(?!\s*<p\b|\s*<img|\s*<ul|\s*<ol|\s*<div|\s*<blockquote|\s*<h[1-6])(.+?)(?=<|$)/ism',
-                            function ($matches) {
-                                return '<p>' . trim($matches[1]) . '</p>';
-                            },
-                            preg_replace_callback(
-                                '/<p>\s*(<br>|&nbsp;)\s*<\/p>/i',
-                                function () {
-                                    return '';
-                                },
-                                preg_replace_callback(
-                                    '/<p\b[^>]*>.*?<\/p>/is',
-                                    function ($matches) use (&$paragraphIndex, $injectAt3, $injectAt6) {
-                                        static $paragraphIndex = 0;
-                                        $paragraphIndex++;
 
-                                        if ($paragraphIndex == 3 && $injectAt3) {
-                                            return $matches[0] . $injectAt3;
-                                        } elseif ($paragraphIndex == 8 && $injectAt6) {
-                                            return $matches[0] . $injectAt6;
-                                        }
+        <!-- Twitter -->
+        <a href="https://twitter.com/intent/tweet?url={{ $url }}" target="_blank">
+            <img src="{{ asset('frontend/icons/twitter.svg') }}" alt="Twitter">
+        </a>
 
-                                        return $matches[0];
-                                    },
-                                    $post->content
-                                )
-                            )
-                        )
-                    )
-                ) !!}</p>
-            </div>
+        <!-- Telegram -->
+        <a href="https://t.me/share/url?url={{ $url }}" target="_blank">
+            <img src="{{ asset('frontend/icons/tele.svg') }}" alt="Telegram">
+        </a>
 
-            <div class="article-detail-tag">
-                <span class="label card-headline-no-image-title">Tag</span>
-                @foreach ($tagsdetail as $index => $tags)
-                    <a href="{{ route('bytag', ['slug' => $tags->slug]) }}" class="tag-item"> {{ $tags->nama_tags }}</a>
-                @endforeach
-            </div>
-            <div class="share-baru-bottom mb-20">
-                <?php $url = urlencode(url()->current()); ?>
+        <!-- WhatsApp -->
+        <a href="https://api.whatsapp.com/send?text={{ $url }}" target="_blank">
+            <img src="{{ asset('frontend/icons/wa.svg') }}" alt="WhatsApp">
+        </a>
 
-                <a href="https://www.facebook.com/sharer/sharer.php?u={{ $url }}" target="_blank">
-                    <img src="{{ asset('frontend/icons/fb.svg') }}" alt="Facebook">
-                </a>
-
-                <!-- Twitter -->
-                <a href="https://twitter.com/intent/tweet?url={{ $url }}" target="_blank">
-                    <img src="{{ asset('frontend/icons/twitter.svg') }}" alt="Twitter">
-                </a>
-
-                <!-- Telegram -->
-                <a href="https://t.me/share/url?url={{ $url }}" target="_blank">
-                    <img src="{{ asset('frontend/icons/tele.svg') }}" alt="Telegram">
-                </a>
-
-                <!-- WhatsApp -->
-                <a href="https://api.whatsapp.com/send?text={{ $url }}" target="_blank">
-                    <img src="{{ asset('frontend/icons/wa.svg') }}" alt="WhatsApp">
-                </a>
-
-                <!-- Copy Link -->
-                <a href="javascript:void(0);" onclick="copyToClipboard()">
-                    <img src="{{ asset('frontend/icons/link.svg') }}" alt="Copy Link">
-                </a>
-            </div>
-        </div>
-    </article>
+        <!-- Copy Link -->
+        <a href="javascript:void(0);" onclick="copyToClipboard()">
+            <img src="{{ asset('frontend/icons/link.svg') }}" alt="Copy Link">
+        </a>
+    </div>
+    <figure class="article-detail-figure">
+        <img alt="{{ $post->title }}"
+            src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}"
+            class="card-headline-img" />
+        <figcaption>{{ $post->image_caption }}</figcaption>
+    </figure>
     <a href="#!" rel="">
         <div class="banner-ads--big">
-            @include('frontend.mobile.components.ads-3')
+            @include('frontend.mobile.components.ads-7')
         </div>
     </a>
-    <!-- terpopuler -->
-    <div class="mt-20 bg1">
-        <h3 class="base-title pl-20 pt-20">Terpopuler</h3>
-        <div class="list">
-            @foreach ($postTerpopuler as $item)
-                <div class="list-element">
-                    <article class="main-card">
-                        <div class="main-card--infoml0">
-                            <h4 class="main-card--title">
-                                <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
-                            </h4>
-                            <div class="category-and-time">
-                                <span>{{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }} WIB</span>
-                            </div>
-                        </div>
-                    </article>
-                </div>
+    <div class="t0-b20">
+        <div class="article-detail--body">
+            <p>{!! $formatted_content !!}</p>
+        </div>
+
+        <div class="article-detail-tag">
+            <span class="label card-headline-no-image-title">Tag</span>
+            @foreach ($tagsdetail as $index => $tags)
+            <a href="{{ route('bytag', ['slug' => $tags->slug]) }}" class="tag-item"> {{ $tags->nama_tags }}</a>
             @endforeach
         </div>
+        <div class="share-baru-bottom mb-20">
+            <?php $url = urlencode(url()->current()); ?>
+
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ $url }}" target="_blank">
+                <img src="{{ asset('frontend/icons/fb.svg') }}" alt="Facebook">
+            </a>
+
+            <!-- Twitter -->
+            <a href="https://twitter.com/intent/tweet?url={{ $url }}" target="_blank">
+                <img src="{{ asset('frontend/icons/twitter.svg') }}" alt="Twitter">
+            </a>
+
+            <!-- Telegram -->
+            <a href="https://t.me/share/url?url={{ $url }}" target="_blank">
+                <img src="{{ asset('frontend/icons/tele.svg') }}" alt="Telegram">
+            </a>
+
+            <!-- WhatsApp -->
+            <a href="https://api.whatsapp.com/send?text={{ $url }}" target="_blank">
+                <img src="{{ asset('frontend/icons/wa.svg') }}" alt="WhatsApp">
+            </a>
+
+            <!-- Copy Link -->
+            <a href="javascript:void(0);" onclick="copyToClipboard()">
+                <img src="{{ asset('frontend/icons/link.svg') }}" alt="Copy Link">
+            </a>
+        </div>
     </div>
-    <!-- end terpopuler -->
-    <!-- dangdut -->
-    <div class="mt-20">
-        <h3 class="base-title pl-20 mb-10">{{ $post->kategori->nama_kategori }}</h3>
-        @foreach ($relatedPosts->take(1) as $item)
-            <article class="card-headline">
-                <img alt="{{ $item->title }}" class="card-headline-img"
-                    src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />
-                <div class="card-headline-info">
-                    <h4 class="card-headline-title">
+</article>
+<a href="#!" rel="">
+    <div class="banner-ads--big">
+        @include('frontend.mobile.components.ads-3')
+    </div>
+</a>
+<!-- terpopuler -->
+<div class="mt-20 bg1">
+    <h3 class="base-title pl-20 pt-20">Terpopuler</h3>
+    <div class="list">
+        @foreach ($postTerpopuler as $item)
+        <div class="list-element">
+            <article class="main-card">
+                <div class="main-card--infoml0">
+                    <h4 class="main-card--title">
                         <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
                     </h4>
-                    <p class="card-headline-desc">{!! Str::limit(strip_tags($item->content), 100) !!}</p>
+                    <div class="category-and-time">
+                        <span>{{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }} WIB</span>
+                    </div>
                 </div>
             </article>
+        </div>
         @endforeach
-        <div>
-            @foreach ($relatedPosts->slice(1, 5) as $item)
+    </div>
+</div>
+<!-- end terpopuler -->
+<!-- dangdut -->
+<div class="mt-20">
+    <h3 class="base-title pl-20 mb-10">{{ $post->kategori->nama_kategori }}</h3>
+    @foreach ($relatedPosts->take(1) as $item)
+    <article class="card-headline">
+        <img alt="{{ $item->title }}" class="card-headline-img"
+            src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />
+        <div class="card-headline-info">
+            <h4 class="card-headline-title">
+                <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
+            </h4>
+            <p class="card-headline-desc">{!! Str::limit(strip_tags($item->content), 100) !!}</p>
+        </div>
+    </article>
+    @endforeach
+    <div>
+        @foreach ($relatedPosts->slice(1, 5) as $item)
+        <article class="main-card">
+            <div class="main-card-img-wrap">
+                <img alt="{{ $item->title }}" class="main-card-img"
+                    src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />
+            </div>
+            <div class="main-card--info">
+                <h4 class="main-card--title">
+                    <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
+                </h4>
+                <div class="category-and-time">
+                    <span>{{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }} WIB</span>
+                </div>
+            </div>
+        </article>
+        @endforeach
+        <div class="t10-b20 mb-20">
+            <button class="main-card-loadmore" id="loadmore">Tampilkan lebih banyak</button>
+        </div>
+    </div>
+</div>
+<!-- end Dangdut -->
+<!-- start terkini -->
+<div class="mt-20">
+    <h3 class="base-title pl-20">Terkini</h3>
+    <div>
+        <div class="list">
+            @foreach ($postTerkini as $item)
+            <div class="list-element">
                 <article class="main-card">
                     <div class="main-card-img-wrap">
                         <img alt="{{ $item->title }}" class="main-card-img"
@@ -217,56 +206,27 @@
                             <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
                         </h4>
                         <div class="category-and-time">
+                            @if ($item->subCategory)
+                            <a href="">
+                                {{ $item->subCategory->nama_sub_kategori }}
+                            </a>
+                            @else
+                            <a href="">
+                                {{ $item->kategori->nama_kategori }}
+                            </a>
+                            @endif
                             <span>{{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }} WIB</span>
                         </div>
                     </div>
                 </article>
+            </div>
             @endforeach
-            <div class="t10-b20 mb-20">
-                <button class="main-card-loadmore" id="loadmore">Tampilkan lebih banyak</button>
-            </div>
         </div>
-    </div>
-    <!-- end Dangdut -->
-    <!-- start terkini -->
-    <div class="mt-20">
-        <h3 class="base-title pl-20">Terkini</h3>
-        <div>
-            <div class="list">
-                @foreach ($postTerkini as $item)
-                    <div class="list-element">
-                        <article class="main-card">
-                            <div class="main-card-img-wrap">
-                                <img alt="{{ $item->title }}" class="main-card-img"
-                                    src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />
-                            </div>
-                            <div class="main-card--info">
-                                <h4 class="main-card--title">
-                                    <a
-                                        href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
-                                </h4>
-                                <div class="category-and-time">
-                                    @if ($item->subCategory)
-                                    <a href="">
-                                        {{ $item->subCategory->nama_sub_kategori }}
-                                    </a>
-                                    @else
-                                    <a href="">
-                                        {{ $item->kategori->nama_kategori }}
-                                    </a>
-                                    @endif
-                                    <span>{{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }} WIB</span>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-                @endforeach
-            </div>
-            <div class="t10-b20 mb-20">
-                <button class="main-card-loadmore" id="loadmore">Tampilkan lebih banyak</button>
-            </div>
-            <script>
-                function copyToClipboard() {
+        <div class="t10-b20 mb-20">
+            <button class="main-card-loadmore" id="loadmore">Tampilkan lebih banyak</button>
+        </div>
+        <script>
+            function copyToClipboard() {
                 var tempInput = document.createElement("input");
                 tempInput.value = window.location.href;
                 document.body.appendChild(tempInput);
@@ -276,5 +236,25 @@
                 alert("Link copied to clipboard!");
             }
 
-            </script>
-        @endsection
+        </script>
+        @if($post->adult === 'yes')
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const adSelectors = [
+                    '.adsbygoogle',
+                    '.ad-popup',
+                    '.popup-ad',
+                    '#ad_position_box',
+                    'adsbygoogle adsbygoogle-noablate',
+                ];
+
+                adSelectors.forEach(selector => {
+                    document.querySelectorAll(selector).forEach(el => {
+                        el.remove();
+                    });
+                });
+            });
+
+        </script>
+        @endif
+@endsection

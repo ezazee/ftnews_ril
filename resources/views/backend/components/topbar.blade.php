@@ -25,8 +25,7 @@
                     <span class="crop-image-original avatar avatar-sm" style="background-image: url('{{ asset('backend/images/profile/profile.png') }}');"></span>
                     <div class="d-none d-xl-block ps-2">
                         <div>{{ Auth::user()->name }}</div>
-                        <div class="mt-1 small text-muted"><span class="__cf_email__"
-                                data-cfemail="0e787b62627c676d664e6a676d6567607d6160206d6163">{{ Auth::user()->email }}</span>
+                        <div class="mt-1 small text-muted"><span>{{ Auth::user()->email }}</span>
                         </div>
                     </div>
                 </a>

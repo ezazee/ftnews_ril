@@ -245,6 +245,23 @@
                         <div class="card meta-boxes">
                             <div class="card-header">
                                 <h4 class="card-title">
+                                    <label for="author_id" class="form-label">Adult</label>
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="position-relative">
+                                    <label class="form-check form-switch ">
+                                        <input name="adult" type="hidden" value="no" />
+                                        <input class="form-check-input" name="adult" type="checkbox"
+                                            value="yes" />
+                                        <span class="form-check-label">Is content adult?</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card meta-boxes">
+                            <div class="card-header">
+                                <h4 class="card-title">
                                     <label for="author_id" class="form-label">Headline</label>
                                 </h4>
                             </div>

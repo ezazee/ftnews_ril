@@ -88,47 +88,7 @@
                     <figcaption>{{ $post->image_caption }}</figcaption>
                 </figure>
                 <div class="article-detail--body">
-                    <p>{!! preg_replace_callback(
-                        '/<img[^>]+alt="([^"]*)"[^>]*>/i',
-                        function ($matches) {
-                            return $matches[0] . '<i>' . htmlspecialchars($matches[1]) . '</i>';
-                        },
-                        preg_replace_callback(
-                            '/(?:<caption\b[^>]*>|\[caption[^\]]*\])(.*?)(?:<\/caption>|\[\/caption\])/is',
-                            function ($matches) {
-                                preg_match_all('/<img[^>]+>/i', $matches[1], $images);
-                                return implode('', $images[0]);
-                            },
-                            preg_replace_callback(
-                                '/^(?!\s*<p\b|\s*<img|\s*<ul|\s*<ol|\s*<div|\s*<blockquote|\s*<h[1-6])(.+?)(?=<|$)/ism',
-                                function ($matches) {
-                                    return '<p>' . trim($matches[1]) . '</p>';
-                                },
-                                preg_replace_callback(
-                                    '/<p>\s*(<br>|&nbsp;)\s*<\/p>/i',
-                                    function () {
-                                        return '';
-                                    },
-                                    preg_replace_callback(
-                                        '/<p\b[^>]*>.*?<\/p>/is',
-                                        function ($matches) use (&$paragraphIndex, $injectAt3, $injectAt6) {
-                                            static $paragraphIndex = 0;
-                                            $paragraphIndex++;
-
-                                            if ($paragraphIndex == 3 && $injectAt3) {
-                                                return $matches[0] . $injectAt3;
-                                            } elseif ($paragraphIndex == 8 && $injectAt6) {
-                                                return $matches[0] . $injectAt6;
-                                            }
-
-                                            return $matches[0];
-                                        },
-                                        $post->content
-                                    )
-                                )
-                            )
-                        )
-                    ) !!}</p>
+                    <p>{!! $formatted_content !!}</p>
                 </div>
                 <div class="article-detail-tag">
                     <span class="label card-headline-no-image-title-detail2">Tag</span>
@@ -211,4 +171,23 @@
             alert("Link copied to clipboard!");
         }
     </script>
+    @if($post->adult === 'yes')
+    <script>
+     document.addEventListener("DOMContentLoaded", function () {
+         const adSelectors = [
+             '.adsbygoogle',
+             '.ad-popup',
+             '.popup-ad',
+             '#ad_position_box', 
+             'adsbygoogle adsbygoogle-noablate',
+         ];
+    
+         adSelectors.forEach(selector => {
+             document.querySelectorAll(selector).forEach(el => {
+                 el.remove();
+             });
+         });    
+     });
+    </script>
+    @endif
 @endsection

@@ -16,7 +16,7 @@ class Post extends Model implements HasMedia
         'title', 'content', 'gambar', 'short_description', 
         'image_caption', 'slug', 'status', 'headline', 
         'start_date', 'start_time', 'keyword', 'sub_category_id',
-        'description', 'kategori_id', 'user_id','created_at',
+        'description', 'kategori_id', 'user_id','created_at','adult',
     ];
     
 

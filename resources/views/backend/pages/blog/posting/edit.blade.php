@@ -40,7 +40,8 @@
                                 <div class="tab-pane active show" id="tabs-detail">
                                     <div class="mb-3 position-relative">
                                         <label for="name" class="form-label">Name</label>
-                                        <input class="form-control" data-counter="250" placeholder="Name" name="title" type="text" value="{{ $post->title }}">
+                                        <input class="form-control" data-counter="250" placeholder="Name" name="title"
+                                            type="text" value="{{ $post->title }}">
                                     </div>
                                     <div class="mb-3 ">
                                         <div class="slug-field-wrapper" data-field-name="name">
@@ -70,18 +71,22 @@
                                     </div>
                                     <div class="mb-3 position-relative">
                                         <label for="video-url" class="mt-4 block">Video URL</label>
-                                        <input class="form-control" id="video-url" placeholder="Paste video URL di sini" type="text" >
-                                        <button type="button" class="btn btn-primary btn-sm mt-2" onclick="insertVideo()">
+                                        <input class="form-control" id="video-url" placeholder="Paste video URL di sini"
+                                            type="text">
+                                        <button type="button" class="btn btn-primary btn-sm mt-2"
+                                            onclick="insertVideo()">
                                             Insert Video
                                         </button>
-                                     </div>
-                                     <div class="mb-3 position-relative " id="embed-container">
-                                        <label for="embed-url" >Generated Embed URL:</label>
-                                        <textarea class="form-control" data-counter="160" rows="3" id="embed-url" placeholder="URL Embed" ></textarea>
-                                        <button type="button" class="btn btn-primary btn-sm mt-2" onclick="copyEmbedUrl()">
+                                    </div>
+                                    <div class="mb-3 position-relative " id="embed-container">
+                                        <label for="embed-url">Generated Embed URL:</label>
+                                        <textarea class="form-control" data-counter="160" rows="3" id="embed-url"
+                                            placeholder="URL Embed"></textarea>
+                                        <button type="button" class="btn btn-primary btn-sm mt-2"
+                                            onclick="copyEmbedUrl()">
                                             Copy Embed URL
                                         </button>
-                                     </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -211,7 +216,9 @@
                         </div>
                         <div class="card-body">
                             <div class="image-box image-box-banner_image" data-counter="250">
-                                <input class="image-data" name="banner_image" type="hidden" value="{{ is_array($post->gambar) ? $post->gambar[0] : $post->gambar }}" data-counter="250" />
+                                <input class="image-data" name="banner_image" type="hidden"
+                                    value="{{ is_array($post->gambar) ? $post->gambar[0] : $post->gambar }}"
+                                    data-counter="250" />
                                 <div style="width: 8rem; height: 8rem; border: 1px dashed #ddd; display: flex; align-items: center; justify-content: center;"
                                     class="preview-image-wrapper mb-1">
                                     <div class="preview-image-inner">
@@ -239,8 +246,10 @@
                                         </button>
                                     </div>
                                 </div>
-                                <input class="form-control mb-3" placeholder="Image Caption" name="image_caption" type="text" value="{{ $post->image_caption }}">
-                            <a href="{{ url('/laravel-filemanager') }}" onclick="openFileManager(event)" class="btn btn-primary btn-sm">
+                                <input class="form-control mb-3" placeholder="Image Caption" name="image_caption"
+                                    type="text" value="{{ $post->image_caption }}">
+                                <a href="{{ url('/laravel-filemanager') }}" onclick="openFileManager(event)"
+                                    class="btn btn-primary btn-sm">
                                     Choose image
                                 </a>
                             </div>
@@ -274,20 +283,37 @@
                     <div class="card meta-boxes">
                         <div class="card-header">
                             <h4 class="card-title">
+                                <label for="author_id" class="form-label">Adult</label>
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="position-relative">
+                                <label class="form-check form-switch ">
+                                    <input name="adult" type="hidden" value="no" />
+                                        <input class="form-check-input" name="adult" type="checkbox" value="yes"
+                                            {{ $post->adult === 'yes' ? 'checked' : '' }}>
+                                        <span class="form-check-label">Is content adult?</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card meta-boxes">
+                        <div class="card-header">
+                            <h4 class="card-title">
                                 <label for="author_id" class="form-label">Headline</label>
                             </h4>
                         </div>
                         <div class="card-body">
                             <div class="card-body">
                                 <div class="position-relative">
-                                <label class="form-check form-switch">
-                                    <input name="headline" type="hidden" value="no" />
-                                    <input class="form-check-input" name="headline" type="checkbox" value="yes"
-                                    {{ $post->headline === 'yes' ? 'checked' : '' }}>
-                                    <span class="form-check-label">Is headline?</span>
-                                </label>
+                                    <label class="form-check form-switch">
+                                        <input name="headline" type="hidden" value="no" />
+                                        <input class="form-check-input" name="headline" type="checkbox" value="yes"
+                                            {{ $post->headline === 'yes' ? 'checked' : '' }}>
+                                        <span class="form-check-label">Is headline?</span>
+                                    </label>
                                 </div>
-                            </div>                     
+                            </div>
                         </div>
                     </div>
                     <div class="card meta-boxes">
@@ -302,49 +328,45 @@
                                     @foreach ($category as $item)
                                     <li>
                                         <label class="form-check">
-                                            <input type="checkbox" 
-                                                id="category-{{ $item->id }}" 
-                                                name="categories[]" 
-                                                class="form-check-input category-checkbox"
-                                                value="{{ $item->id }}"
+                                            <input type="checkbox" id="category-{{ $item->id }}" name="categories[]"
+                                                class="form-check-input category-checkbox" value="{{ $item->id }}"
                                                 onchange="toggleCategorySelection(this, {{ $item->id }})"
                                                 {{ $post->kategori && $post->kategori->id === $item->id ? 'checked' : '' }}>
                                             <span class="form-check-label">{{ $item->nama_kategori }}</span>
                                         </label>
-                                
+
                                         <ul class="list-unstyled ms-4 mt-2">
                                             @foreach ($item->subCategories as $subItem)
                                             <li>
                                                 <label class="form-check">
-                                                    <input type="checkbox" 
-                                                        id="subcategory-{{ $subItem->id }}" 
-                                                        name="subcategories[]" 
-                                                        value="{{ $subItem->id }}"
+                                                    <input type="checkbox" id="subcategory-{{ $subItem->id }}"
+                                                        name="subcategories[]" value="{{ $subItem->id }}"
                                                         class="form-check-input subcategory-checkbox sub-of-{{ $item->id }}"
                                                         {{ $post->subCategory && $post->subCategory->id === $subItem->id ? 'checked' : '' }}
                                                         {{ $post->kategori && $post->kategori->id === $item->id ? '' : 'disabled' }}>
-                                                    <span class="form-check-label">{{ $subItem->nama_sub_kategori }}</span>
+                                                    <span
+                                                        class="form-check-label">{{ $subItem->nama_sub_kategori }}</span>
                                                 </label>
                                             </li>
                                             @endforeach
                                         </ul>
                                     </li>
-                                @endforeach                                                               
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
                     </div>
                     <div class="card meta-boxes">
-                     <div class="card-header">
-                         <h4 class="card-title">
-                             <label for="tag" class="form-label">Tags</label>
-                         </h4>
-                     </div>
-                     <div class="card-body">
-                         <input class="form-control tags" placeholder="Write some tags" name="tag" type="text"
-                             value="{{ implode(',', $post->tags->pluck('nama_tags')->toArray()) }}" id="tag">
-                     </div>
-                 </div>
+                        <div class="card-header">
+                            <h4 class="card-title">
+                                <label for="tag" class="form-label">Tags</label>
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <input class="form-control tags" placeholder="Write some tags" name="tag" type="text"
+                                value="{{ implode(',', $post->tags->pluck('nama_tags')->toArray()) }}" id="tag">
+                        </div>
+                    </div>
                 </div>
             </div>
         </form>
@@ -477,7 +499,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         function toggleScheduledForm() {
             if ($("#status").val() === "schedule") {
                 $("#form-scheduled").show();
@@ -486,10 +508,11 @@
             }
         }
         toggleScheduledForm();
-        $("#status").change(function() {
+        $("#status").change(function () {
             toggleScheduledForm();
         });
     });
+
 </script>
 
 <script>
@@ -499,13 +522,14 @@
 
         // Menonaktifkan atau mengaktifkan checkbox subkategori terkait
         const subcategoryCheckboxes = document.querySelectorAll('.sub-of-' + categoryId);
-        subcategoryCheckboxes.forEach(function(checkbox) {
+        subcategoryCheckboxes.forEach(function (checkbox) {
             checkbox.disabled = !isChecked;
             if (!isChecked) {
                 checkbox.checked = false;
             }
         });
     }
+
 </script>
 
 <script>
@@ -563,5 +587,6 @@
         document.execCommand("copy");
         alert("Embed URL copied to clipboard: " + embedUrlInput.value);
     }
+
 </script>
 @endsection

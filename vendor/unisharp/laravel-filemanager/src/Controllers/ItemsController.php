@@ -49,9 +49,13 @@ class ItemsController extends LfmController
          foreach ($iterator as $fileInfo) {
              $name = $fileInfo->getFilename();
  
-             if ($search && stripos($name, $search) === false) {
-                 continue;
-             }
+            if (!empty($search)) {
+                $searchLower = mb_strtolower(trim($search));
+                $nameLower = mb_strtolower($name);
+                if (mb_stripos($nameLower, $searchLower) === false) {
+                    continue;
+                }
+            }
  
              $extension = strtolower($fileInfo->getExtension());
              $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];

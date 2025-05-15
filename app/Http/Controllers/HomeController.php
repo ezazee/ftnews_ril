@@ -160,22 +160,22 @@ class HomeController extends Controller
         ->select('posts.*')
         ->take(2)
         ->get();
-
+    
         $firstRelated = $relatedPosts->get(0);
         $secondRelated = $relatedPosts->get(1);
-
+        
         $injectAt3 = '';
         $injectAt6 = '';
-
+        
         if ($firstRelated) {
             $injectAt3 = '<p><strong>Baca Juga: <a href="' . route('detail.desktop', ['slug' => $firstRelated->slug]) . '">' . htmlspecialchars($firstRelated->title) . '</a></strong></p>';
         }
-
+        
         if ($secondRelated) {
             $injectAt6 = '<p><strong>Baca Juga: <a href="' . route('detail.desktop', ['slug' => $secondRelated->slug]) . '">' . htmlspecialchars($secondRelated->title) . '</a></strong></p>';
         }
 
-        // dd($relatedPosts);
+        $formatted_content = $this->formatPostContent($post->content, $injectAt3, $injectAt6);
 
         $postTerpopuler = Post::with('kategori', 'user')
         ->where('status', 'public')
@@ -196,9 +196,9 @@ class HomeController extends Controller
         $tagsdetail = $post->tags;
 
         if ($this->agent->isMobile()) {
-            return view('frontend.mobile.pages.detail',compact('relatedPosts','injectAt3', 'injectAt6','postTerkiniBottom','post','postTerkini','postTerpopuler','tagsdetail'));
+            return view('frontend.mobile.pages.detail',compact('relatedPosts','injectAt3', 'injectAt6','postTerkiniBottom','post','postTerkini','postTerpopuler','tagsdetail','formatted_content'));
         } else {
-            return view('frontend.dekstop.pages.detail',compact('relatedPosts','injectAt3', 'injectAt6','postTerkiniBottom','post','postTerkini','postTerpopuler','tagsdetail'));
+            return view('frontend.dekstop.pages.detail',compact('relatedPosts','injectAt3', 'injectAt6','postTerkiniBottom','post','postTerkini','postTerpopuler','tagsdetail','formatted_content'));
         }
     }
 
@@ -570,9 +570,8 @@ class HomeController extends Controller
             return view('frontend.dekstop.pages.404', compact('postTerkini', 'postTerkiniBottom', 'postTerpopuler'));
         }
     }
-
-
-    public function jaringan(){
+    
+        public function jaringan(){
         $postTerkini = Post::with('kategori', 'user')
         ->where('status', 'public')
         ->latest()
@@ -597,5 +596,52 @@ class HomeController extends Controller
             return view('frontend.dekstop.pages.jaringan', compact('postTerkini', 'postTerkiniBottom', 'postTerpopuler'));
         }
     }
-
+    
+    
+    public function formatPostContent($content, $injectAt3 = '', $injectAt6 = '')
+    {
+        $content = preg_replace_callback(
+            '/(?:<caption\b[^>]*>)(.*?)(?:<\/caption>)/is',
+            function ($matches) {
+                return $matches[1];
+            },
+            $content
+        );
+        
+        $content = preg_replace_callback(
+            '/\[caption[^\]]*\](.*?)\[\/caption\]/is',
+            function ($matches) {
+                return $matches[1];
+            },
+            $content
+        );
+    
+        $content = preg_replace_callback(
+            '/<img[^>]+alt="([^"]*)"[^>]*>/i',
+            function ($matches) {
+                return $matches[0] . '<i>' . htmlspecialchars($matches[1]) . '</i>';
+            },
+            $content
+        );
+    
+        $content = preg_replace('/<p>\s*(<br>|&nbsp;|\s)*<\/p>/i', '', $content);
+    
+        $paragraphIndex = 0;
+        $content = preg_replace_callback(
+            '/(<p\b[^>]*>.*?<\/p>)/is',
+            function ($matches) use (&$paragraphIndex, $injectAt3, $injectAt6) {
+                $paragraphIndex++;
+                $result = $matches[1];
+                if ($paragraphIndex === 3 && $injectAt3) {
+                    $result .= $injectAt3;
+                } elseif ($paragraphIndex === 8 && $injectAt6) {
+                    $result .= $injectAt6;
+                }
+                return $result;
+            },
+            $content
+        );
+    
+        return $content;
+    }
 }
