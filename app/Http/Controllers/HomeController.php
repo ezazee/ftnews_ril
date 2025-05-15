@@ -167,15 +167,37 @@ class HomeController extends Controller
         $injectAt3 = '';
         $injectAt6 = '';
         
+
         if ($firstRelated) {
-            $injectAt3 = '<p><strong>Baca Juga: <a href="' . route('detail.desktop', ['slug' => $firstRelated->slug]) . '">' . htmlspecialchars($firstRelated->title) . '</a></strong></p>';
+            $injectAt3 = '
+            <blockquote class="bacajuga">
+                <strong>Baca Juga:</strong>
+                <a href="' . route('detail.desktop', ['slug' => $firstRelated->slug]) . '">' . htmlspecialchars($firstRelated->title) . '</a>
+            </blockquote>';
+
         }
         
         if ($secondRelated) {
-            $injectAt6 = '<p><strong>Baca Juga: <a href="' . route('detail.desktop', ['slug' => $secondRelated->slug]) . '">' . htmlspecialchars($secondRelated->title) . '</a></strong></p>';
+            $injectAt6 = '
+            <blockquote class="bacajuga">
+                <strong>Baca Juga:</strong>
+                <a href="' . route('detail.desktop', ['slug' => $secondRelated->slug]) . '">' . htmlspecialchars($secondRelated->title) . '</a>
+            </blockquote>';
         }
 
-        $formatted_content = $this->formatPostContent($post->content, $injectAt3, $injectAt6);
+        if ($this->agent->isMobile()) {
+            $ads1 = '';
+            $ads2 = '';
+            $ads3 = '';
+        } else {
+            $ads1 = '';
+            $ads2 = '';
+            $ads3 = '';
+        }
+
+
+        $formatted_content = $this->formatPostContent($post->content, $injectAt3, $injectAt6, $ads1, $ads2, $ads3);
+
 
         $postTerpopuler = Post::with('kategori', 'user')
         ->where('status', 'public')
@@ -598,7 +620,7 @@ class HomeController extends Controller
     }
     
     
-    public function formatPostContent($content, $injectAt3 = '', $injectAt6 = '')
+    public function formatPostContent($content, $injectAt3 = '', $injectAt6 = '', $ads1 = '', $ads2 = '', $ads3 = '')
     {
         $content = preg_replace_callback(
             '/(?:<caption\b[^>]*>)(.*?)(?:<\/caption>)/is',
@@ -607,7 +629,7 @@ class HomeController extends Controller
             },
             $content
         );
-        
+
         $content = preg_replace_callback(
             '/\[caption[^\]]*\](.*?)\[\/caption\]/is',
             function ($matches) {
@@ -615,7 +637,7 @@ class HomeController extends Controller
             },
             $content
         );
-    
+
         $content = preg_replace_callback(
             '/<img[^>]+alt="([^"]*)"[^>]*>/i',
             function ($matches) {
@@ -623,25 +645,37 @@ class HomeController extends Controller
             },
             $content
         );
-    
+
         $content = preg_replace('/<p>\s*(<br>|&nbsp;|\s)*<\/p>/i', '', $content);
-    
+
         $paragraphIndex = 0;
         $content = preg_replace_callback(
             '/(<p\b[^>]*>.*?<\/p>)/is',
-            function ($matches) use (&$paragraphIndex, $injectAt3, $injectAt6) {
+            function ($matches) use (&$paragraphIndex, $injectAt3, $injectAt6, $ads1, $ads2, $ads3) {
                 $paragraphIndex++;
                 $result = $matches[1];
+
+                if ($paragraphIndex === 2 && $ads1) {
+                    $result .= $ads1;
+                } elseif ($paragraphIndex === 4 && $ads2) {
+                    $result .= $ads2;
+                } elseif ($paragraphIndex === 7 && $ads3) {
+                    $result .= $ads3;
+                }
+
                 if ($paragraphIndex === 3 && $injectAt3) {
                     $result .= $injectAt3;
                 } elseif ($paragraphIndex === 8 && $injectAt6) {
                     $result .= $injectAt6;
                 }
+
                 return $result;
             },
             $content
         );
-    
+
         return $content;
     }
+
+
 }
