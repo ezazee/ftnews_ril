@@ -18,11 +18,11 @@
                             <p class="main-card--desc">{!! Str::limit(strip_tags($item->content ), 150) !!}</p>
                             <div class="category-and-time">
                                 @if ($item->subCategory)
-                                <a href="">
+                                <a href="{{ route('subcateg.desktop', ['categ' => $item->kategori->slug, 'subcateg' => $item->subCategory->slug]) }}">
                                     {{ $item->subCategory->nama_sub_kategori }}
                                 </a>
                                 @else
-                                <a href="">
+                                <a href="{{ route('kanal.desktop', ['slug' => $item->kategori->slug]) }}">
                                     {{ $item->kategori->nama_kategori }}
                                 </a>
                                 @endif

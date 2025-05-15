@@ -84,7 +84,6 @@
                                 </h4>
                                 <p class="main-card--desc">{!! Str::limit(strip_tags($item->content), 150) !!} </p>
                                 <div class="category-and-time">
-                                    <a href="">
                                         <span>
                                             @if ($item->subCategory)
                                                 <a href="{{ route('kanal.desktop', ['slug' => $item->slug]) }}">
@@ -103,7 +102,6 @@
                                                 |</span>
                                             <span>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('H:i:s') : '' }}</span>
                                         </span>
-                                    </a>
                                 </div>
                             </div>
                         </article>

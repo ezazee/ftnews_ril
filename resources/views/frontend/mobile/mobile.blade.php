@@ -497,9 +497,7 @@
                     @endforeach
                 </div>
                 <div class="t10-b20 mb-20">
-                    <a href="">
                         <button class="main-card-loadmore" id="loadmore">Tampilkan lebih banyak</button>
-                    </a>
                 </div>
             </div>
         </div>
