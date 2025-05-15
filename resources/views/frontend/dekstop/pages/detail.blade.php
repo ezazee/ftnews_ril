@@ -27,6 +27,23 @@
         color: var(--gray-color);
         background: #f2f2f2;
     }
+
+    .bacajuga {
+        margin: 0 0 1rem;
+        padding: 1rem;
+        background-color: #f9f9f9;
+        border-left: 5px solid var(--blue-primary);
+        font-style: italic;
+        color: #333;
+        border-radius: 5px;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .bacajuga a {
+        color: var(--blue-primary) !important;
+        text-decoration: underline;
+    }
 </style>
 @section('content')
     {{-- Ads --}}
@@ -84,11 +101,21 @@
                 </div>
 
                 <figure class="article-detail-figure">
-                    <img alt="{{ $post->title }}" width="660" height="497" src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}" class="card-headline-img" />
+                    <img alt="{{ $post->title }}" width="660" height="497"
+                        src="{{ asset('storage/comp/' . (is_array($post->gambar) ? basename($post->gambar[0]) : basename($post->gambar))) }}"
+                        class="card-headline-img" />
                     <figcaption>{{ $post->image_caption }}</figcaption>
                 </figure>
                 <div class="article-detail--body">
                     <p>{!! $formatted_content !!}</p>
+                    <blockquote class="bacajuga"> <strong>Baca Juga:</strong>
+                        <a href="#">Jokowi-Puan Jabat Tangan saat "Welcoming Dinner" WWF, PertandaIslah? "Welcoming Dinner" WWF, PertandaIslah? "Welcoming Dinner" WWF, PertandaIslah?</a>
+                    </blockquote>
+
+                    <p style="width: 615px; height: 204px">
+                        <img src="{{ asset('frontend/images/ads/320_x_100.jpg') }}" alt="">
+                    </p>
+
                 </div>
                 <div class="article-detail-tag">
                     <span class="label card-headline-no-image-title-detail2">Tag</span>
@@ -171,23 +198,23 @@
             alert("Link copied to clipboard!");
         }
     </script>
-    @if($post->adult === 'yes')
-    <script>
-     document.addEventListener("DOMContentLoaded", function () {
-         const adSelectors = [
-             '.adsbygoogle',
-             '.ad-popup',
-             '.popup-ad',
-             '#ad_position_box', 
-             'adsbygoogle adsbygoogle-noablate',
-         ];
-    
-         adSelectors.forEach(selector => {
-             document.querySelectorAll(selector).forEach(el => {
-                 el.remove();
-             });
-         });    
-     });
-    </script>
+    @if ($post->adult === 'yes')
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const adSelectors = [
+                    '.adsbygoogle',
+                    '.ad-popup',
+                    '.popup-ad',
+                    '#ad_position_box',
+                    'adsbygoogle adsbygoogle-noablate',
+                ];
+
+                adSelectors.forEach(selector => {
+                    document.querySelectorAll(selector).forEach(el => {
+                        el.remove();
+                    });
+                });
+            });
+        </script>
     @endif
 @endsection
