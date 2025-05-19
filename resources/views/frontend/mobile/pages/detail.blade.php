@@ -104,13 +104,6 @@
     <div class="t0-b20">
         <div class="article-detail--body">
             <p>{!! $formatted_content !!}</p>
-            <blockquote class="bacajuga"> <strong>Baca Juga:</strong>
-                <a href="#">Jokowi-Puan Jabat Tangan saat "Welcoming Dinner" WWF, PertandaIslah? "Welcoming Dinner" WWF, PertandaIslah? "Welcoming Dinner" WWF, PertandaIslah?</a>
-            </blockquote>
-
-            <p style="width: 315px; height: 104px">
-                <img src="{{ asset('frontend/images/ads/320_x_100.jpg') }}" alt="">
-            </p>
         </div>
 
         <div class="article-detail-tag">

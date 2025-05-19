@@ -108,14 +108,6 @@
                 </figure>
                 <div class="article-detail--body">
                     <p>{!! $formatted_content !!}</p>
-                    <blockquote class="bacajuga"> <strong>Baca Juga:</strong>
-                        <a href="#">Jokowi-Puan Jabat Tangan saat "Welcoming Dinner" WWF, PertandaIslah? "Welcoming Dinner" WWF, PertandaIslah? "Welcoming Dinner" WWF, PertandaIslah?</a>
-                    </blockquote>
-
-                    <p style="width: 615px; height: 204px">
-                        <img src="{{ asset('frontend/images/ads/320_x_100.jpg') }}" alt="">
-                    </p>
-
                 </div>
                 <div class="article-detail-tag">
                     <span class="label card-headline-no-image-title-detail2">Tag</span>
