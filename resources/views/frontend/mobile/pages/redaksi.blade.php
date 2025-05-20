@@ -44,8 +44,10 @@
                         </div>
                         <li>Redaksi</li>
                         <div class="list-nama">
-                            <p>M. Aribowo</p>
-                            <p>Choirul Anwar</p>
+                            <p>Rizky Nurmansyah </p>
+                            <p>Zulfikar</p>
+                            <p>Fatimah Oktavianti</p>
+                            <p>Lidya Hidayati</p>
                             <p>Diana Ontje Irene Runtu</p>
                             <p>Galang Kelana</p>
                             <p>Lilis Suryaningsih</p>
@@ -57,14 +59,26 @@
                         </div>
                         <li>Sosmed & Multimedia</li>
                         <div class="list-nama">
+                            <p>Muhammad Yani</p>
                             <p>Heriyanto</p>
+                            <p>Choirul Anwar</p>
                             <p>Anda</p>
-                            <p>Ari Hidayat</p>
+                            <p>Ahmad Jayadi Zakaria</p>
+                            <p>Shariat Hidayatullah</p>
                             <p>Anto Supriyanto</p>
                             <p>Dimas Adityanugroho</p>
                             <p>Firhan</p>
                             <p>Nadya Nur Aulia</p>
-                            <p>Siti Fakhriyatussyah Aribah</p>
+                        </div>
+                        <li>Perwakilan Sumatera Utara</li>
+                        <div class="list-nama">
+                            <p>Muhammad Aribowo</p>
+                            <p>Kesuma Ramadhan</p>
+                            <p>Reza Daeng Syahputra</p>
+                        </div>
+                        <li>Digital Ads & Programmatic </li>
+                        <div class="list-nama">
+                            <p>Feri Anggriawan</p>
                         </div>
                         <li>IT & Development</li>
                         <div class="list-nama">
@@ -80,12 +94,10 @@
                         <li>Legal</li>
                         <div class="list-nama">
                             <p>Heriandi Sidauruk</p>
-                            <p>Ghandi Alfredo Sinaga</p>
                         </div>
                         <li>Alamat Redaksi:</li>
                         <div class="list-nama">
-                            <p>Jl. Raya Ragunan No.T.05, RT.8/RW.6, Jati Padang, Ps. Minggu, Jakarta Selatan, DKI Jakarta
-                                12540
+                            <p>Jl. Raya Ragunan No.T.05, RT.8/RW.6, Jati Padang, Ps. Minggu, Jakarta Selatan, DKI Jakarta 12540
                                 Telepon: +62812-822-81-822</p>
                         </div>
                         <li>Email:</li>
@@ -95,7 +107,7 @@
                         </div>
                         <li>Facebook:</li>
                         <div class="list-nama">
-                            <p>FTNewscoid</p>
+                           <p>FTNewscoid</p>
                         </div>
                         <li>Tiktok:</li>
                         <div class="list-nama">
