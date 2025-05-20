@@ -165,7 +165,9 @@
                                     </h4>
                                     <p class="main-card--desc">{!! Str::limit(strip_tags($item->content), 100) !!}</p>
                                     <div class="category-and-time">
-                                        <span>{{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }} WIB</span>
+                                        <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->isoFormat('DD MMMM YYYY') : '' }}
+                                            |</span>
+                                        <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->format('H:i:s') : '' }}</span>
                                     </div>
                                 </div>
                             </article>

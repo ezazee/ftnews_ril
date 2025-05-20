@@ -28,7 +28,7 @@
                                         {{ $topPostheadline->kategori->nama_kategori }}
                                     </a>
                                 @endif
-                                <span>{{ $topPostheadline->created_at ? \Carbon\Carbon::parse($topPostheadline->created_at)->isoFormat('DD MMMM, YYYY') : '' }}
+                                <span>{{ $topPostheadline->created_at ? \Carbon\Carbon::parse($topPostheadline->created_at)->isoFormat('DD MMMM YYYY') : '' }}
                                     |</span>
                                 <span>{{ $topPostheadline->created_at ? \Carbon\Carbon::parse($topPostheadline->created_at)->format('H:i:s') : '' }}</span>
                             </span>
@@ -53,7 +53,7 @@
                                 <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
                             </h4>
                             <div class="category-and-time-head">
-                                <span>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->isoFormat('DD MMMM, YYYY') : '' }}
+                                <span>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->isoFormat('DD MMMM YYYY') : '' }}
                                     |</span>
                                 <span>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('H:i:s') : '' }}</span>
                             </div>
@@ -89,7 +89,7 @@
                                         {{ $item->kategori->nama_kategori }}
                                     </a>
                                 @endif
-                                <span>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->isoFormat('DD MMMM, YYYY') : '' }}
+                                <span>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->isoFormat('DD MMMM YYYY') : '' }}
                                     |</span>
                                 <span>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('H:i:s') : '' }}</span>
                             </span>
@@ -112,7 +112,7 @@
                                         href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
                                 </h4>
                                 <div class="category-and-time">
-                                    <span>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->isoFormat('DD MMMM, YYYY') : '' }}
+                                    <span>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->isoFormat('DD MMMM YYYY') : '' }}
                                         |</span>
                                     <span>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('H:i:s') : '' }}</span>
                                 </div>
@@ -143,7 +143,7 @@
                         </h4>
                         <div class="category-and-time">
                             <p class="card-headline-desc">{!! Str::limit(strip_tags($topPostNasional->content), 60) !!}</p>
-                            <span>{{ $topPostNasional->created_at ? \Carbon\Carbon::parse($topPostNasional->created_at)->isoFormat('DD MMMM, YYYY') : '' }}
+                            <span>{{ $topPostNasional->created_at ? \Carbon\Carbon::parse($topPostNasional->created_at)->isoFormat('DD MMMM YYYY') : '' }}
                                 |</span>
                             <span>{{ $topPostNasional->created_at ? \Carbon\Carbon::parse($topPostNasional->created_at)->format('H:i:s') : '' }}</span>
                         </div>
@@ -164,7 +164,7 @@
                                 <a href="{{ route('detail.desktop', ['slug' => $post->slug]) }}">{{ $post->title }}</a>
                             </h4>
                             <div class="category-and-time">
-                                <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->isoFormat('DD MMMM, YYYY') : '' }}
+                                <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->isoFormat('DD MMMM YYYY') : '' }}
                                     |</span>
                                 <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->format('H:i:s') : '' }}</span>
                             </div>
@@ -197,7 +197,7 @@
                         </h4>
                         <div class="category-and-time">
                             <p class="card-headline-desc">{!! Str::limit(strip_tags($topPostDaerah->content), 60) !!}</p>
-                            <span>{{ $topPostDaerah->created_at ? \Carbon\Carbon::parse($topPostDaerah->created_at)->isoFormat('DD MMMM, YYYY') : '' }}
+                            <span>{{ $topPostDaerah->created_at ? \Carbon\Carbon::parse($topPostDaerah->created_at)->isoFormat('DD MMMM YYYY') : '' }}
                                 |</span>
                             <span>{{ $topPostDaerah->created_at ? \Carbon\Carbon::parse($topPostDaerah->created_at)->format('H:i:s') : '' }}</span>
                         </div>
@@ -214,7 +214,7 @@
                                 <a href="{{ route('detail.desktop', ['slug' => $post->slug]) }}">{{ $post->title }}</a>
                             </h4>
                             <div class="category-and-time">
-                                <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->isoFormat('DD MMMM, YYYY') : '' }}
+                                <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->isoFormat('DD MMMM YYYY') : '' }}
                                     |</span>
                                 <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->format('H:i:s') : '' }}</span>
                             </div>
@@ -253,7 +253,7 @@
                         </h4>
                         <div class="category-and-time">
                             <p class="card-headline-desc">{!! Str::limit(strip_tags($topPostLifestyle->content), 60) !!}</p>
-                            <span>{{ $topPostLifestyle->created_at ? \Carbon\Carbon::parse($topPostLifestyle->created_at)->isoFormat('DD MMMM, YYYY') : '' }}
+                            <span>{{ $topPostLifestyle->created_at ? \Carbon\Carbon::parse($topPostLifestyle->created_at)->isoFormat('DD MMMM YYYY') : '' }}
                                 |</span>
                             <span>{{ $topPostLifestyle->created_at ? \Carbon\Carbon::parse($topPostLifestyle->created_at)->format('H:i:s') : '' }}</span>
                         </div>
@@ -275,7 +275,7 @@
                                 </a>
                             </h4>
                             <div class="category-and-time">
-                                <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->isoFormat('DD MMMM, YYYY') : '' }}
+                                <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->isoFormat('DD MMMM YYYY') : '' }}
                                     |</span>
                                 <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->format('H:i:s') : '' }}</span>
                             </div>
@@ -303,7 +303,7 @@
                         </h4>
                         <div class="category-and-time">
                             <p class="card-headline-desc">{!! Str::limit(strip_tags($topPostTeknologi->content), 60) !!}</p>
-                            <span>{{ $topPostTeknologi->created_at ? \Carbon\Carbon::parse($topPostTeknologi->created_at)->isoFormat('DD MMMM, YYYY') : '' }}
+                            <span>{{ $topPostTeknologi->created_at ? \Carbon\Carbon::parse($topPostTeknologi->created_at)->isoFormat('DD MMMM YYYY') : '' }}
                                 |</span>
                             <span>{{ $topPostTeknologi->created_at ? \Carbon\Carbon::parse($topPostTeknologi->created_at)->format('H:i:s') : '' }}</span>
                         </div>
@@ -320,7 +320,7 @@
                                 <a href="{{ route('detail.desktop', ['slug' => $post->slug]) }}">{{ $post->title }}</a>
                             </h4>
                             <div class="category-and-time">
-                                <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->isoFormat('DD MMMM, YYYY') : '' }}
+                                <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->isoFormat('DD MMMM YYYY') : '' }}
                                     |</span>
                                 <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->format('H:i:s') : '' }}</span>
                             </div>
@@ -359,7 +359,7 @@
                         </h4>
                         <div class="category-and-time">
                             <p class="card-headline-desc">{!! Str::limit(strip_tags($topPostOlahraga->content), 60) !!}</p>
-                            <span>{{ $topPostOlahraga->created_at ? \Carbon\Carbon::parse($topPostOlahraga->created_at)->isoFormat('DD MMMM, YYYY') : '' }}
+                            <span>{{ $topPostOlahraga->created_at ? \Carbon\Carbon::parse($topPostOlahraga->created_at)->isoFormat('DD MMMM YYYY') : '' }}
                                 |</span>
                             <span>{{ $topPostOlahraga->created_at ? \Carbon\Carbon::parse($topPostOlahraga->created_at)->format('H:i:s') : '' }}</span>
                         </div>
@@ -380,7 +380,7 @@
                                 <a href="{{ route('detail.desktop', ['slug' => $post->slug]) }}">{{ $post->title }}</a>
                             </h4>
                             <div class="category-and-time">
-                                <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->isoFormat('DD MMMM, YYYY') : '' }}
+                                <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->isoFormat('DD MMMM YYYY') : '' }}
                                     |</span>
                                 <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->format('H:i:s') : '' }}</span>
                             </div>
@@ -413,7 +413,7 @@
                         </h4>
                         <div class="category-and-time">
                             <p class="card-headline-desc">{!! Str::limit(strip_tags($topPostOtomotif->content), 60) !!}</p>
-                            <span>{{ $topPostOtomotif->created_at ? \Carbon\Carbon::parse($topPostOtomotif->created_at)->isoFormat('DD MMMM, YYYY') : '' }}
+                            <span>{{ $topPostOtomotif->created_at ? \Carbon\Carbon::parse($topPostOtomotif->created_at)->isoFormat('DD MMMM YYYY') : '' }}
                                 |</span>
                             <span>{{ $topPostOtomotif->created_at ? \Carbon\Carbon::parse($topPostOtomotif->created_at)->format('H:i:s') : '' }}</span>
                         </div>
@@ -431,7 +431,7 @@
                                     href="{{ route('detail.desktop', ['slug' => $post->slug]) }}">{{ $post->title }}</a>
                             </h4>
                             <div class="category-and-time">
-                                <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->isoFormat('DD MMMM, YYYY') : '' }}
+                                <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->isoFormat('DD MMMM YYYY') : '' }}
                                     |</span>
                                 <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->format('H:i:s') : '' }}</span>
                             </div>
@@ -486,7 +486,7 @@
                                                     {{ $post->kategori->nama_kategori }}
                                                 </a>
                                             @endif
-                                            <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->isoFormat('DD MMMM, YYYY') : '' }}
+                                            <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->isoFormat('DD MMMM YYYY') : '' }}
                                                 |</span>
                                             <span>{{ $post->created_at ? \Carbon\Carbon::parse($post->created_at)->format('H:i:s') : '' }}</span>
                                         </span>

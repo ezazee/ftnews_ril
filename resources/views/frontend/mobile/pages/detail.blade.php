@@ -231,7 +231,9 @@
                                 {{ $item->kategori->nama_kategori }}
                             </a>
                             @endif
-                            <span>{{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }} WIB</span>
+                            <span>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->isoFormat('DD MMMM YYYY') : '' }}
+                                |</span>
+                            <span>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('H:i:s') : '' }}</span>
                         </div>
                     </div>
                 </article>
