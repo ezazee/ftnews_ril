@@ -58,7 +58,7 @@
                         </h4>
                         <div class="category-and-time-head">
                             <span
-                                style="font-size: 10px;">{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->isoFormat('DD MMMM, YYYY') : '' }}
+                                style="font-size: 10px;">{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->isoFormat('DD MMMM YYYY') : '' }}
                                 |
                                 {{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('H:i:s') : '' }}
                             </span>
@@ -88,7 +88,7 @@
                         <a href="{{ route('kanal.desktop', ['slug' => $item->kategori->slug]) }}"
                             style="color: #888; text-decoration: none;">{{ $item->kategori->nama_kategori }}</a>
                         <span
-                            style="font-size: 10px; margin-left: 6px;">{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->isoFormat('DD MMMM, YYYY') : '' }}
+                            style="font-size: 10px; margin-left: 6px;">{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->isoFormat('DD MMMM YYYY') : '' }}
                             |
                             {{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('H:i:s') : '' }}</span>
                     </div>

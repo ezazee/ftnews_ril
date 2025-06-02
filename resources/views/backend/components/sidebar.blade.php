@@ -13,7 +13,7 @@
         </button>
         <h2 class="d-block d-lg-none navbar-brand navbar-brand-autodark">
             <a href="{{ route('dashboard') }}">
-                <img src="{{ asset('backend/images/logo/logo.svg') }}" style="max-height: 32px; height: auto;"
+                <img src="{{ asset('backend/images/logo/logo.png') }}" style="max-height: 32px; height: auto;"
                     alt="FTnews" class="navbar-brand-image">
             </a>
         </h2>
