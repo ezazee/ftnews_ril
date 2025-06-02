@@ -150,6 +150,7 @@ class SettingsController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'role' => 'admin',
+            'status' => 'active',
         ]);
         Alert::success('Success', 'Member added successfully!!');
         return redirect()->route('settings.memberDashboard')->with('success', 'Admin berhasil ditambahkan!');

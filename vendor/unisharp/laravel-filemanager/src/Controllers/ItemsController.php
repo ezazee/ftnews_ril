@@ -72,6 +72,7 @@ class ItemsController extends LfmController
                  'is_file' => $fileInfo->isFile(),
                  'is_image' => $isImage,
                  'thumb_url' => $isImage ? asset($this->lfm->url($name)."/".$name) : null,
+                //  'alt' => $isImage ? pathinfo($name, PATHINFO_FILENAME) : null,
              ];
          }
  

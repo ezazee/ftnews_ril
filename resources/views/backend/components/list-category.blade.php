@@ -16,8 +16,7 @@
             </div>
         </div>
         <div class="card-body tree-categories-body">
-            <div class="file-tree-wrapper" data-url=""
-                data-update-url="https://cms.botble.com/admin/blog/categories/update-tree">
+            <div class="file-tree-wrapper">
                 <div class="dd" data-depth="0" data-empty-text="No categories found.">
                     <ol class="list-group dd-list ">
                         @foreach ($categories as $item)

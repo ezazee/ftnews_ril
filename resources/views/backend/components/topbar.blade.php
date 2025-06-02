@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <button class="navbar-toggler d-none d-lg-block me-2 ms-n1" type="button" data-bb-toggle="navbar-minimal"
             data-bb-target="#sidebar-menu-main" aria-controls="navbar-menu" aria-expanded="false"
-            aria-label="Toggle navigation" data-url="https://cms.botble.com/admin/system/users/profile/1/preferences"
+            aria-label="Toggle navigation"
             data-method="PATCH">
             <svg class="icon  svg-icon-ti-ti-menu-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
