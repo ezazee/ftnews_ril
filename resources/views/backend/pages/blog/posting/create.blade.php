@@ -510,61 +510,70 @@
     </script>
 
 
-    <script>
-        function convertSocialMediaLink(url) {
-            let regex = /https:\/\/www\.instagram\.com\/(p|reel|tv)\/([^\/?]+)\//;
-            let match = url.match(regex);
-            if (match) {
-                const postId = match[2];
-                return `https://www.instagram.com/p/${postId}/embed`;
-            }
-
-            regex = /https:\/\/www\.tiktok\.com\/@[^\/]+\/video\/([^\/?]+)/;
-            match = url.match(regex);
-            if (match) {
-                const videoId = match[1];
-                return `https://www.tiktok.com/embed/v2/${videoId}`;
-            }
-
-            regex = /https:\/\/x\.com\/[^\/]+\/status\/([^\/?]+)/;
-            match = url.match(regex);
-            if (match) {
-                const tweetId = match[1];
-                return `https://platform.twitter.com/embed/Tweet.html?id=${tweetId}`;
-            }
-
-            regex = /https:\/\/www\.youtube\.com\/watch\?v=([^\/&?]+)/;
-            match = url.match(regex);
-            if (match) {
-                const videoId = match[1];
-                return `https://www.youtube.com/embed/${videoId}`;
-            }
-
-            throw new Error('URL tidak valid atau tidak didukung.');
+   <script>
+    function convertSocialMediaLink(url) {
+        let regex = /https:\/\/www\.instagram\.com\/(p|reel|tv)\/([^\/?]+)\//;
+        let match = url.match(regex);
+        if (match) {
+            const postId = match[2];
+            return `https://www.instagram.com/p/${postId}/embed`;
         }
 
-        function insertVideo() {
-            const url = document.getElementById('video-url').value;
-
-            try {
-                const embedUrl = convertSocialMediaLink(url);
-
-                document.getElementById('embed-url').value = embedUrl;
-                document.getElementById('embed-container').style.display = 'block';
-            } catch (error) {
-                alert(`Error: ${error.message}`);
-            }
+        regex = /https:\/\/www\.tiktok\.com\/@[^\/]+\/video\/([^\/?]+)/;
+        match = url.match(regex);
+        if (match) {
+            const videoId = match[1];
+            return `https://www.tiktok.com/embed/v2/${videoId}`;
         }
 
-        function copyEmbedUrl() {
-            const embedUrlInput = document.getElementById('embed-url');
-
-            embedUrlInput.select();
-            embedUrlInput.setSelectionRange(0, 99999);
-
-            document.execCommand("copy");
-            alert("Embed URL copied to clipboard: " + embedUrlInput.value);
+        regex = /https:\/\/x\.com\/[^\/]+\/status\/([^\/?]+)/;
+        match = url.match(regex);
+        if (match) {
+            const tweetId = match[1];
+            return `https://platform.twitter.com/embed/Tweet.html?id=${tweetId}`;
         }
-    </script>
+
+        regex = /https:\/\/(?:www\.)?youtube\.com\/watch\?v=([^&]+)/;
+        match = url.match(regex);
+        if (match) {
+            const videoId = match[1];
+            return `https://www.youtube.com/embed/${videoId}`;
+        }
+
+        regex = /https:\/\/youtu\.be\/([^?]+)/;
+        match = url.match(regex);
+        if (match) {
+            const videoId = match[1];
+            return `https://www.youtube.com/embed/${videoId}`;
+        }
+
+        throw new Error('URL tidak valid atau tidak didukung.');
+    }
+
+
+    function insertVideo() {
+        const url = document.getElementById('video-url').value;
+
+        try {
+            const embedUrl = convertSocialMediaLink(url);
+
+            document.getElementById('embed-url').value = embedUrl;
+            document.getElementById('embed-container').style.display = 'block';
+        } catch (error) {
+            alert(`Error: ${error.message}`);
+        }
+    }
+
+    function copyEmbedUrl() {
+        const embedUrlInput = document.getElementById('embed-url');
+
+        embedUrlInput.select();
+        embedUrlInput.setSelectionRange(0, 99999);
+
+        document.execCommand("copy");
+        alert("Embed URL copied to clipboard: " + embedUrlInput.value);
+    }
+</script>
+
 
 @endsection

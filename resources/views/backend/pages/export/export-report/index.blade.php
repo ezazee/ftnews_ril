@@ -76,7 +76,7 @@
                         <div class="container mt-5">
                             <div class="d-flex justify-content-between">
                                 <h2>Generated Report</h2>
-                                <p><em>From: <strong>2024-12-01</strong> To: <strong>2025-01-14</strong></em></p>
+                                <p><em>From: <strong>{{ $start_date }}</strong> To: <strong>{{ $end_date }}</strong></em></p>
                             </div>
                             {{-- <label class="form-label">Report User (NamaUser)</label> --}}
                             <table class="table table-bordered mt-3">
@@ -93,7 +93,7 @@
                                     <tr>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
-                                        <td>{{ $user->name }}</td>
+                                        <td>{{ $user->role }}</td>
                                         <td>{{ $user->posts_count }}</td>
                                     </tr>
                                     @endforeach

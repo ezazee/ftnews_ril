@@ -101,6 +101,21 @@
                             </div>
                         </div>
                     </div>
+                                        <div class="card meta-boxes">
+                        <div class="card-header">
+                            <h4 class="card-title">
+                                <label for="status" class="form-label required">Status</label>
+                            </h4>
+                        </div>
+
+                        <div class="card-body">
+                            <select class="form-control form-select" name="status">
+                                <option value="active" {{ $member->status == 'active' ? 'selected' : '' }}>Active
+                                </option>
+                                <option value="block" {{ $member->status == 'block' ? 'selected' : '' }}>Block</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="card meta-boxes">
                         <div class="card-header">
                             <h4 class="card-title">
