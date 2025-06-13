@@ -44,8 +44,11 @@ class MemberController extends Controller
             
         }
     
-        $user = $query->orderBy('name', 'asc')->paginate(10);
-    
+        $user = $query
+            ->orderByRaw("CASE WHEN status = 'active' THEN 0 ELSE 1 END")
+            ->orderBy('name', 'asc')
+            ->paginate(10);
+            
         return view('backend.pages.member.index', compact('user'));
     }
     
@@ -74,6 +77,7 @@ class MemberController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'role' => 'author',
+            'status' => 'active',
         ]);
 
         Alert::success('Success', 'Member added successfully!!');
@@ -95,6 +99,7 @@ class MemberController extends Controller
             'slug' => Str::slug($request->name),
             'email' => $request->input('email'),
             'role' => $request->input('role'),
+            'status' => $request->status,
         ];
 
         if ($request->filled('password')) {

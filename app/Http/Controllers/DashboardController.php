@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Exports\PostExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use App\Services\PlausibleService;
 
 class DashboardController extends Controller
@@ -206,8 +207,8 @@ class DashboardController extends Controller
 
     public function exportReport(Request $request)
     {
-        $startDate = $request->start_date;
-        $endDate = $request->end_date;
+        $startDate = $request->start_date ? Carbon::parse($request->start_date)->startOfDay()->addSecond() : null;
+        $endDate = $request->end_date ? Carbon::parse($request->end_date)->endOfDay() : null;
         $authorIds = $request->author_id;
 
         $users = User::query()
@@ -221,8 +222,8 @@ class DashboardController extends Controller
             $users->whereIn('id', $authorIds);
         }
 
-        $users = $users->get();
-            
+        $users = $users->orderBy('posts_count', 'desc')->get();
+
         return view('backend.pages.export.export-report.index', [
             'user' => $users,
             'start_date' => $request->start_date,
@@ -230,6 +231,7 @@ class DashboardController extends Controller
             'user_json' => json_encode($users),
         ]);
     }
+
 
 
     public function exportPdf(Request $request)
