@@ -17,6 +17,7 @@ use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
 use App\Models\Post;
 use App\Models\Categori;
+use App\Http\Controllers\RssFeedController;
 
 use UniSharp\LaravelFilemanager\Controllers\ItemsController;
 /*
@@ -180,7 +181,7 @@ Route::get('/category/{slug}', [HomeController::class, 'kanal'])->name('kanal.de
 Route::get('/category/{categ}/{subcateg}', [HomeController::class, 'subcateg'])->name('subcateg.desktop');
 Route::get('/indeks', [HomeController::class, 'byIndex'])->name('byIndex.dekstop');
 Route::get('/search-result', [HomeController::class, 'searchResult'])->name('searchResult.dekstop');
-
+Route::get('/feed', [RssFeedController::class, 'index']);
 Route::get('/{slug}', [HomeController::class, 'detail'])->name('detail.desktop');
 
 Route::get('/404/not-found', [HomeController::class, 'by404'])->name('by404');
