@@ -13,7 +13,7 @@ use Carbon\Carbon;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use App\Helpers\ImageResizeHelper;
-
+use \App\Models\ImageMetadata;
 
 
 class BlogController extends Controller
@@ -28,29 +28,32 @@ class BlogController extends Controller
                 $value = $request->filter_values[$index] ?? '';
 
                 if (!empty($column) && !empty($value)) {
+                    $value = strtolower($value);
+
                     if ($column === 'categori') {
                         $query->whereHas('kategori', function ($q) use ($operator, $value) {
                             if ($operator === 'like') {
                                 $value = "%$value%";
                             }
-                            $q->where('nama_kategori', $operator, $value);
+                            $q->whereRaw('LOWER(nama_kategori) ' . $operator . ' ?', [$value]);
                         });
                     } elseif ($column === 'author') {
                         $query->whereHas('user', function ($q) use ($operator, $value) {
                             if ($operator === 'like') {
                                 $value = "%$value%";
                             }
-                            $q->where('name', $operator, $value);
+                            $q->whereRaw('LOWER(name) ' . $operator . ' ?', [$value]);
                         });
-                    }else {
+                    } else {
                         if ($operator === 'like') {
                             $value = "%$value%";
                         }
-                        $query->where($column, $operator, $value);
+                        $query->whereRaw('LOWER(' . $column . ') ' . $operator . ' ?', [$value]);
                     }
                 }
             }
         }
+
 
         $post = $query->latest()->paginate(20);
 
@@ -70,24 +73,37 @@ class BlogController extends Controller
 
         return view('backend.pages.blog.posting.edit',compact('post','category'));
     }
-    public function createPost() {
+
+    public function createPost()
+    {
         $category = Categori::all();
-        return view('backend.pages.blog.posting.create',compact('category'));
+        return view('backend.pages.blog.posting.create', compact('category'));
     }
 
-    public function PostAdd(Request $request) {
-            // $validatedData = $request->validate([
-            //     'content' => 'required|string',
-            //     'headline' => 'nullable|string|in:yes,no',
-            //     'gambar' => 'required|url',
-            // ]);
 
-            // dd($request);
 
+    public function PostAdd(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'banner_image' => 'required',
+            ]);
+
+            $bannerImageUrl = $request->input('banner_image');
+
+            $metadata = ImageMetadata::where('comp_url', $bannerImageUrl)->first();
+
+            if ($metadata) {
+                if ($request->filled('image_caption')) {
+                    $metadata->caption = $request->input('image_caption');
+                    $metadata->save();
+                }
+            }
+            
             $post = Post::create([
                 'title' => $request->input('title'),
                 'slug' => Str::slug($request->input('title')),
-                'image_caption' => $request->input('image_caption'),
+                'image_caption' =>  $metadata->caption ?? null,
                 'content' => $request->input('content'),
                 'keyword' => $request->input('seo_meta.seo_title'),
                 'description' => $request->input('seo_meta.seo_description'),
@@ -98,7 +114,7 @@ class BlogController extends Controller
                 'adult' => $request->input('adult', 'no'),
                 'kategori_id' => $request->input('categories')[0] ?? null,
                 'sub_category_id' => $request->input('subcategories')[0] ?? null,
-                'gambar' => $request->input('banner_image'),
+                'gambar' => $bannerImageUrl,
                 'user_id' => Auth::id(),
             ]);
 
@@ -108,7 +124,6 @@ class BlogController extends Controller
                 foreach ($tags as $tag) {
                     if (!empty($tag['value'])) {
                         $slug = Str::slug($tag['value']);
-
                         $tagModel = Tag::firstOrCreate(
                             ['nama_tags' => $tag['value']],
                             ['slug' => $slug]
@@ -119,9 +134,20 @@ class BlogController extends Controller
 
                 $post->tags()->sync($tagIds);
             }
-        Alert::success('Success', 'Post added successfully!!');
-        return redirect()->back()->with('success', 'post Added successfully.');
+
+            Alert::success('Success', 'Post added successfully!');
+            return redirect()->back();
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Alert::warning('Error', implode(', ', $e->validator->errors()->all()));
+            return redirect()->back()->withErrors($e->validator)->withInput();
+
+        } catch (\Exception $e) {
+            Alert::error('Error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
+
 
     // NEW
     // public function PostAdd(Request $request)

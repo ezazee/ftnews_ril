@@ -42,7 +42,7 @@
                                 <div class="form-body">
                                     <div class="mb-3 position-relative">
                                         <label for="name" class="form-label">Name</label>
-                                        <input class="form-control" data-counter="250" required placeholder="Name" name="title" type="text" id="name">
+                                        <input class="form-control" data-counter="250" required placeholder="Name" name="title" value="{{ old('title') }}" type="text" id="name">
                                         @if ($errors->has('title'))
                                             <small class="text-danger">{{ $errors->first('title') }}</small>
                                         @endif
@@ -50,7 +50,7 @@
                                     <div class="mb-3 position-relative">
                                         <label for="content" class="form-label">Content</label>
                                         <textarea required class="form-control form-control editor-ckeditor ays-ignore" data-counter="100000" rows="4"
-                                            placeholder="Write your content" with-short-code id="content" name="content" cols="50"></textarea>
+                                            placeholder="Write your content" with-short-code id="content" name="content" cols="50" value="{{ old('content') }}"></textarea>
                                         @if ($errors->has('content'))
                                             <small class="text-danger">{{ $errors->first('content') }}</small>
                                         @endif
@@ -83,13 +83,13 @@
                                             <label for="seo_meta[seo_title]" class="form-label">SEO Keyword</label>
                                             <input class="form-control" data-counter="70" placeholder="SEO Keyword"
                                                 data-allow-over-limit name="seo_meta[seo_title]" type="text"
-                                                id="seo_meta[seo_title]">
+                                                id="seo_meta[seo_title]" value="{{ old('seo_meta[seo_title]') }}">
                                         </div>
                                         <div class="mb-3 position-relative">
                                             <label for="seo_meta[seo_description]" class="form-label">SEO
                                                 description</label>
                                             <textarea class="form-control" data-counter="160" rows="3" placeholder="SEO description" data-allow-over-limit
-                                                name="seo_meta[seo_description]" cols="50" id="seo_meta[seo_description]"></textarea>
+                                                name="seo_meta[seo_description]" cols="50" id="seo_meta[seo_description]" value="{{ old('seo_meta[seo_description]') }}"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -182,7 +182,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="image-box image-box-banner_image" data-counter="250">
-                                    <input required class="image-data" name="banner_image" type="hidden" data-counter="250" />
+                                    <input required class="image-data" name="banner_image" type="hidden" data-counter="250"  id="banner_image_input" />
                                     <div style="width: 8rem; height: 8rem; border: 1px dashed #ddd; display: flex; align-items: center; justify-content: center;"
                                         class="preview-image-wrapper mb-1">
                                         <div class="preview-image-inner">
@@ -214,7 +214,7 @@
                                     @if ($errors->has('banner_image'))
                                         <small class="text-danger">{{ $errors->first('banner_image') }}</small>
                                     @endif
-                                    <input class="form-control mb-3" placeholder="Image Caption" name="image_caption" type="text">
+                                    <input class="form-control mb-3" placeholder="Image Caption" name="image_caption" type="text" id="caption_input" >
 
                                     <a href="{{ url('/laravel-filemanager') }}" onclick="openFileManager(event)"
                                         class="btn btn-primary btn-sm">
@@ -574,6 +574,45 @@
         alert("Embed URL copied to clipboard: " + embedUrlInput.value);
     }
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const bannerInput = document.getElementById('banner_image_input');
+        const captionInput = document.getElementById('caption_input');
+
+        function fetchCaption(compUrl) {
+            if (!compUrl) {
+                captionInput.value = '';
+                return;
+            }
+
+            fetch(`/get-caption?url=${encodeURIComponent(compUrl)}`)
+                .then(response => response.json())
+                .then(data => {
+                    captionInput.value = data.caption ?? '';
+                })
+                .catch(err => {
+                    console.error('Fetch error:', err);
+                    captionInput.value = '';
+                });
+        }
+
+        if (bannerInput.value) {
+            fetchCaption(bannerInput.value);
+        }
+
+        const observer = new MutationObserver(() => {
+            fetchCaption(bannerInput.value);
+        });
+
+        observer.observe(bannerInput, { attributes: true, attributeFilter: ['value'] });
+
+        bannerInput.addEventListener('change', () => {
+            fetchCaption(bannerInput.value);
+        });
+    });
+</script>
+
 
 
 @endsection

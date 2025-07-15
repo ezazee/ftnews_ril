@@ -30,20 +30,18 @@ class UploadController extends LfmController
         $uploaded_files = request()->file('upload');
         $error_bag = [];
         $new_filename = null;
-        $success_messages = [];
-        // $cache = Cache::(env('CACHE_DRIVER'));
-
-    
+        $success_messages = [];    
         foreach (is_array($uploaded_files) ? $uploaded_files : [$uploaded_files] as $file) {
 
             
             try {
-                $originalName = preg_replace('/\s+/', '-', pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+                $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
                 $extension = $file->getClientOriginalExtension();
-        
-                $filename = $originalName . '.' . $extension;
-                $thumbFilename = $originalName . '.' . $extension;
-                $compFilename = $originalName . '.' . $extension;
+                $kodeUnik = now()->format('dmY');
+                $counter = rand(1, 9);
+                $filename = $originalName . ' ' . $kodeUnik . $counter . '.' . $extension;
+                $thumbFilename = $originalName . ' ' . $kodeUnik . $counter . '.' . $extension;
+                $compFilename = $originalName . ' ' . $kodeUnik . $counter . '.' . $extension;
         
                 $resizeResult = ImageResizeHelper::resizeImage($file, $filename, $thumbFilename, $compFilename);
         
@@ -54,8 +52,8 @@ class UploadController extends LfmController
         
                 $url = Storage::url($resizeResult['path']);
                 $thumbUrl = Storage::url($resizeResult['thumb_path']);
-                $compUrl = Storage::url($resizeResult['comp_path']); 
-                // begitu susccess remove cache image
+                $compUrl = Storage::url($resizeResult['comp_path']);
+
                 $response = [
                     'url' => $url,
                     'thumb_url' => $thumbUrl,

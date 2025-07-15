@@ -10,6 +10,7 @@ use UniSharp\LaravelFilemanager\Events\FolderWasMoving;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use FilesystemIterator;
+use \App\Models\ImageMetadata;
 use Illuminate\Support\Collection;
 
 
@@ -72,7 +73,6 @@ class ItemsController extends LfmController
                  'is_file' => $fileInfo->isFile(),
                  'is_image' => $isImage,
                  'thumb_url' => $isImage ? asset($this->lfm->url($name)."/".$name) : null,
-                //  'alt' => $isImage ? pathinfo($name, PATHINFO_FILENAME) : null,
              ];
          }
  

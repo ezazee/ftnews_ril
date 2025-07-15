@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\ImageMetadata;
 use Illuminate\Support\Facades\Storage;
 
 class ImageResizeHelper
@@ -94,6 +95,19 @@ class ImageResizeHelper
         imagedestroy($thumb);
         imagedestroy($compImage);
         imagedestroy($source);
+
+        $url = env('APP_URL');
+        $ori = $url . '/storage/gambar/' . $filename;
+        $thumburl = $url . '/storage/photos/shares/' . $thumbFilename;
+        $comp_url = $url . '/storage/comp/' . $compFilename;
+
+        ImageMetadata::create([
+            'original_name'     => $thumbFilename,
+            'url'     => $ori,
+            'filename'     => $thumbFilename,
+            'thumb_url'     => $thumburl,
+            'comp_url'      => $comp_url,
+        ]);
     
         return [
             'path' => 'gambar/' . $filename,

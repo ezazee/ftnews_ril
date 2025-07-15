@@ -153,28 +153,6 @@
                             <button class="btn   btn-show-table-options" type="button">
                                 Filters
                             </button>
-                            <div class="table-search-input">
-                                <label>
-                                    <input type="search" class="form-control input-sm" placeholder="Search..."
-                                        style="min-width: 120px">
-                                    <button type="button" title="Search..." class="search-icon"><svg
-                                            class="icon  svg-icon-ti-ti-search" xmlns="http://www.w3.org/2000/svg"
-                                            width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                            <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
-                                            <path d="M21 21l-6 -6" />
-                                        </svg></button>
-                                    <button type="button" title="Clear" class="search-reset-icon"><svg
-                                            class="icon  svg-icon-ti-ti-x" xmlns="http://www.w3.org/2000/svg" width="24"
-                                            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                            <path d="M18 6l-12 12" />
-                                            <path d="M6 6l12 12" />
-                                        </svg></button>
-                                </label>
-                            </div>
                         </div>
                         <div class="d-flex align-items-center gap-1">
                             <button class="btn action-item btn-primary " tabindex="0"

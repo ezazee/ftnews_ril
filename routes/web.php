@@ -18,6 +18,8 @@ use Spatie\Sitemap\Tags\Url;
 use App\Models\Post;
 use App\Models\Categori;
 use App\Http\Controllers\RssFeedController;
+use App\Models\ImageMetadata;
+use Illuminate\Http\Request;
 
 use UniSharp\LaravelFilemanager\Controllers\ItemsController;
 /*
@@ -157,7 +159,13 @@ Route::middleware(['auth', 'role:author|admin'])->group(function () {
     Route::group(['prefix' => 'laravel-filemanager'], function () {
         \UniSharp\LaravelFilemanager\Lfm::routes();
     });
+    
 
+    Route::get('/get-caption', function (Request $request) {
+        $url = $request->query('url');
+        $metadata = ImageMetadata::where('comp_url', $url)->first();
+        return response()->json(['caption' => $metadata->caption ?? null]);
+    });
     // Route::get('/laravel-filemanager/search', [DashboardController::class, 'searchLfm'])->name('unisharp.lfm.search');
 
 });
