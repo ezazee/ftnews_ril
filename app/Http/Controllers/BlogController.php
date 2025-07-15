@@ -247,4 +247,11 @@ class BlogController extends Controller
         return redirect()->route('blog.post')->with('success', 'Post deleted successfully.');
     }
 
+
+    // Schedule Post Page
+    public function schedulePost()
+    {
+        return view('backend.pages.blog.schedule.index',);
+    }
+
 }

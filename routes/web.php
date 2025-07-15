@@ -134,6 +134,10 @@ Route::middleware(['auth', 'role:author|admin'])->group(function () {
     Route::post('/dashboard/blog/{id}/update', [BlogController::class, 'PostUpdate'])->name('post.update');
 
 
+    // Schedule Post Page
+    Route::get('/dashboard/blog/schedule-post', [BlogController::class, 'schedulePost'])->name('blog.schedulePost');
+
+
     // Tags
     Route::get('/dashboard/blog/tags', [TagsController::class, 'tagsIndex'])->name('tags.index');
     Route::get('/dashboard/blog/tags/edit/{id}', [TagsController::class, 'tagsEdit'])->name('tags.edit');
