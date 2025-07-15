@@ -1,9 +1,9 @@
 @extends('frontend.mobile.master.master-app')
 @section('content')
-    <div style="margin-top: 150px">
+    <div style="margin-top: 120px">
         <h2 class="card-headline-no-image-title text-center fw-bold">{{ $category->nama_kategori }}</h2>
         <ul class="scrollable-subtitles"
-            style="display: flex; overflow-x: auto; white-space: nowrap; padding: 10px 0; margin-bottom: 30px">
+            style="display: flex; overflow-x: auto; white-space: nowrap; padding: 10px 0; margin-bottom: 20px; margin-top: -15px">
             @foreach ($category->subCategories as $item)
                 <li class="menu-item-scroll {{ Request::is('category/' . $category->slug . '/' . $item->slug) ? 'active' : '' }}"
                     style="padding: 0 15px; font-size: 14px; color: #333;"><a

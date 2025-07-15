@@ -21,7 +21,7 @@ body {
 }
 
 a {
-  color: #666666;
+  color: var(--black-color);
   text-decoration: none;
 }
 
@@ -30,7 +30,7 @@ a:hover {
 }
 
 a:visited {
-  color: #666666;
+  color: var(--black-color);
 }
 
 /* Padding */
@@ -407,7 +407,7 @@ a:visited {
 }
 
 p.card-headline-desc {
-  color: var(--gray-color);
+  color: var(--black-color);
   padding: 0px;
   margin-top: 5px;
   margin-bottom: 0px;
@@ -423,7 +423,7 @@ p.card-headline-desc {
 }
 
 .card-headline-title a {
-  color: var(--gray-color);
+  color: var(--black-color);
   font-weight: 500;
 }
 
@@ -465,11 +465,11 @@ p.card-headline-desc {
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
-  color: var(--gray-color);
+  color: var(--black-color);
 }
 
 .card-headline-small-title a {
-  color: var(--gray-color);
+  color: var(--black-color);
   font-weight: 500;
 }
 
@@ -628,7 +628,7 @@ p.card-headline-desc {
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
-  color: var(--gray-color);
+  color: var(--black-color);
   margin-bottom: 5px;
 }
 
@@ -1000,7 +1000,7 @@ p.card-headline-desc {
   font-size: 16px;
   line-height: 28px;
   align-items: center;
-  color: #000;
+  color: #000000;
 }
 
 .read-also-wrap-title {
@@ -1902,7 +1902,7 @@ th {
 }
 
 .menu-item-scroll a {
-  color: var(--gray-color);
+  color: var(--black-color);
 }
 
 .menu-item-scroll.active a {
@@ -1954,7 +1954,7 @@ th {
   text-decoration: none;
   color: black;
   font-weight: 400;
-  font-size: 12px;
+  font-size: 10px;
 }
 @keyframes marquee {
   0% {
