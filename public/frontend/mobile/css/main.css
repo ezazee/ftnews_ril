@@ -966,7 +966,7 @@ p.card-headline-desc {
   line-height: 26px;
   display: flex;
   align-items: center;
-  color: #494652;
+  color: #000000;
   margin-top: 0;
   margin-bottom: 0;
 }
@@ -1000,7 +1000,7 @@ p.card-headline-desc {
   font-size: 16px;
   line-height: 28px;
   align-items: center;
-  color: #494652;
+  color: #000;
 }
 
 .read-also-wrap-title {
