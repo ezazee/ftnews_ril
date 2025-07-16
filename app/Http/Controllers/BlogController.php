@@ -139,7 +139,7 @@ class BlogController extends Controller
             return redirect()->back();
 
         } catch (\Illuminate\Validation\ValidationException $e) {
-            Alert::warning('Error', implode(', ', $e->validator->errors()->all()));
+            Alert::warning('Warning', implode(', ', $e->validator->errors()->all()));
             return redirect()->back()->withErrors($e->validator)->withInput();
 
         } catch (\Exception $e) {
@@ -147,81 +147,6 @@ class BlogController extends Controller
             return redirect()->back()->withInput();
         }
     }
-
-
-    // NEW
-    // public function PostAdd(Request $request)
-    // {
-    //     $request->validate([
-    //         'title' => 'required|string|max:255',
-    //         'slug' => 'nullable|string|max:255|unique:posts,slug',
-    //         'short_description' => 'nullable|string',
-    //         'content' => 'required|string',
-    //         'headline' => 'nullable|string|in:yes,no',
-    //         'categories' => 'required|integer|exists:categories,id',
-    //         'banner_image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-    //         'tag' => 'required|json',
-    //     ]);
-
-    //     if ($request->hasFile('banner_image')) {
-    //         $image = $request->file('banner_image');
-    //         $filename = time() . '.' . $image->getClientOriginalExtension();
-    //         $thumbFilename = time() . '_thumb.' . $image->getClientOriginalExtension();
-
-    //         $filePath = $image->getRealPath();
-    //         if (ImageResizeHelper::isDuplicateFile($filePath, 'public/gambar')) {
-    //             return redirect()->back()->with('error', 'File gambar sudah ada di sistem.');
-    //         }
-
-    //         $imagePaths = ImageResizeHelper::resizeImage($image, $filename, $thumbFilename);
-
-    //         if (isset($imagePaths['error'])) {
-    //             return redirect()->back()->with('error', $imagePaths['error']);
-    //         }
-    //     } else {
-    //         return redirect()->back()->with('error', 'Gambar wajib diunggah.');
-    //     }
-
-    //     $post = Post::create([
-    //         'title' => $request->input('title'),
-    //         'slug' => $request->input('slug', Str::slug($request->input('title'))),
-    //         'short_description' => $request->input('short_description'),
-    //         'image_caption' => $request->input('image_caption'),
-    //         'content' => $request->input('content'),
-    //         'keyword' => $request->input('seo_meta.seo_title'),
-    //         'description' => $request->input('seo_meta.seo_description'),
-    //         'start_date' => \Carbon\Carbon::parse($request->input('scheduled_date'))->format('Y-m-d'),
-    //         'start_time' => \Carbon\Carbon::parse($request->input('scheduled_time'))->format('H:i'),
-    //         'status' => $request->input('status'),
-    //         'headline' => $request->input('headline', 'no'),
-    //         'kategori_id' => $request->input('categories'),
-    //         'gambar' => 'storage/gambar/' . $filename,
-    //         'thumbs' => 'storage/photos/shares' . $thumbFilename,
-    //         'user_id' => Auth::id(),
-    //     ]);
-
-    //     $tags = json_decode($request->input('tag'), true);
-    //     if ($tags && is_array($tags)) {
-    //         $tagIds = [];
-    //         foreach ($tags as $tag) {
-    //             if (!empty($tag['value'])) {
-    //                 $slug = Str::slug($tag['value']);
-
-    //                 $tagModel = Tag::firstOrCreate(
-    //                     ['nama_tags' => $tag['value']],
-    //                     ['slug' => $slug]
-    //                 );
-    //                 $tagIds[] = $tagModel->id;
-    //             }
-    //         }
-
-    //         $post->tags()->sync($tagIds);
-    //     }
-
-    //     Alert::success('Success', 'Post added successfully!!');
-    //     return redirect()->back()->with('success', 'Post added successfully.');
-    // }
-
 
     public function PostUpdate(Request $request, $id) {
         $post = Post::findOrFail($id);
@@ -275,9 +200,47 @@ class BlogController extends Controller
 
 
     // Schedule Post Page
-    public function schedulePost()
+    public function schedulePost(Request $request)
     {
-        return view('backend.pages.blog.schedule.index',);
+
+        $query = Post::with('kategori', 'user');
+
+        if ($request->has('filter_columns')) {
+            foreach ($request->filter_columns as $index => $column) {
+                $operator = $request->filter_operators[$index] ?? 'like';
+                $value = $request->filter_values[$index] ?? '';
+
+                if (!empty($column) && !empty($value)) {
+                    $value = strtolower($value);
+
+                    if ($column === 'categori') {
+                        $query->whereHas('kategori', function ($q) use ($operator, $value) {
+                            if ($operator === 'like') {
+                                $value = "%$value%";
+                            }
+                            $q->whereRaw('LOWER(nama_kategori) ' . $operator . ' ?', [$value]);
+                        });
+                    } elseif ($column === 'author') {
+                        $query->whereHas('user', function ($q) use ($operator, $value) {
+                            if ($operator === 'like') {
+                                $value = "%$value%";
+                            }
+                            $q->whereRaw('LOWER(name) ' . $operator . ' ?', [$value]);
+                        });
+                    } else {
+                        if ($operator === 'like') {
+                            $value = "%$value%";
+                        }
+                        $query->whereRaw('LOWER(' . $column . ') ' . $operator . ' ?', [$value]);
+                    }
+                }
+            }
+        }
+
+
+        $post = $query->where('status','schedule')->latest()->paginate(20);
+
+        return view('backend.pages.blog.schedule.index',compact('post'));
     }
 
 }

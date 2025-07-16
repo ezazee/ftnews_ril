@@ -77,7 +77,10 @@ class ItemsController extends LfmController
          }
  
          usort($matchingFiles, fn($a, $b) => $b->time <=> $a->time);
- 
+         if (!empty($search)) {
+            $matchingFiles = array_slice($matchingFiles, 0, 50);
+         }
+         
          $totalFound = count($matchingFiles);
          $sliced = array_slice($matchingFiles, ($currentPage - 1) * $perPage, $perPage);
          $items = collect($sliced)->values();

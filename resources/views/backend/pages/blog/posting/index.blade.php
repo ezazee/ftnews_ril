@@ -219,6 +219,9 @@
                                     <th title="Status" width="100"
                                         class="text-center  column-key-6 text-center  column-key-6  column-key-6">
                                         Status</th>
+                                    <th title="Status" width="100"
+                                        class="text-center  column-key-6 text-center  column-key-6  column-key-6">
+                                        Views</th>
                                     <th title="Operations">Operations</th>
                                 </tr>
                             </thead>
@@ -241,11 +244,11 @@
                                             src="{{ asset('storage/comp/' . (is_array($images) ? basename($images[0]) : basename($images))) }}" width="50" alt="Image">
                                     </td>
                                     <td class="  text-start  column-key-2 text-start  column-key-2  column-key-2"><a
-                                            href="{{ route('blog.edit', ['id' => $item->id ]) }}"
+                                            href="{{ route('detail.desktop', ['slug' => $item->slug ]) }}"
                                             title="{{ $item->title }}">{{ $item->title }}</a></td>
                                     <td class="column-key-3  column-key-3  column-key-3">
                                         {{ $item->kategori->nama_kategori }} </td>
-                                    <td class="column-key-4  column-key-4  column-key-4">{{ $item->user->name }}</td>
+                                    <td class="column-key-4  column-key-4  column-key-4"> {{ $item->user->name }}</td>
                                     <td
                                         class="text-center no-column-visibility column-key-5 column-key-5 column-key-5 ">
                                         {{ \Carbon\Carbon::parse($item->created_at)->format('d F Y H:i') }}</td>
@@ -257,6 +260,9 @@
                                         <span
                                             class="badge bg-secondary text-secondary-fg">{{ ucfirst($item->status) }}</span>
                                         @endif
+                                    </td>
+                                    <td class="  text-start  column-key-6 text-center  column-key-6  column-key-6">
+                                       {{ $item->view }}
                                     </td>
                                     <td class="  text-center no-column-visibility text-nowrap">
                                         <div class="table-actions">

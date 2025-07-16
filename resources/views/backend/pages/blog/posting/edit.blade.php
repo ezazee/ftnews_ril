@@ -218,7 +218,7 @@
                             <div class="image-box image-box-banner_image" data-counter="250">
                                 <input class="image-data" name="banner_image" type="hidden"
                                     value="{{ is_array($post->gambar) ? $post->gambar[0] : $post->gambar }}"
-                                    data-counter="250" />
+                                    data-counter="250" id="banner_image_input" />
                                 <div style="width: 8rem; height: 8rem; border: 1px dashed #ddd; display: flex; align-items: center; justify-content: center;"
                                     class="preview-image-wrapper mb-1">
                                     <div class="preview-image-inner">
@@ -247,7 +247,7 @@
                                     </div>
                                 </div>
                                 <input class="form-control mb-3" placeholder="Image Caption" name="image_caption"
-                                    type="text" value="{{ $post->image_caption }}">
+                                    type="text" value="{{ $post->image_caption }}" id="caption_input">
                                 <a href="{{ url('/laravel-filemanager') }}" onclick="openFileManager(event)"
                                     class="btn btn-primary btn-sm">
                                     Choose image
@@ -588,5 +588,44 @@
         alert("Embed URL copied to clipboard: " + embedUrlInput.value);
     }
 
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const bannerInput = document.getElementById('banner_image_input');
+        const captionInput = document.getElementById('caption_input');
+
+        function fetchCaption(compUrl) {
+            if (!compUrl) {
+                captionInput.value = '';
+                return;
+            }
+
+            fetch(`/get-caption?url=${encodeURIComponent(compUrl)}`)
+                .then(response => response.json())
+                .then(data => {
+                    captionInput.value = data.caption ?? '';
+                })
+                .catch(err => {
+                    console.error('Fetch error:', err);
+                    captionInput.value = '';
+                });
+        }
+
+        if (bannerInput.value) {
+            fetchCaption(bannerInput.value);
+        }
+
+        const observer = new MutationObserver(() => {
+            fetchCaption(bannerInput.value);
+        });
+
+        observer.observe(bannerInput, { attributes: true, attributeFilter: ['value'] });
+
+        bannerInput.addEventListener('change', () => {
+            fetchCaption(bannerInput.value);
+        });
+    });
 </script>
 @endsection

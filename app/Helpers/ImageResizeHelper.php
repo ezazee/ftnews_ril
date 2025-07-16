@@ -86,7 +86,7 @@ class ImageResizeHelper
     
         if ($extension == 'jpeg' || $extension == 'jpg') {
             imagejpeg($thumb, $thumbPath, 60);
-            imagejpeg($compImage, $compPath, 85);
+            imagejpeg($compImage, $compPath, 90);
         } elseif ($extension == 'png') {
             imagepng($thumb, $thumbPath, 6);
             imagepng($compImage, $compPath, 6);

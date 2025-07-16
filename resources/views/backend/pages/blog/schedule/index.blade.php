@@ -70,14 +70,14 @@
 
                                     <div class="col-auto w-100 w-sm-25">
                                         <span class="filter-column-value-wrap">
-                                            <input class="form-control filter-column-value" type="text"
-                                                placeholder="Value" name="filter_values[]">
+                                            <input class="form-control filter-column-value" type="text" placeholder="Value"
+                                                name="filter_values[]">
                                         </span>
                                     </div>
 
                                     <div class="col">
-                                        <button class="btn btn-icon   btn-remove-filter-item mb-3 text-danger"
-                                            type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                        <button class="btn btn-icon   btn-remove-filter-item mb-3 text-danger" type="button"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
                                             <svg class="icon icon-left svg-icon-ti-ti-trash"
                                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -95,8 +95,7 @@
                                 </div>
                             </div>
 
-                            <form method="GET" action="{{ route('blog.post') }}" accept-charset="UTF-8"
-                                class="filter-form">
+                            <form method="GET" action="{{ route('blog.schedulePost') }}" accept-charset="UTF-8" class="filter-form">
                                 <div class="filter_list inline-block filter-items-wrap">
                                     <div class="row filter-item form-filter filter-item-default">
                                         <div class="col-auto">
@@ -140,7 +139,7 @@
 
                                 <div class="btn-list mt-3">
                                     <button class="btn btn-primary" type="submit">Apply</button>
-                                    <a class="btn btn-light" href="{{ route('blog.post') }}">Reset</a>
+                                    <a class="btn btn-light" href="{{ route('blog.schedulePost') }}">Reset</a>
                                 </div>
                             </form>
                         </div>
@@ -153,40 +152,15 @@
                                 <button class="btn   btn-show-table-options" type="button">
                                     Filters
                                 </button>
-                                <div class="table-search-input">
-                                    <label>
-                                        <input type="search" class="form-control input-sm" placeholder="Search..."
-                                            style="min-width: 120px">
-                                        <button type="button" title="Search..." class="search-icon"><svg
-                                                class="icon  svg-icon-ti-ti-search" xmlns="http://www.w3.org/2000/svg"
-                                                width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
-                                                <path d="M21 21l-6 -6" />
-                                            </svg></button>
-                                        <button type="button" title="Clear" class="search-reset-icon"><svg
-                                                class="icon  svg-icon-ti-ti-x" xmlns="http://www.w3.org/2000/svg"
-                                                width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                <path d="M18 6l-12 12" />
-                                                <path d="M6 6l12 12" />
-                                            </svg></button>
-                                    </label>
-                                </div>
                             </div>
                             <div class="d-flex align-items-center gap-1">
                                 <button class="btn action-item btn-primary " tabindex="0"
                                     aria-controls="botble-blog-tables-post-table" type="button" aria-haspopup="dialog"
                                     aria-expanded="false">
                                     <span data-action="create" data-href="{{ route('blog.create') }}">
-                                        <svg class="icon  svg-icon-ti-ti-plus" xmlns="http://www.w3.org/2000/svg"
-                                            width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
+                                        <svg class="icon  svg-icon-ti-ti-plus" xmlns="http://www.w3.org/2000/svg" width="24"
+                                            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M12 5l0 14" />
                                             <path d="M5 12l14 0" />
@@ -195,26 +169,27 @@
                                     </span>
                                 </button>
                                 <button class="btn" type="button" data-bb-toggle="dt-buttons"
-                                    data-bb-target=".buttons-reload" tabindex="0"
-                                    aria-controls="botble-blog-tables-post-table" onclick="location.reload();">
-                                    <svg class="icon icon-left svg-icon-ti-ti-refresh" xmlns="http://www.w3.org/2000/svg"
-                                        width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" />
-                                        <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />
-                                    </svg>
-                                    Reload
-                                </button>
+                                data-bb-target=".buttons-reload" tabindex="0"
+                                aria-controls="botble-blog-tables-post-table" onclick="location.reload();">
+                                <svg class="icon icon-left svg-icon-ti-ti-refresh" xmlns="http://www.w3.org/2000/svg"
+                                    width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" />
+                                    <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />
+                                </svg>
+                                Reload
+                            </button>
                             </div>
                         </div>
                     </div>
                     <div class="card-table">
                         <div class="table-responsive table-has-actions table-has-filter">
+                            @if($post->isEmpty())
                             <div class="text-center mt-4">
                                 <p>No Data Result</p>
                             </div>
+                            @else
                             <table class="table card-table table-vcenter table-striped table-hover"
                                 id="botble-blog-tables-post-table">
                                 <thead>
@@ -227,8 +202,7 @@
                                             class="text-center no-column-visibility  column-key-0 text-center no-column-visibility  column-key-0  column-key-0">
                                             ID
                                         </th>
-                                        <th title="Image" width="50"
-                                            class=" column-key-1  column-key-1  column-key-1">Image
+                                        <th title="Image" width="50" class=" column-key-1  column-key-1  column-key-1">Image
                                         </th>
                                         <th title="Title"
                                             class="text-start  column-key-2 text-start  column-key-2  column-key-2">
@@ -236,8 +210,7 @@
                                         <th title="Categories" width="150"
                                             class=" column-key-3  column-key-3  column-key-3">Categories
                                         </th>
-                                        <th title="Author" width="150"
-                                            class=" column-key-4  column-key-4  column-key-4">
+                                        <th title="Author" width="150" class=" column-key-4  column-key-4  column-key-4">
                                             Author</th>
                                         <th title="Created At" width="100"
                                             class=" column-key-5  column-key-5  column-key-5">Created At
@@ -245,10 +218,15 @@
                                         <th title="Status" width="100"
                                             class="text-center  column-key-6 text-center  column-key-6  column-key-6">
                                             Status</th>
+                                        <th title="Created At" width="100"
+                                            class=" column-key-5  column-key-5  column-key-5">Schedule Time
+                                        </th>
                                         <th title="Operations">Operations</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+
+                                    @foreach ($post as $index => $item)
 
                                     <tr class="odd">
                                         <td class="w-1 text-start no-column-visibility dtr-control"><input
@@ -256,30 +234,41 @@
                                                 name="id[]" value="1"></td>
                                         <td
                                             class="text-center no-column-visibility  column-key-0 text-center no-column-visibility  column-key-0  column-key-0">
-
+                                            {{ $loop->iteration + ($post->currentPage() - 1) * $post->perPage() }}
                                         </td>
-
-                                        <td class="   column-key-1  column-key-1  column-key-1"><img src=""
-                                                width="50" alt="Image">
+                                        @php
+                                        $images = explode('|', $item->gambar);
+                                        @endphp
+                                        <td class="   column-key-1  column-key-1  column-key-1"><img
+                                                src="{{ asset('storage/comp/' . (is_array($images) ? basename($images[0]) : basename($images))) }}" width="50" alt="Image">
                                         </td>
                                         <td class="  text-start  column-key-2 text-start  column-key-2  column-key-2"><a
-                                                href="#" title="">asdasd</a></td>
-                                        <td class="column-key-3  column-key-3  column-key-3">asdsadsa </td>
-                                        <td class="column-key-4  column-key-4  column-key-4">asdsadsa</td>
+                                                href="{{ route('blog.edit', ['id' => $item->id ]) }}"
+                                                title="{{ $item->title }}">{{ $item->title }}</a></td>
+                                        <td class="column-key-3  column-key-3  column-key-3">
+                                            {{ $item->kategori->nama_kategori }} </td>
+                                        <td class="column-key-4  column-key-4  column-key-4">{{ $item->user->name }}</td>
                                         <td
                                             class="text-center no-column-visibility column-key-5 column-key-5 column-key-5 ">
-                                            sdsddd</td>
+                                            {{ \Carbon\Carbon::parse($item->created_at)->format('d F Y H:i') }}</td>
                                         <td class="  text-start  column-key-6 text-center  column-key-6  column-key-6">
-                                            <span class="badge bg-secondary text-secondary-fg">Schedule</span>
+                                            @if ($item->status == 'publish')
+                                            <span
+                                                class="badge bg-success text-success-fg">{{ ucfirst($item->status) }}</span>
+                                            @else
+                                            <span
+                                                class="badge bg-secondary text-secondary-fg">{{ ucfirst($item->status) }}</span>
+                                            @endif
                                         </td>
-                                        <td class="  text-center no-column-visibility text-nowrap">
+                                        <td class="text-start  column-key-6 text-center  column-key-6  column-key-6">{{ \Carbon\Carbon::parse($item->start_date)->format('d F Y') }} {{ \Carbon\Carbon::parse($item->start_time)->format('H:i') }}</td>
+                                        <td class="text-start  column-key-6 text-center  column-key-6  column-key-6">
                                             <div class="table-actions">
-                                                <a href="#" class="btn btn-sm btn-icon btn-primary">
+                                                <a href="{{ route('blog.edit', ['id' => $item->id ]) }}"
+                                                    class="btn btn-sm btn-icon btn-primary">
                                                     <svg class="icon  svg-icon-ti-ti-edit" data-bs-toggle="tooltip"
-                                                        data-bs-title="Edit" xmlns="http://www.w3.org/2000/svg"
-                                                        width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                        stroke-linejoin="round">
+                                                        data-bs-title="Edit" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                        height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                         <path
                                                             d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1">
@@ -292,17 +281,17 @@
                                                     <span class="sr-only">Edit</span>
                                                 </a>
 
-                                                <form action="#" method="POST" style="display:inline;">
+                                                <form action="{{ route('blog.delete', ['id' => $item->id]) }}" method="POST"
+                                                    style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-icon btn-danger"
                                                         data-bs-toggle="tooltip" data-bs-title="Delete"
                                                         onclick="return confirm('Do you really want to delete this record?');">
                                                         <svg class="icon svg-icon-ti-ti-trash"
-                                                            xmlns="http://www.w3.org/2000/svg" width="24"
-                                                            height="24" viewBox="0 0 24 24" fill="none"
-                                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                            stroke-linejoin="round">
+                                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                             <path d="M4 7l16 0"></path>
                                                             <path d="M10 11l0 6"></path>
@@ -316,10 +305,12 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
+                            @endif
                             <div class="mt-3">
-                                asdasdsadads
+                                {{ $post->links('pagination::bootstrap-4') }}
                             </div>
                         </div>
                     </div>
@@ -327,4 +318,4 @@
             </div>
         </div>
     </div>
-@endsection
+    @endsection
