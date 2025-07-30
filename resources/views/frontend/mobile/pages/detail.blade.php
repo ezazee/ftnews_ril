@@ -8,12 +8,40 @@
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
     }
 
-    .article-detail--body iframe {
+    .article-detail--body iframe[src*="youtube.com"] {
         width: 100% !important;
-        height: 800px !important;
+        height: 300px !important;
         margin: 10px 0 !important;
         border-radius: 8px !important;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .article-detail--body iframe[src*="tiktok.com"] {
+        width: 100% !important;
+        height: 750px !important;
+        margin: 10px 0 !important;
+        border-radius: 8px !important;
+    }
+
+    .article-detail--body iframe[src*="instagram.com"] {
+        width: 100% !important;
+        height: 600px !important;
+        margin: 10px 0 !important;
+        border-radius: 8px !important;
+    }
+
+    .article-detail--body iframe[src*="facebook.com"] {
+        width: 100% !important;
+        height: 550px !important;
+        margin: 10px 0 !important;
+        border-radius: 8px !important;
+    }
+
+    .article-detail--body iframe[src*="platform.twitter.com/embed/Tweet.html"] {
+        width: 100% !important;
+        height: 700px !important;
+        margin: 10px 0 !important;
+        border-radius: 8px !important;
     }
 
     .article-detail--body i {
@@ -104,9 +132,9 @@
     <div class="t0-b20">
         <div class="article-detail--body">
             <p>{!! $formatted_content !!}</p>
+            <div class="gliaplayer-container mb-3" data-slot="id_ftnews_mobile"></div>
         </div>
-
-        <div class="article-detail-tag">
+        <div class="article-detail-tag mt-3">
             <span class="label card-headline-no-image-title">Tag</span>
             @foreach ($tagsdetail as $index => $tags)
             <a href="{{ route('bytag', ['slug' => $tags->slug]) }}" class="tag-item"> {{ $tags->nama_tags }}</a>
@@ -141,11 +169,11 @@
         </div>
     </div>
 </article>
-<a href="#!" rel="">
-    <div class="banner-ads--big">
-        @include('frontend.mobile.components.ads-3')
-    </div>
-</a>
+
+<div data-type="_mgwidget" data-widget-id="1799018">
+ </div>
+ <script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");
+ </script>
 <!-- terpopuler -->
 <div class="mt-20 bg1">
     <h3 class="base-title pl-20 pt-20">Terpopuler</h3>
@@ -167,6 +195,9 @@
     </div>
 </div>
 <!-- end terpopuler -->
+
+@include('frontend.mobile.components.ads-mediumRectangle-1')
+
 <!-- dangdut -->
 <div class="mt-20">
     <h3 class="base-title pl-20 mb-10">{{ $post->kategori->nama_kategori }}</h3>
@@ -199,12 +230,19 @@
             </div>
         </article>
         @endforeach
-        <div class="t10-b20 mb-20">
-            <button class="main-card-loadmore" id="loadmore">Tampilkan lebih banyak</button>
-        </div>
+        @if ($post->kategori)
+            <div class="t10-b20 mb-20">
+                <a href="{{ route('kanal.desktop', ['slug' => $post->kategori->slug]) }}">
+                    <button class="main-card-loadmore">Selengkapnya</button>
+                </a>
+            </div>
+        @endif
     </div>
 </div>
 <!-- end Dangdut -->
+
+@include('frontend.mobile.components.ads-mediumRectangle-2')
+
 <!-- start terkini -->
 <div class="mt-20">
     <h3 class="base-title pl-20">Terkini</h3>
@@ -241,8 +279,10 @@
             @endforeach
         </div>
         <div class="t10-b20 mb-20">
-            <button class="main-card-loadmore" id="loadmore">Tampilkan lebih banyak</button>
-        </div>
+            <a href="/indeks">
+                <button class="main-card-loadmore">Selengkapnya</button>
+            </a>
+       </div>
         <script>
             function copyToClipboard() {
                 var tempInput = document.createElement("input");
