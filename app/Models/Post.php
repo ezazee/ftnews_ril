@@ -16,7 +16,7 @@ class Post extends Model implements HasMedia
         'title', 'content', 'gambar', 'short_description', 
         'image_caption', 'slug', 'status', 'headline', 
         'start_date', 'start_time', 'keyword', 'sub_category_id',
-        'description', 'kategori_id', 'user_id','created_at','adult',
+        'description', 'kategori_id', 'user_id','created_at','adult','reporter_id','multipages'
     ];
     
 
@@ -43,6 +43,11 @@ class Post extends Model implements HasMedia
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'post_tags', 'post_id', 'tags_id');
+    }
+
+    public function reporter()
+    {
+        return $this->belongsTo(Reporter::class, 'reporter_id');
     }
 
 }

@@ -3,6 +3,7 @@
 
 <head>
     @include('frontend.dekstop.master.master-meta')
+    @include('frontend.dekstop.master.master-microdata')
     @include('frontend.dekstop.master.master-css')
 </head>
 

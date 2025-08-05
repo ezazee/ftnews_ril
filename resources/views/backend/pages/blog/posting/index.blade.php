@@ -247,7 +247,11 @@
                                             href="{{ route('detail.desktop', ['slug' => $item->slug ]) }}"
                                             title="{{ $item->title }}">{{ $item->title }}</a></td>
                                     <td class="column-key-3  column-key-3  column-key-3">
-                                        {{ $item->kategori->nama_kategori }} </td>
+                                        @if ($item->subCategory)
+                                            {{ $item->subCategory->nama_sub_kategori }} </td>
+                                        @else
+                                            {{ $item->kategori->nama_kategori }} </td>
+                                        @endif
                                     <td class="column-key-4  column-key-4  column-key-4"> {{ $item->user->name }}</td>
                                     <td
                                         class="text-center no-column-visibility column-key-5 column-key-5 column-key-5 ">

@@ -137,7 +137,7 @@ class HomeController extends Controller
 
     public function detail($slug)
     {
-        $post = Post::with(['kategori','subCategory','user'])->where('slug', $slug)->where('status', 'public')->firstOrFail();
+        $post = Post::with(['kategori','subCategory','user','reporter'])->where('slug', $slug)->where('status', 'public')->firstOrFail();
 
         $postTerkini = Post::with('kategori', 'user')
         ->where('status', 'public')
@@ -196,8 +196,24 @@ class HomeController extends Controller
         }
 
 
+        $page = request()->get('page', 1);
+        $currentPage = $page == 'all' ? 'all' : (int) $page;
+
         $formatted_content = $this->formatPostContent($post->content, $injectAt3, $injectAt6, $ads1, $ads2, $ads3);
 
+        $totalPages = 1;
+
+        if ($post->multipages === 'yes' && $currentPage !== 'all') {
+            $parts = preg_split('/(<\/p>)/i', $formatted_content, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+
+            $chunks = array_chunk($parts, ceil(count($parts) / 3));
+            $formatted_chunks = array_map(function ($chunk) {
+                return implode('', $chunk);
+            }, $chunks);
+
+            $formatted_content = $formatted_chunks[$currentPage - 1] ?? '';
+            $totalPages = count($formatted_chunks);
+        }
 
         $postTerpopuler = Post::with('kategori', 'user')
         ->where('status', 'public')
@@ -216,11 +232,11 @@ class HomeController extends Controller
 
         $post->increment('view');
         $tagsdetail = $post->tags;
-
+        
         if ($this->agent->isMobile()) {
-            return view('frontend.mobile.pages.detail',compact('relatedPosts','injectAt3', 'injectAt6','postTerkiniBottom','post','postTerkini','postTerpopuler','tagsdetail','formatted_content'));
+            return view('frontend.mobile.pages.detail',compact('relatedPosts','injectAt3', 'injectAt6','postTerkiniBottom','post','postTerkini','postTerpopuler','tagsdetail','formatted_content','totalPages', 'currentPage'));
         } else {
-            return view('frontend.dekstop.pages.detail',compact('relatedPosts','injectAt3', 'injectAt6','postTerkiniBottom','post','postTerkini','postTerpopuler','tagsdetail','formatted_content'));
+            return view('frontend.dekstop.pages.detail',compact('relatedPosts','injectAt3', 'injectAt6','postTerkiniBottom','post','postTerkini','postTerpopuler','tagsdetail','formatted_content','totalPages', 'currentPage'));
         }
     }
 

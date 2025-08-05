@@ -8,12 +8,52 @@
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
     }
 
-    .article-detail--body iframe {
+    .article-detail--body iframe[src*="youtube.com"] {
         width: 100% !important;
-        height: 800px !important;
+        height: 300px !important;
         margin: 10px 0 !important;
         border-radius: 8px !important;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .article-detail--body iframe[src*="tiktok.com"] {
+        width: 100% !important;
+        height: 750px !important;
+        margin: 10px 0 !important;
+        border-radius: 8px !important;
+    }
+
+    .article-detail--body iframe[src*="instagram.com"] {
+        width: 100% !important;
+        height: 600px !important;
+        margin: 10px 0 !important;
+        border-radius: 8px !important;
+    }
+
+    .article-detail--body iframe[src*="facebook.com"] {
+        width: 100% !important;
+        height: 550px !important;
+        margin: 10px 0 !important;
+        border-radius: 8px !important;
+    }
+
+    .article-detail--body iframe[src*="facebook.com/plugins/video.php?href="][src*="%2Freel%2F"] {
+        height: 500px !important;
+    }
+
+    .article-detail--body iframe[src*="facebook.com/plugins/video.php?href="][src*="%2Fvideos%2F"] {
+        height: 500px !important;
+    }
+
+    .article-detail--body iframe[src*="facebook.com/plugins/post.php?href="][src*="%252Fshare%252Fv%252F"] {
+        height: 500px !important;
+    }
+
+    .article-detail--body iframe[src*="platform.twitter.com/embed/Tweet.html"] {
+        width: 100% !important;
+        height: 700px !important;
+        margin: 10px 0 !important;
+        border-radius: 8px !important;
     }
 
     .article-detail--body i {
@@ -44,6 +84,7 @@
         color: var(--blue-primary) !important;
         text-decoration: underline;
     }
+
 </style>
 @section('content')
 <div class="kanal-wrap">
@@ -60,7 +101,11 @@
     <div class="t5-b20">
         <h1 class="article-detail--title">{{ $post->title }}</h1>
         <div class="article-detail--info">
-            <div class="author"> {{ $post->user->name }} </div>
+            <div class="author"> {{ $post->user->name }}
+                @if ($post->reporter)
+                | {{ $post->reporter->name }}
+                @endif
+            </div>
         </div>
     </div>
     <div class="share-baru-header">
@@ -86,7 +131,7 @@
         </a>
 
         <!-- Copy Link -->
-        <a href="javascript:void(0);" onclick="copyToClipboard()">
+        <a href="{{ url($post->slug) }}" onclick="copyToClipboard()">
             <img src="{{ asset('frontend/icons/link.svg') }}" alt="Copy Link">
         </a>
     </div>
@@ -105,7 +150,14 @@
         <div class="article-detail--body">
             <p>{!! $formatted_content !!}</p>
         </div>
-
+        @if($post->multipages === 'yes' && isset($totalPages) && $totalPages > 1)
+        <div class="article-detail-pagination">
+            @for($i = 1; $i <= $totalPages; $i++) <a href="?page={{ $i }}"
+                class="{{ $currentPage == $i ? 'active' : '' }}">{{ $i }}</a>
+                @endfor
+                <a href="?page=all" class="show-all {{ $currentPage == 'all' ? 'active' : '' }}">Tampilkan Semua</a>
+        </div>
+        @endif
         <div class="article-detail-tag">
             <span class="label card-headline-no-image-title">Tag</span>
             @foreach ($tagsdetail as $index => $tags)
@@ -135,7 +187,7 @@
             </a>
 
             <!-- Copy Link -->
-            <a href="javascript:void(0);" onclick="copyToClipboard()">
+            <a href="{{ url($post->slug) }}" onclick="copyToClipboard()">
                 <img src="{{ asset('frontend/icons/link.svg') }}" alt="Copy Link">
             </a>
         </div>
@@ -223,7 +275,8 @@
                         </h4>
                         <div class="category-and-time">
                             @if ($item->subCategory)
-                            <a href="{{ route('subcateg.desktop', ['categ' => $item->kategori->slug, 'subcateg' => $item->subCategory->slug]) }}">
+                            <a
+                                href="{{ route('subcateg.desktop', ['categ' => $item->kategori->slug, 'subcateg' => $item->subCategory->slug]) }}">
                                 {{ $item->subCategory->nama_sub_kategori }}
                             </a>
                             @else
@@ -275,4 +328,4 @@
 
         </script>
         @endif
-@endsection
+        @endsection

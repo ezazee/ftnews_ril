@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Categori;
+use App\Models\Reporter;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Support\Str;
@@ -61,9 +62,17 @@ class BlogController extends Controller
     }
 
     public function editPost($id){
-        $post = Post::with('kategori')->findOrFail($id);
+        $post = Post::with('kategori','reporter')->findOrFail($id);
         $category = Categori::all();
         $allPosts = collect([$post])->flatten();
+        $reporter = Reporter::where(function ($query) use ($post) {
+            $query->where('is_deleted', 'no');
+            
+            if ($post->reporter_id) {
+                $query->orWhere('id', $post->reporter_id);
+            }
+        })->get();
+
 
         foreach ($allPosts as $singlePost) {
             if ($singlePost->gambar) {
@@ -71,13 +80,14 @@ class BlogController extends Controller
             }
         }
 
-        return view('backend.pages.blog.posting.edit',compact('post','category'));
+        return view('backend.pages.blog.posting.edit',compact('post','category','reporter'));
     }
 
     public function createPost()
     {
         $category = Categori::all();
-        return view('backend.pages.blog.posting.create', compact('category'));
+        $reporter = Reporter::where('is_deleted', 'no')->get();
+        return view('backend.pages.blog.posting.create', compact('category','reporter'));
     }
 
 
@@ -116,6 +126,8 @@ class BlogController extends Controller
                 'sub_category_id' => $request->input('subcategories')[0] ?? null,
                 'gambar' => $bannerImageUrl,
                 'user_id' => Auth::id(),
+                'multipages' => $request->input('multipages', 'no'),
+                'reporter_id' => $request->input('reporter_id')[0] ?? null,
             ]);
 
             $tags = json_decode($request->input('tag'), true);
@@ -164,6 +176,8 @@ class BlogController extends Controller
             'adult' => $request->input('adult', 'no'),
             'kategori_id' => $request->input('categories')[0] ?? null,
             'sub_category_id' => $request->input('subcategories')[0] ?? null,
+            'reporter_id' => $request->input('reporter_id')[0] ?? null,
+            'multipages' => $request->input('multipages', 'no'),
             'gambar' => $request->input('banner_image'),
         ]);
 

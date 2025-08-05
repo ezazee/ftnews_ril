@@ -80,7 +80,7 @@
                                     </div>
                                     <div class="mb-3 position-relative " id="embed-container">
                                         <label for="embed-url">Generated Embed URL:</label>
-                                        <textarea class="form-control" data-counter="160" rows="3" id="embed-url"
+                                        <textarea class="form-control" data-counter="500" rows="3" id="embed-url"
                                             placeholder="URL Embed"></textarea>
                                         <button type="button" class="btn btn-primary btn-sm mt-2"
                                             onclick="copyEmbedUrl()">
@@ -91,6 +91,67 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <div class="card meta-boxes">
+                                <div class="card-header">
+                                    <h4 class="card-title">
+                                        <label for="reporter" class="form-label">Reporter</label>
+                                    </h4>
+                                </div>
+                                <div class="card-body">
+                                    <select class="form-control" name="reporter_id" id="reporter">
+                                        <option value="" disabled>-- Pilih Reporter --</option>
+                                        <option value="">-- Tidak Ada --</option>
+                                        @foreach ($reporter as $item)
+                                        <option value="{{ $item->id }}"
+                                            {{ old('reporter_id', $post->reporter_id) == $item->id ? 'selected' : '' }}>
+                                            {{ $item->name }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <div class="card meta-boxes">
+                                <div class="card-header">
+                                    <h4 class="card-title">
+                                        <label for="author_id" class="form-label">Adult</label>
+                                    </h4>
+                                </div>
+                                <div class="card-body mb-3">
+                                <label class="form-check form-switch ">
+                                    <input name="adult" type="hidden" value="no" />
+                                    <input class="form-check-input" name="adult" type="checkbox" value="yes"
+                                        {{ $post->adult === 'yes' ? 'checked' : '' }}>
+                                    <span class="form-check-label">Is content adult?</span>
+                                </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <div class="card meta-boxes">
+                                <div class="card-header">
+                                    <h4 class="card-title">
+                                        <label for="multipages_id" class="form-label">Multiple Page</label>
+                                    </h4>
+                                </div>
+                                <div class="card-body mb-3">
+                                    <label class="form-check form-switch">
+                                        <input name="multipages" type="hidden" value="no" />
+                                        <input class="form-check-input" name="multipages" type="checkbox" value="yes"
+                                            {{ old('multipages', $post->multipages ?? '') === 'yes' ? 'checked' : '' }} />
+                                        <span class="form-check-label">Is multiple pages?</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div id="advanced-sortables" class="meta-box-sortables">
                         <div class="card meta-boxes mb-3" id="seo_wrap">
                             <div class="card-header">
@@ -277,23 +338,6 @@
                                 <label class="form-label">Time</label>
                                 <input type="time" class="form-control" name="scheduled_time"
                                     value="{{ isset($post->start_time) ? \Carbon\Carbon::parse($post->start_time)->format('H:i') : '' }}">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card meta-boxes">
-                        <div class="card-header">
-                            <h4 class="card-title">
-                                <label for="author_id" class="form-label">Adult</label>
-                            </h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="position-relative">
-                                <label class="form-check form-switch ">
-                                    <input name="adult" type="hidden" value="no" />
-                                        <input class="form-check-input" name="adult" type="checkbox" value="yes"
-                                            {{ $post->adult === 'yes' ? 'checked' : '' }}>
-                                        <span class="form-check-label">Is content adult?</span>
-                                </label>
                             </div>
                         </div>
                     </div>
@@ -533,14 +577,18 @@
 </script>
 
 <script>
-    function convertSocialMediaLink(url) {
-        let regex = /https:\/\/www\.instagram\.com\/(p|reel|tv)\/([^\/?]+)\//;
-        let match = url.match(regex);
+    async function convertSocialMediaLink(url) {
+        let regex, match;
+
+        // Instagram
+        regex = /https:\/\/www\.instagram\.com\/(p|reel|tv)\/([^\/?]+)\//;
+        match = url.match(regex);
         if (match) {
             const postId = match[2];
             return `https://www.instagram.com/p/${postId}/embed`;
         }
 
+        // TikTok
         regex = /https:\/\/www\.tiktok\.com\/@[^\/]+\/video\/([^\/?]+)/;
         match = url.match(regex);
         if (match) {
@@ -548,6 +596,7 @@
             return `https://www.tiktok.com/embed/v2/${videoId}`;
         }
 
+        // Twitter
         regex = /https:\/\/x\.com\/[^\/]+\/status\/([^\/?]+)/;
         match = url.match(regex);
         if (match) {
@@ -555,22 +604,106 @@
             return `https://platform.twitter.com/embed/Tweet.html?id=${tweetId}`;
         }
 
-        regex = /https:\/\/www\.youtube\.com\/watch\?v=([^\/&?]+)/;
+        // YouTube
+        regex = /https:\/\/(?:www\.)?youtube\.com\/watch\?v=([^&]+)/;
         match = url.match(regex);
         if (match) {
             const videoId = match[1];
             return `https://www.youtube.com/embed/${videoId}`;
         }
 
+        // YouTube
+        regex = /https:\/\/youtu\.be\/([^?]+)/;
+        match = url.match(regex);
+        if (match) {
+            const videoId = match[1];
+            return `https://www.youtube.com/embed/${videoId}`;
+        }
+
+        // Facebook
+        regex = /https:\/\/www\.facebook\.com\/share\/(p|v)\/([^\/?]+)/;
+        match = url.match(regex);
+        if (match) {
+            const response = await fetch('/get-facebook-embed-url', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                        'content'),
+                },
+                body: JSON.stringify({
+                    url
+                }),
+            });
+
+            const data = await response.json();
+            if (data.embed_url) {
+                return data.embed_url;
+            } else {
+                throw new Error('Gagal mendapatkan URL embed Facebook.');
+            }
+        }
+
+        // Facebook
+        regex = /https:\/\/www\.facebook\.com\/[^\/]+\/posts\/([^\/?]+)/;
+        match = url.match(regex);
+        if (match) {
+            const encodedUrl = encodeURIComponent(url);
+            return `https://www.facebook.com/plugins/post.php?href=${encodedUrl}`;
+        }
+
+        regex = /https:\/\/www\.facebook\.com\/[^\/]+\/(photos|videos)\/[^\/]+\/(\d+)/;
+        match = url.match(regex);
+        if (match) {
+            const encodedUrl = encodeURIComponent(url);
+            return `https://www.facebook.com/plugins/post.php?href=${encodedUrl}`;
+        }
+
+        regex = /https:\/\/www\.facebook\.com\/reel\/(\d+)/;
+        match = url.match(regex);
+        if (match) {
+            const encodedUrl = encodeURIComponent(url);
+            return `https://www.facebook.com/plugins/video.php?href=${encodedUrl}`;
+        }
+
+        regex = /https:\/\/www\.facebook\.com\/\d+\/videos\/\d+/;
+        match = url.match(regex);
+        if (match) {
+            const encodedUrl = encodeURIComponent(url);
+            return `https://www.facebook.com/plugins/video.php?href=${encodedUrl}`;
+        }
+
+        regex = /facebook\.com\/watch\/\?v=(\d+)/i;
+        match = url.match(regex);
+        if (match) {
+            const response = await fetch('/get-facebook-embed-url', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                        'content'),
+                },
+                body: JSON.stringify({
+                    url
+                }),
+            });
+
+            const data = await response.json();
+            if (data.embed_url) {
+                return data.embed_url;
+            } else {
+                throw new Error('Gagal mendapatkan URL embed Facebook.');
+            }
+        }
+
         throw new Error('URL tidak valid atau tidak didukung.');
     }
 
-    function insertVideo() {
+    async function insertVideo() {
         const url = document.getElementById('video-url').value;
 
         try {
-            const embedUrl = convertSocialMediaLink(url);
-
+            const embedUrl = await convertSocialMediaLink(url);
             document.getElementById('embed-url').value = embedUrl;
             document.getElementById('embed-container').style.display = 'block';
         } catch (error) {
@@ -580,10 +713,8 @@
 
     function copyEmbedUrl() {
         const embedUrlInput = document.getElementById('embed-url');
-
         embedUrlInput.select();
         embedUrlInput.setSelectionRange(0, 99999);
-
         document.execCommand("copy");
         alert("Embed URL copied to clipboard: " + embedUrlInput.value);
     }
@@ -605,7 +736,7 @@
             fetch(`/get-caption?url=${encodeURIComponent(compUrl)}`)
                 .then(response => response.json())
                 .then(data => {
-                    captionInput.value = data.caption ?? '';
+                    captionInput.value = data.caption ? ? '';
                 })
                 .catch(err => {
                     console.error('Fetch error:', err);
@@ -621,11 +752,15 @@
             fetchCaption(bannerInput.value);
         });
 
-        observer.observe(bannerInput, { attributes: true, attributeFilter: ['value'] });
+        observer.observe(bannerInput, {
+            attributes: true,
+            attributeFilter: ['value']
+        });
 
         bannerInput.addEventListener('change', () => {
             fetchCaption(bannerInput.value);
         });
     });
+
 </script>
 @endsection

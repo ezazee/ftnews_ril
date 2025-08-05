@@ -200,6 +200,27 @@
                             </span>
                         </a>
                     </li>
+                <li
+                    class="nav-item {{ Request::is('dashboard/reporter') || Request::is('dashboard/reporter/create') || Request::is('dashboard/reporter/edit/*') ? 'active' : '' }}">
+                    <a class="nav-link nav-priority-50" href="{{ route('reporter.index') }}"
+                        title="Reporter">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block" title="Reporter">
+                            <svg class="icon svg-icon-ti-ti-microphone" xmlns="http://www.w3.org/2000/svg"
+                                width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M12 1a3 3 0 0 1 3 3v8a3 3 0 0 1 -6 0v-8a3 3 0 0 1 3 -3z" />
+                                <path d="M19 10a7 7 0 0 1 -14 0" />
+                                <path d="M12 19v4" />
+                                <path d="M8 23h8" />
+                            </svg>
+                        </span>
+                        <span class="nav-link-title text-truncate">
+                            Reporter
+                        </span>
+                    </a>
+                </li>
                 @endif
                 <li class="nav-item {{ Request::is('dashboard/media') ? 'active' : '' }}">
                     <a class="nav-link nav-priority-999" href="{{ route('media.index') }}" id="cms-core-media"

@@ -4,6 +4,7 @@
 <head>
     @include('backend.master.master-meta')
     @include('backend.master.master-css')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body class="page-sidebar-closed-hide-logo page-content-white page-container-bg-solid">

@@ -20,8 +20,10 @@ use App\Models\Categori;
 use App\Http\Controllers\RssFeedController;
 use App\Models\ImageMetadata;
 use Illuminate\Http\Request;
-
+use App\Http\Controllers\SocialMediaController;
 use UniSharp\LaravelFilemanager\Controllers\ItemsController;
+use App\Http\Controllers\ReporterController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -108,12 +110,19 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/dashboard/blog/category/update/{id}', [CategoryController::class, 'categoryUpdate'])->name('category.update');
 
     // Route::get('/laravel-filemanager/items', [ItemsController::class, 'getItems']);
-
-
     // subcateg
     Route::get('/dashboard/blog/subcateg/edit/{id}', [CategoryController::class, 'SubcategEdit'])->name('subcateg.edit');
     Route::put('/dashboard/blog/subcateg/update/{id}', [CategoryController::class, 'subCategoryUpdate'])->name('subcateg.update');
     Route::delete('/dashboard/blog/subcateg/delete/{id}', [CategoryController::class, 'subcategDestroy'])->name('subcateg.destroy');
+
+    // === {{ !! reporter !! }} === //
+    Route::get('/dashboard/reporter', [ReporterController::class, 'reporterIndex'])->name('reporter.index');
+    Route::get('/dashboard/reporter/create', [ReporterController::class, 'reporterCreate'])->name('reporter.create');
+    Route::post('/dashboard/reporter/create', [ReporterController::class, 'reporterPost'])->name('reporter.post');
+    Route::get('/dashboard/reporter/edit/{id}', [ReporterController::class, 'reporterEdit'])->name('reporter.edit');
+    Route::put('/dashboard/reporter/update/{id}', [ReporterController::class, 'reporterUpdate'])->name('reporter.update');
+    Route::delete('/dashboard/reporter/delete/{id}', [ReporterController::class, 'reporterdelete'])->name('reporter.delete');
+
 });
 
 Route::middleware(['auth', 'role:author|admin'])->group(function () {
@@ -170,6 +179,9 @@ Route::middleware(['auth', 'role:author|admin'])->group(function () {
         $metadata = ImageMetadata::where('comp_url', $url)->first();
         return response()->json(['caption' => $metadata->caption ?? null]);
     });
+
+    Route::post('/get-facebook-embed-url', [SocialMediaController::class, 'getFacebookEmbedUrl'])->name('getFacebookEmbedUrl');
+
     // Route::get('/laravel-filemanager/search', [DashboardController::class, 'searchLfm'])->name('unisharp.lfm.search');
 
 });
