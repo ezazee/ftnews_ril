@@ -718,50 +718,41 @@
 
 </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const bannerInput = document.getElementById('banner_image_input');
+            const captionInput = document.getElementById('caption_input');
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const bannerInput = document.getElementById('banner_image_input');
-        const captionInput = document.getElementById('caption_input');
+            function fetchCaption(compUrl) {
+                if (!compUrl) {
+                    captionInput.value = '';
+                    return;
+                }
 
-        function fetchCaption(compUrl) {
-            if (!compUrl) {
-                captionInput.value = '';
-                return;
+                fetch(`/get-caption?url=${encodeURIComponent(compUrl)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        captionInput.value = data.caption ?? '';
+                    })
+                    .catch(err => {
+                        console.error('Fetch error:', err);
+                        captionInput.value = '';
+                    });
             }
 
-            fetch(`/get-caption?url=${encodeURIComponent(compUrl)}`)
-                .then(response => response.json())
-                .then(data => {
-                    captionInput.value = data.caption ? ? '';
-                })
-                .catch(err => {
-                    console.error('Fetch error:', err);
-                    captionInput.value = '';
-                });
-        }
+            if (bannerInput.value) {
+                fetchCaption(bannerInput.value);
+            }
 
-        if (bannerInput.value) {
-            fetchCaption(bannerInput.value);
-        }
+            const observer = new MutationObserver(() => {
+                fetchCaption(bannerInput.value);
+            });
 
-        const observer = new MutationObserver(() => {
-            fetchCaption(bannerInput.value);
+            observer.observe(bannerInput, { attributes: true, attributeFilter: ['value'] });
+
+            bannerInput.addEventListener('change', () => {
+                fetchCaption(bannerInput.value);
+            });
         });
-
-        observer.observe(bannerInput, {
-            attributes: true,
-            attributeFilter: ['value']
-        });
-
-        bannerInput.addEventListener('change', () => {
-            fetchCaption(bannerInput.value);
-        });
-    });
-
-</script>
-
-
-
-
+    </script>
 @endsection

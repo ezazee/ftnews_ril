@@ -40,10 +40,10 @@
         <a class="navbar-brand d-block d-lg-none" id="current_folder"></a>
         <a id="loading" class="navbar-brand"><i class="fas fa-spinner fa-spin"></i></a>
         <div class="ml-auto px-2">
-            <a class="navbar-link d-none" id="multi_selection_toggle">
+            {{-- <a class="navbar-link d-none" id="multi_selection_toggle">
                 <i class="fa fa-check-double fa-fw"></i>
                 <span class="d-none d-lg-inline">{{ trans('laravel-filemanager::lfm.menu-multiple') }}</span>
-            </a>
+            </a> --}}
         </div>
         <a class="navbar-toggler collapsed border-0 px-1 py-2 m-0" data-toggle="collapse" data-target="#nav-buttons">
             <i class="fas fa-cog fa-fw"></i>
@@ -52,10 +52,10 @@
             
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" data-display="grid">
+                    {{-- <a class="nav-link" data-display="grid">
                         <i class="fas fa-th-large fa-fw"></i>
                         <span>{{ trans('laravel-filemanager::lfm.nav-thumbnails') }}</span>
-                    </a>
+                    </a> --}}
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-display="list">
@@ -232,12 +232,12 @@
             //   label: 'Confirm',
             //   multiple: true
             // },
-            {
-                name: 'rename',
-                icon: 'edit',
-                label: lang['menu-rename'],
-                multiple: false
-            },
+            // {
+            //     name: 'rename',
+            //     icon: 'edit',
+            //     label: lang['menu-rename'],
+            //     multiple: false
+            // },
             {
                 name: 'download',
                 icon: 'download',
@@ -250,24 +250,24 @@
             //   label: lang['menu-view'],
             //   multiple: true
             // },
-            {
-                name: 'move',
-                icon: 'paste',
-                label: lang['menu-move'],
-                multiple: true
-            },
-            {
-                name: 'resize',
-                icon: 'arrows-alt',
-                label: lang['menu-resize'],
-                multiple: false
-            },
-            {
-                name: 'crop',
-                icon: 'crop',
-                label: lang['menu-crop'],
-                multiple: false
-            },
+            // {
+            //     name: 'move',
+            //     icon: 'paste',
+            //     label: lang['menu-move'],
+            //     multiple: true
+            // },
+            // {
+            //     name: 'resize',
+            //     icon: 'arrows-alt',
+            //     label: lang['menu-resize'],
+            //     multiple: false
+            // },
+            // {
+            //     name: 'crop',
+            //     icon: 'crop',
+            //     label: lang['menu-crop'],
+            //     multiple: false
+            // },
             {
                 name: 'trash',
                 icon: 'trash',

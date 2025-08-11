@@ -22,82 +22,81 @@ class ItemsController extends LfmController
      * @return mixed
      */
 
-     public function getItems(Request $request)
+    public function getItems(Request $request)
     {
-         $currentPage = self::getCurrentPageFromRequest();
-         $perPage = $this->helper->getPaginationPerPage();
-         $search = $request->input('search_query');
- 
-         $workingDir = $this->lfm->path('public');
-        
-         if (!file_exists($workingDir)) {
-             return response()->json([
-                 'items' => [],
-                 'paginator' => [
-                     'current_page' => $currentPage,
-                     'total' => 0,
-                     'per_page' => $perPage,
-                     'last_page' => 0,
-                 ],
-                 'display' => $this->helper->getDisplayMode(),
-                 'working_dir' => $workingDir,
-             ]);
-         }
- 
-         $iterator = new FilesystemIterator($workingDir);
-         $matchingFiles = [];
- 
-         foreach ($iterator as $fileInfo) {
-             $name = $fileInfo->getFilename();
- 
-            if (!empty($search)) {
-                $searchLower = mb_strtolower(trim($search));
-                $nameLower = mb_strtolower($name);
-                if (mb_stripos($nameLower, $searchLower) === false) {
-                    continue;
+        $currentPage = self::getCurrentPageFromRequest();
+        $perPage = $this->helper->getPaginationPerPage();
+        $search = $request->input('search_query');
+        $searchLower = mb_strtolower(trim($search));
+
+        $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+
+        $query = ImageMetadata::query();
+
+        if (!empty($searchLower)) {
+            $isDateSearch = preg_match('/^\d{1,2}(-\d{1,2})?(-\d{4})?$/', $searchLower) || preg_match('/^\d{4}$/', $searchLower);
+
+            $query->where(function ($q) use ($searchLower, $isDateSearch) {
+                $q->whereRaw("LOWER(REPLACE(REPLACE(filename, '-', ' '), '_', ' ')) LIKE ?", ['%' . $searchLower . '%'])
+                ->orWhereRaw("LOWER(filename) LIKE ?", ['%' . $searchLower . '%']);
+
+                if ($isDateSearch) {
+                    $dateParts = explode('-', $searchLower);
+                    $q->orWhere(function ($sub) use ($dateParts) {
+                        if (count($dateParts) === 3) {
+                            $sub->whereRaw('EXTRACT(DAY FROM created_at) = ?', [$dateParts[0]])
+                                ->whereRaw('EXTRACT(MONTH FROM created_at) = ?', [$dateParts[1]])
+                                ->whereRaw('EXTRACT(YEAR FROM created_at) = ?', [$dateParts[2]]);
+                        } elseif (count($dateParts) === 2) {
+                            $sub->whereRaw('EXTRACT(DAY FROM created_at) = ?', [$dateParts[0]])
+                                ->whereRaw('EXTRACT(MONTH FROM created_at) = ?', [$dateParts[1]]);
+                        } elseif (strlen($dateParts[0]) === 4) {
+                            $sub->whereRaw('EXTRACT(YEAR FROM created_at) = ?', [$dateParts[0]]);
+                        } else {
+                            $sub->whereRaw('EXTRACT(DAY FROM created_at) = ?', [$dateParts[0]]);
+                        }
+                    });
                 }
-            }
- 
-             $extension = strtolower($fileInfo->getExtension());
-             $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
- 
-             $isImage = in_array($extension, $imageExtensions);
-             $icon = $isImage ? 'fa-image' : 'fa-file';
- 
-             $matchingFiles[] = (object)[
-                 'name' => $name,
-                 'path' => $fileInfo->getPathname(),
-                 'url' => str_replace('/storage/photos/shares/', '/storage/comp/', $this->lfm->url($name)."/".$name),
-                 'time' => $fileInfo->getMTime(),
-                 'icon' => $icon,
-                 'is_file' => $fileInfo->isFile(),
-                 'is_image' => $isImage,
-                 'thumb_url' => $isImage ? asset($this->lfm->url($name)."/".$name) : null,
-             ];
-         }
- 
-         usort($matchingFiles, fn($a, $b) => $b->time <=> $a->time);
-         if (!empty($search)) {
-            $matchingFiles = array_slice($matchingFiles, 0, 50);
-         }
-         
-         $totalFound = count($matchingFiles);
-         $sliced = array_slice($matchingFiles, ($currentPage - 1) * $perPage, $perPage);
-         $items = collect($sliced)->values();
- 
-         return response()->json([
-             'items' => $items,
-             'paginator' => [
-                 'current_page' => $currentPage,
-                 'total' => $totalFound,
-                 'per_page' => $perPage,
-                 'last_page' => ceil($totalFound / $perPage),
-             ],
-             'display' => $this->helper->getDisplayMode(),
-             'working_dir' => '/shares',
-         ]);
+            });
+        }
+
+        $totalFound = $query->count();
+
+        $metadataList = $query->select(['filename', 'comp_url', 'thumb_url', 'created_at'])
+                            ->orderByDesc('created_at')
+                            ->forPage($currentPage, $perPage)
+                            ->get();
+
+        $items = $metadataList->map(function ($metadata) use ($imageExtensions) {
+            $extension = strtolower(pathinfo($metadata->filename, PATHINFO_EXTENSION));
+            $isImage = in_array($extension, $imageExtensions);
+            $icon = $isImage ? 'fa-image' : 'fa-file';
+
+            return (object)[
+                'name' => $metadata->filename,
+                'path' => null,
+                'url' => $metadata->comp_url,
+                'time' => strtotime($metadata->created_at),
+                'icon' => $icon,
+                'is_file' => true,
+                'is_image' => $isImage,
+                'thumb_url' => $metadata->thumb_url,
+            ];
+        });
+
+        return response()->json([
+            'items' => $items,
+            'paginator' => [
+                'current_page' => $currentPage,
+                'total' => $totalFound,
+                'per_page' => $perPage,
+                'last_page' => ceil($totalFound / $perPage),
+            ],
+            'display' => $this->helper->getDisplayMode(),
+            'working_dir' => '/shares',
+        ]);
     }
-     
+
     public function move()
     {
         $items = request('items');

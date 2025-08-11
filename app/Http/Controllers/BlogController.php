@@ -45,7 +45,28 @@ class BlogController extends Controller
                             }
                             $q->whereRaw('LOWER(name) ' . $operator . ' ?', [$value]);
                         });
-                    } else {
+                    }elseif ($column === 'created_at') {
+                        $input = str_replace('/', '-', $value);
+                        $parts = explode('-', $input);
+
+                        $searchPattern = '';
+
+                        if (count($parts) === 3) {
+                            [$d, $m, $y] = $parts;
+                            $searchPattern = "$y-$m-$d";
+                        } elseif (count($parts) === 2) {
+                            [$d, $m] = $parts;
+                            $searchPattern = "-$m-$d";
+                        } elseif (strlen($input) === 2 || strlen($input) === 1) {
+                            $searchPattern = "-$input";
+                        } elseif (strlen($input) === 4) {
+                            $searchPattern = "$input-";
+                        } else {
+                            $searchPattern = $value;
+                        }
+
+                        $query->whereRaw("CAST(created_at AS TEXT) ILIKE ?", ["%$searchPattern%"]);
+                    }else {
                         if ($operator === 'like') {
                             $value = "%$value%";
                         }
@@ -55,8 +76,9 @@ class BlogController extends Controller
             }
         }
 
+        $filters = $request->all();
 
-        $post = $query->latest()->paginate(20);
+        $post = $query->latest()->paginate(20)->appends($filters);
 
         return view('backend.pages.blog.posting.index', compact('post'));
     }
@@ -163,10 +185,21 @@ class BlogController extends Controller
     public function PostUpdate(Request $request, $id) {
         $post = Post::findOrFail($id);
 
+        $bannerImageUrl = $request->input('banner_image');
+
+        $metadata = ImageMetadata::where('comp_url', $bannerImageUrl)->first();
+
+        if ($metadata) {
+            if ($request->filled('image_caption')) {
+                $metadata->caption = $request->input('image_caption');
+                $metadata->save();
+            }
+        }
+
         $post->update([
             'title' => $request->input('title'),
             'content' => $request->input('content'),
-            'image_caption' => $request->input('image_caption'),
+            'image_caption' =>  $metadata->caption ?? null,
             'keyword' => $request->input('seo_meta.seo_title'),
             'description' => $request->input('seo_meta.seo_description'),
             'start_date' => \Carbon\Carbon::parse($request->input('scheduled_date'))->format('Y-m-d'),
