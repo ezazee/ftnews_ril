@@ -718,41 +718,54 @@
 
 </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const bannerInput = document.getElementById('banner_image_input');
-            const captionInput = document.getElementById('caption_input');
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const bannerInput = document.getElementById('banner_image_input');
+        const captionInput = document.getElementById('caption_input');
 
-            function fetchCaption(compUrl) {
-                if (!compUrl) {
-                    captionInput.value = '';
-                    return;
-                }
+        function extractNameFromUrl(url) {
+            let decoded = decodeURIComponent(url);
+            return decoded.replace(/^.*\/(.*?)\s\d+\.[a-zA-Z]+$/, "$1");
+        }
 
-                fetch(`/get-caption?url=${encodeURIComponent(compUrl)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        captionInput.value = data.caption ?? '';
-                    })
-                    .catch(err => {
-                        console.error('Fetch error:', err);
-                        captionInput.value = '';
-                    });
+        function fetchCaption(compUrl) {
+            if (!compUrl) {
+                captionInput.value = '';
+                return;
             }
 
-            if (bannerInput.value) {
-                fetchCaption(bannerInput.value);
-            }
+            fetch(`/get-caption?url=${encodeURIComponent(compUrl)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.caption && data.caption.trim() !== '') {
+                        captionInput.value = data.caption;
+                    } else {
+                        captionInput.value = extractNameFromUrl(compUrl);
+                    }
+                })
+                .catch(err => {
+                    console.error('Fetch error:', err);
+                    captionInput.value = extractNameFromUrl(compUrl);
+                });
+        }
 
-            const observer = new MutationObserver(() => {
-                fetchCaption(bannerInput.value);
-            });
+        if (bannerInput.value) {
+            fetchCaption(bannerInput.value);
+        }
 
-            observer.observe(bannerInput, { attributes: true, attributeFilter: ['value'] });
-
-            bannerInput.addEventListener('change', () => {
-                fetchCaption(bannerInput.value);
-            });
+        const observer = new MutationObserver(() => {
+            fetchCaption(bannerInput.value);
         });
-    </script>
+
+        observer.observe(bannerInput, {
+            attributes: true,
+            attributeFilter: ['value']
+        });
+
+        bannerInput.addEventListener('change', () => {
+            fetchCaption(bannerInput.value);
+        });
+    });
+</script>
+
 @endsection

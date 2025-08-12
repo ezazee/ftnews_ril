@@ -419,7 +419,7 @@ CKEDITOR.lang["en"] = {
     tabindex: "Remove from tabindex",
   },
   image: {
-    alt: "Alternative Text",
+    alt: "Caption",
     border: "Border",
     btnUpload: "Send it to the Server",
     button2Img:

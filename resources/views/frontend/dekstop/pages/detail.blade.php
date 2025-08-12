@@ -123,13 +123,6 @@
     @include('frontend.dekstop.components.ads-1')
 
     <div class="mt-20">
-        <h3 class="card-headline-no-image-title">
-            @if ($post->subCategory)
-                {{ $post->subCategory->nama_sub_kategori }}
-            @else
-                {{ $post->kategori->nama_kategori }}
-            @endif
-        </h3>
     </div>
 
     <div class="content-home" id="content">
@@ -137,6 +130,13 @@
             <article class="article-detail">
                 <h1 class="article-detail--title">{{ $post->title }}</h1>
                 <div class="article-detail--info">
+                    <h3 class="card-headline-no-image-title">
+                        @if ($post->subCategory)
+                            {{ $post->subCategory->nama_sub_kategori }}
+                        @else
+                            {{ $post->kategori->nama_kategori }}
+                        @endif
+                    </h3>
                     <div class="date">
                         {{ \Carbon\Carbon::parse($post->created_at)->translatedFormat('l, d F Y | H:i') }} WIB
                     </div>
@@ -179,21 +179,29 @@
                 <div class="article-detail--body">
                     <p>{!! $formatted_content !!}</p>
                 </div>
+                @if($post->multipages === 'yes' && isset($totalPages) && $totalPages > 1)
+                    <div class="article-detail-pagination">
+                        @for($i = 1; $i <= $totalPages; $i++)
+                            <a href="?page={{ $i }}" class="{{ $currentPage == $i ? 'active' : '' }}">{{ $i }}</a>
+                        @endfor
+                        <a href="?page=all" class="show-all {{ $currentPage == 'all' ? 'active' : '' }}">Tampilkan Semua</a>
+                    </div>
+                @endif
                 @php
-                    $editorName = $post->editor_name ?? (optional($post->editor)->name ?? 'Editor');
-                    $reporterName = $post->reporter_name ?? (optional($post->reporter)->name ?? 'Reporter');
+                    $editorName = $post->user->name ?? 'Editor';
+                    $reporterName = $post->reporter->name ?? 'Reporter';
 
                     $getInitial = fn($name) => mb_strtoupper(mb_substr(trim($name), 0, 1, 'UTF-8'), 'UTF-8');
 
                     $svgAvatar = function (string $initial, string $bg = '#7c4dff', string $fg = '#ffffff'): string {
-                        $svg = <<<SVG
-                        <svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 72 72">
-                          <rect width="72" height="72" rx="36" fill="$bg"/>
-                          <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
-                                font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700" fill="$fg">$initial</text>
-                        </svg>
-                        SVG;
-                        return 'data:image/svg+xml;utf8,' . rawurlencode($svg);
+                    $svg = "
+                    <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"72\" height=\"72\" viewBox=\"0 0 72 72\">
+                    <rect width=\"72\" height=\"72\" rx=\"36\" fill=\"$bg\"/>
+                    <text x=\"50%\" y=\"50%\" text-anchor=\"middle\" dominant-baseline=\"middle\"
+                            font-family=\"Inter, Arial, sans-serif\" font-size=\"34\" font-weight=\"700\" fill=\"$fg\">$initial</text>
+                    </svg>";
+                    
+                    return 'data:image/svg+xml;utf8,' . rawurlencode($svg);
                     };
 
                     // Inisial + avatar
@@ -216,14 +224,15 @@
                                 <strong class="byline-name">{{ $editorName }}</strong>
                             </div>
                         </div>
-
-                        <div class="byline-item">
-                            <img class="byline-avatar" src="{{ $reporterAvatarSrc }}" alt="{{ $reporterInitial }}">
-                            <div class="byline-info">
-                                <small class="byline-role">Reporter</small>
-                                <strong class="byline-name">{{ $reporterName }}</strong>
+                        @if (optional($post->reporter)->name)
+                            <div class="byline-item">
+                                <img class="byline-avatar" src="{{ $reporterAvatarSrc }}" alt="{{ $reporterInitial }}">
+                                <div class="byline-info">
+                                    <small class="byline-role">Reporter</small>
+                                    <strong class="byline-name">{{ $reporterName }}</strong>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
                 <div class="article-detail-tag">

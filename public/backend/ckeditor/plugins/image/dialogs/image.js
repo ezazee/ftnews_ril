@@ -251,20 +251,36 @@
                                 }
                             ]
                         }]
-                    }, {
+                    },{
                         id: "txtAlt",
                         type: "text",
                         label: d.lang.image.alt,
                         accessKey: "T",
-                        "default": "",
+
                         onChange: function () {
-                            e(this.getDialog())
+                            const currentValue = this.getValue();
                         },
-                        setup: function (a, b) {
-                            1 == a && this.setValue(b.getAttribute("alt"))
+
+                        setup: function (type, element) {
+                            let altValue = element.getAttribute("alt");
+                            if (!altValue || altValue.trim() === "") {
+                                let src = element.getAttribute("src") || "";
+                                let decodedSrc = decodeURIComponent(src);
+                                altValue = decodedSrc.replace(/^.*\/(.*?)\s\d+\.[a-zA-Z]+$/, "$1");
+                            }
+                            this.setValue(altValue);
                         },
-                        commit: function (a, b) {
-                            1 == a ? (this.getValue() || this.isChanged()) && b.setAttribute("alt", this.getValue()) : 4 == a ? b.setAttribute("alt", this.getValue()) : 8 == a && b.removeAttribute("alt")
+
+                        commit: function (type, element) {
+                            let finalAlt = this.getValue();
+
+                            if (!finalAlt || finalAlt.trim() === "") {
+                                let src = element.getAttribute("src") || "";
+                                let decodedSrc = decodeURIComponent(src);
+                                finalAlt = decodedSrc.replace(/^.*\/(.*?)\s\d+\.[a-zA-Z]+$/, "$1");
+                                this.setValue(finalAlt);
+                            }
+                            element.setAttribute("alt", finalAlt);
                         }
                     },
                     {
@@ -449,45 +465,6 @@
                                         var c = parseInt(this.getValue(), 10);
                                         1 == a || 4 == a ? (isNaN(c) ? !c && this.isChanged() && (b.removeStyle("margin-top"), b.removeStyle("margin-bottom")) : (b.setStyle("margin-top", CKEDITOR.tools.cssLength(c)), b.setStyle("margin-bottom", CKEDITOR.tools.cssLength(c))),
                                             1 == a && b.removeAttribute("vspace")) : 8 == a && (b.removeAttribute("vspace"), b.removeStyle("margin-top"), b.removeStyle("margin-bottom"))
-                                    }
-                                }, {
-                                    id: "cmbAlign",
-                                    requiredContent: "img{float}",
-                                    type: "select",
-                                    widths: ["35%", "65%"],
-                                    style: "width:90px",
-                                    label: d.lang.common.align,
-                                    "default": "",
-                                    items: [
-                                        [d.lang.common.notSet, ""],
-                                        [d.lang.common.left, "left"],
-                                        [d.lang.common.right, "right"]
-                                    ],
-                                    onChange: function () {
-                                        e(this.getDialog());
-                                        g.call(this, "advanced:txtdlgGenStyle")
-                                    },
-                                    setup: function (a, b) {
-                                        if (1 == a) {
-                                            var c = b.getStyle("float");
-                                            switch (c) {
-                                                case "inherit":
-                                                case "none":
-                                                    c =
-                                                        ""
-                                            }!c && (c = (b.getAttribute("align") || "").toLowerCase());
-                                            this.setValue(c)
-                                        }
-                                    },
-                                    commit: function (a, b) {
-                                        var c = this.getValue();
-                                        if (1 == a || 4 == a) {
-                                            if (c ? b.setStyle("float", c) : b.removeStyle("float"), 1 == a) switch (c = (b.getAttribute("align") || "").toLowerCase(), c) {
-                                                case "left":
-                                                case "right":
-                                                    b.removeAttribute("align")
-                                            }
-                                        } else 8 == a && b.removeStyle("float")
                                     }
                                 }]
                             }]
