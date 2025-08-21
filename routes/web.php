@@ -147,6 +147,8 @@ Route::middleware(['auth', 'role:author|admin'])->group(function () {
 
     // Schedule Post Page
     Route::get('/dashboard/blog/schedule-post', [BlogController::class, 'schedulePost'])->name('blog.schedulePost');
+    // SEO Post Page
+    Route::get('/dashboard/blog/seo-post', [BlogController::class, 'seoPost'])->name('blog.seoPost');
 
 
     // Tags

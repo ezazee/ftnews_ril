@@ -139,7 +139,20 @@
                                 Schedule Posts
                             </span>
                         </a>
-
+                        <a class="dropdown-item nav-priority-10 {{ Request::is('dashboard/blog/seo-post*') ? 'active' : '' }}"
+                        href="{{ route('blog.seoPost') }}" id="cms-plugins-blog-post" title="seo-post">
+                            <span class="nav-link-icon d-md-none d-lg-inline-block" title="seo-post">
+                                <!-- Ganti SVG di bawah ini dengan kode ikon SEO -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                <text x="8" y="12" font-size="5" fill="currentColor">SEO</text>
+                                </svg>
+                            </span>
+                            <span class="nav-link-title text-truncate">
+                                SEO Posts
+                            </span>
+                        </a>
                         @if (Auth::check() && Auth::user()->role == 'admin')
                             <a class="dropdown-item nav-priority-20 {{ Request::is('dashboard/blog/category*') ? 'active' : '' }}"
                                 href="{{ route('category.create') }}" id="cms-plugins-blog-categories"

@@ -150,6 +150,7 @@ class BlogController extends Controller
                 'user_id' => Auth::id(),
                 'multipages' => $request->input('multipages', 'no'),
                 'reporter_id' => $request->input('reporter_id')[0] ?? null,
+                'seo' => $request->input('seo', 'no'),
             ]);
 
             $tags = json_decode($request->input('tag'), true);
@@ -212,6 +213,7 @@ class BlogController extends Controller
             'reporter_id' => $request->input('reporter_id')[0] ?? null,
             'multipages' => $request->input('multipages', 'no'),
             'gambar' => $request->input('banner_image'),
+            'seo' => $request->input('seo', 'no')
         ]);
 
         $tags = json_decode($request->input('tag'), true);
@@ -289,5 +291,73 @@ class BlogController extends Controller
 
         return view('backend.pages.blog.schedule.index',compact('post'));
     }
+
+
+    public function seoPost(Request $request){
+        
+    $query = Post::with('kategori', 'user');
+
+        if ($request->has('filter_columns')) {
+            foreach ($request->filter_columns as $index => $column) {
+                $operator = $request->filter_operators[$index] ?? 'like';
+                $value = $request->filter_values[$index] ?? '';
+
+                if (!empty($column) && !empty($value)) {
+                    $value = strtolower($value);
+
+                    if ($column === 'categori') {
+                        $query->whereHas('kategori', function ($q) use ($operator, $value) {
+                            if ($operator === 'like') {
+                                $value = "%$value%";
+                            }
+                            $q->whereRaw('LOWER(nama_kategori) ' . $operator . ' ?', [$value]);
+                        });
+                    } elseif ($column === 'author') {
+                        $query->whereHas('user', function ($q) use ($operator, $value) {
+                            if ($operator === 'like') {
+                                $value = "%$value%";
+                            }
+                            $q->whereRaw('LOWER(name) ' . $operator . ' ?', [$value]);
+                        });
+                    }elseif ($column === 'created_at') {
+                        $input = str_replace('/', '-', $value);
+                        $parts = explode('-', $input);
+
+                        $searchPattern = '';
+
+                        if (count($parts) === 3) {
+                            [$d, $m, $y] = $parts;
+                            $searchPattern = "$y-$m-$d";
+                        } elseif (count($parts) === 2) {
+                            [$d, $m] = $parts;
+                            $searchPattern = "-$m-$d";
+                        } elseif (strlen($input) === 2 || strlen($input) === 1) {
+                            $searchPattern = "-$input";
+                        } elseif (strlen($input) === 4) {
+                            $searchPattern = "$input-";
+                        } else {
+                            $searchPattern = $value;
+                        }
+
+                        $query->whereRaw("CAST(created_at AS TEXT) ILIKE ?", ["%$searchPattern%"]);
+                    }else {
+                        if ($operator === 'like') {
+                            $value = "%$value%";
+                        }
+                        $query->whereRaw('LOWER(' . $column . ') ' . $operator . ' ?', [$value]);
+                    }
+                }
+            }
+        }
+
+        $filters = $request->all();
+        
+        $post = $query->where('seo', 'yes')->latest()->paginate(20)->appends($filters);
+
+
+        return view('backend.pages.blog.seo.index',compact('post'));
+    }
+
+    
 
 }
