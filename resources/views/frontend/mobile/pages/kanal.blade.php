@@ -71,26 +71,26 @@
 
     <div>
         @foreach ($post->skip(5)->sortByDesc('created_at') as $item)
-            <article class="main-card" style="display: flex; align-items: flex-start; margin-bottom: 18px; gap: 12px;">
-                <div class="main-card-img-wrap"
-                    style="flex-shrink:0; width: 90px; height: 70px; overflow: hidden; border-radius: 8px; background: #f3f3f3; display: flex; align-items: center; justify-content: center;">
+            <article class="main-card">
+                <div class="main-card-img-wrap">
                     <img alt="{{ $item->title }}" class="main-card-img"
                         src="{{ asset('storage/comp/' . (is_array($item->gambar) ? basename($item->gambar[0]) : basename($item->gambar))) }}" />
-
                 </div>
-                <div class="main-card--info" style="flex:1; min-width:0;">
-                    <h4 class="main-card--title"
-                        style="font-size: 15px; font-weight: 600; margin-bottom: 4px; line-height: 1.2;">
-                        <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}"
-                            style="color: #222; text-decoration: none;">{{ $item->title }}</a>
+                <div class="main-card--info">
+                    <h4 class="main-card--title">
+                        <a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
                     </h4>
-                    <div class="category-and-time" style="font-size: 11px; color: #888; margin-bottom: 2px;">
-                        <a href="{{ route('kanal.desktop', ['slug' => $item->kategori->slug]) }}"
-                            style="color: #888; text-decoration: none;">{{ $item->kategori->nama_kategori }}</a>
-                        <span
-                            style="font-size: 10px; margin-left: 6px;">{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->isoFormat('DD MMMM YYYY') : '' }}
-                            |
-                            {{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('H:i:s') : '' }}</span>
+                    <div class="category-and-time">
+                        @if ($item->subCategory)
+                        <a href="{{ route('subcateg.desktop', ['categ' => $item->kategori->slug, 'subcateg' => $item->subCategory->slug]) }}">
+                            {{ $item->subCategory->nama_sub_kategori }}
+                        </a>
+                        @else
+                        <a href="{{ route('kanal.desktop', ['slug' => $item->kategori->slug]) }}">
+                            {{ $item->kategori->nama_kategori }}
+                        </a>
+                        @endif
+                            <span style="font-size: 10px;">{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->isoFormat('DD MMMM YYYY') : '' }} | {{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('H:i:s') : '' }}</span>
                     </div>
                 </div>
             </article>
