@@ -19,12 +19,6 @@ use App\Services\PlausibleService;
 
 class DashboardController extends Controller
 {
-    protected $analyticsService;
-
-    public function __construct(GoogleAnalyticsService $analyticsService)
-    {
-        $this->analyticsService = $analyticsService;
-    }
 
     public function index(Request $request)
     {
@@ -44,14 +38,14 @@ class DashboardController extends Controller
     {
         $property = $request->query('property', 'event:page');
         $period = $request->query('period', '7d');
-    
+
         $stats = $plausible->getStats($period, $property);
-    
+
         $topBrowsers = [];
-    
+
         if (!empty($stats['results'])) {
             $topPages = array_slice($stats['results'], 0, 10);
-    
+
             foreach ($topPages as $item) {
                 $topBrowsers[] = [
                     'page' => $item['page'] ?? 'N/A',
@@ -59,24 +53,24 @@ class DashboardController extends Controller
                 ];
             }
         }
-    
+
         return response()->json([
             'topBrowsers' => $topBrowsers,
         ]);
     }
-    
-    
+
+
     public function gettopBrowsers(PlausibleService $plausible, Request $request)
     {
         $period = $request->query('period', '7d');
         $property = $request->query('property', 'visit:source');
 
-        $stats = $plausible->getStats($period, $property);  
+        $stats = $plausible->getStats($period, $property);
         $topBrowsers = [];
-    
+
         if (!empty($stats['results'])) {
             $topPages = array_slice($stats['results'], 0, 15);
-    
+
             foreach ($topPages as $item) {
                 $topBrowsers[] = [
                     'page' => $item['source'] ?? 'N/A',
@@ -84,24 +78,24 @@ class DashboardController extends Controller
                 ];
             }
         }
-    
+
         return response()->json([
             'topBrowsers' => $topBrowsers,
         ]);
     }
-    
+
 
     public function gettopReferrers(PlausibleService $plausible, Request $request){
 
         $period = $request->query('period', '7d');
         $property = $request->query('property', 'visit:referrer');
 
-        $stats = $plausible->getStats($period, $property);  
+        $stats = $plausible->getStats($period, $property);
 
         $topReferrers = [];
         if (!empty($stats['results'])) {
             $topPages = array_slice($stats['results'], 0, 15);
-    
+
             foreach ($topPages as $item) {
                 $topReferrers[] = [
                     'page' => $item['referrer'] ?? 'N/A',
@@ -114,7 +108,7 @@ class DashboardController extends Controller
             'topReferrers' => $topReferrers,
         ]);
     }
-    
+
 
     public function getSiteAnalytics(PlausibleService $plausible, Request $request)
     {
@@ -125,10 +119,10 @@ class DashboardController extends Controller
 
         $traff = $plausible->getTimeSeries($periods, $filters);
         $stats = $plausible->getMet($period, $metrics);
-    
+
         $siteAnalytics = [];
         $trafficData = [];
-    
+
         if (!empty($stats['results'])) {
             $siteAnalytics[] = [
                 'sessions' => $stats['results']['visits']['value'] ?? 0,
@@ -136,7 +130,7 @@ class DashboardController extends Controller
                 'pageviews' => $stats['results']['pageviews']['value'] ?? 0,
                 'activeusers' => $stats['results']['visitors']['value'] ?? 0,
             ];
-    
+
             if (!empty($traff['results'])) {
                 foreach ($traff['results'] as $item) {
                     $trafficData[] = [
@@ -146,15 +140,15 @@ class DashboardController extends Controller
                 }
             }
         }
-    
+
         return response()->json([
             'siteAnalytics' => $siteAnalytics,
             'trafficData' => $trafficData,
         ]);
     }
-    
-    
-    
+
+
+
 
     public function exportDataPost()
     {
@@ -163,7 +157,7 @@ class DashboardController extends Controller
     }
 
     public function exportPosts(Request $request)
-    { 
+    {
         $request->validate([
         'columns' => 'required|array',
         'format' => 'required|in:csv,xlsx,json',
@@ -171,10 +165,10 @@ class DashboardController extends Controller
 
         $columns = $request->input('columns');
         $format = $request->input('format');
-    
+
         $posts = Post::with('kategori', 'tags')->get()->map(function ($post) use ($columns) {
             $data = [];
-    
+
             foreach ($columns as $column) {
                 if ($column === 'categories') {
                     $data['categories'] = $post->kategori->nama_kategori ?? '';
@@ -184,14 +178,14 @@ class DashboardController extends Controller
                     $data[$column] = $post->$column ?? '';
                 }
             }
-    
+
             return $data;
         });
-    
+
         if ($format === 'json') {
             $filename = 'posts_' . now()->format('Y-m-d') . '.json';
             $jsonContent = $posts->toJson(JSON_PRETTY_PRINT);
-        
+
             return response()->streamDownload(function () use ($jsonContent) {
                 echo $jsonContent;
             }, $filename, [
@@ -199,9 +193,9 @@ class DashboardController extends Controller
                 'Content-Disposition' => "attachment; filename={$filename}",
             ]);
         }
-        
+
         return Excel::download(new PostExport($columns), "posts_".now()->format('Y-m-d').".{$format}");
-        
+
     }
 
 

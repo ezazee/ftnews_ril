@@ -1,85 +1,122 @@
-<header class="header-fix">
-    <div class="main-header">
-        <div class="header-container">
-            <div class="logo-wrap">
+<style>
+
+</style>
+<header class="site-header-sticky">
+    {{-- BAGIAN ATAS HEADER --}}
+    <div class="header-primary-content">
+        <div class="header-inner-wrapper">
+            <div class="brand-logo-container">
                 <a href="/">
-                    <img alt="FTNews" width="90" height="30" src="{{ asset('frontend/logo/logo.png') }}" />
+                    <img alt="Logo Situs" height="50" src="{{ asset('frontend/logo/logo.png') }}" />
                 </a>
             </div>
-            <div class="fr">
-                <div class="main-menu-wrap">
-                    <div class="main-menu-container">
-                        <ul class="main-menu">
-                            <li class="menu-item">
-                                <a href="{{ url('/') }}" class="{{ Request::is('/') ? 'active' : '' }}">Home</a>
-                            </li>
-                            @foreach ($categories as $item)
-                                <li class="menu-item dropdown">
-                                    <a href="{{ route('kanal.desktop', ['slug' => $item->slug]) }}"
-                                        class="{{ Request::is('category/' . $item->slug) ? 'active' : '' }}">
-                                        {{ $item->nama_kategori }}
-                                    </a>
 
-                                    @if ($item->subCategories->count())
-                                        <ul class="dropdown-menu">
-                                            @foreach ($item->subCategories as $sub)
-                                                <li>
-                                                    <a
-                                                        href="{{ route('subcateg.desktop', ['categ' => $item->slug, 'subcateg' => $sub->slug]) }}">
-                                                        {{ $sub->nama_sub_kategori }}
-                                                    </a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    @endif
-                                </li>
-                            @endforeach
-
-                            <li class="menu-item">
-                                <a href="https://www.youtube.com/@FTNewscoid" target="_blank">Video</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="{{ url('/indeks') }}"
-                                    class="{{ Request::is('indeks') ? 'active' : '' }}">Indeks</a>
-                            </li>
-                        </ul>
-
-                    </div>
-                    <div class="search-container">
-                        <div class="search-wrap" id="search-button">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                class="bi bi-search" viewBox="0 0 16 16">
-                                <path
-                                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
+            <div class="header-search-area">
+                <form action="{{ route('searchResult.dekstop') }}" method="GET" class="search-form-element">
+                    <button type="submit" class="search-submit-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                        </svg>
+                    </button>
+                    <input type="text" name="q" class="search-field-input" placeholder="Cari topik berita..."
+                        required>
+                </form>
             </div>
         </div>
     </div>
-    <form action="{{ route('searchResult.dekstop') }}" method="GET">
-        <div class="wrap-search-form hidden" id="search-form">
-            <input type="text" name="q" class="input-search" placeholder="Cari di sini..." required>
-            <button type="submit" class="button-search">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-search" viewBox="0 0 16 16">
-                    <path
-                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-                </svg>
-            </button>
-        </div>
-    </form>
-    <div class="today-news-container" style="position: fixed; margin-top:50px; z-index: 9998;">
-        <div class="today-headline">Terpopuler</div>
-        <div class="news-marquee-container">
-            <div class="news-marquee-text">
-                <ul>
-                    @foreach ($postTerpopuler as $item)
-                        <li><a href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
+
+    {{-- BAGIAN BAWAH HEADER (NAVIGASI) --}}
+    <div class="header-navigation-bar">
+        <div class="header-inner-wrapper">
+            <nav class="primary-nav-container">
+                <ul class="navigation-list">
+                    <li class="nav-item">
+                        <a href="{{ url('/') }}" class="{{ Request::is('/') ? 'current-page-link' : '' }}">News</a>
+                    </li>
+
+                    @foreach ($categories as $item)
+                        <li class="nav-item has-submenu">
+                            <a href="{{ route('kanal.desktop', ['slug' => $item->slug]) }}"
+                                class="{{ Request::is('category/' . $item->slug) ? 'current-page-link' : '' }}">
+                                {{ $item->nama_kategori }}
+                            </a>
+
+                            @if ($item->subCategories->count())
+                                <ul class="submenu-list">
+                                    @foreach ($item->subCategories as $sub)
+                                        <li>
+                                            <a
+                                                href="{{ route('subcateg.desktop', ['categ' => $item->slug, 'subcateg' => $sub->slug]) }}">
+                                                {{ $sub->nama_sub_kategori }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
                         </li>
                     @endforeach
+
+                    <li class="nav-item">
+                        <a href="https://www.youtube.com/@FTNewscoid" target="_blank">Video</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('/indeks') }}"
+                            class="{{ Request::is('indeks') ? 'current-page-link' : '' }}">Foto</a>
+                    </li>
                 </ul>
+            </nav>
+
+            <div class="nav-auxiliary-links">
+                <div class="social-media-group">
+                    {{-- Daftar ikon medsos yang sudah disesuaikan --}}
+                    <a href="https://www.facebook.com/ftnewscoid" target="_blank" title="Facebook">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512">
+                            <path fill="currentColor"
+                                d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256C0 376 82.7 476.8 194.2 504.5V334.2H141.4V256h52.8V222.3c0-87.1 39.4-127.5 125-127.5c16.2 0 44.2 3.2 55.7 6.4V172h-43.7c-43.1 0-56.9 21.5-56.9 56.9V256h83.6l-14.4 78.2H287V510.1C413.8 494.8 512 386.9 512 256z" />
+                        </svg>
+                    </a>
+                    <a href="https://www.tiktok.com/@ftnews.co.id" target="_blank" title="TikTok">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 448 512">
+                            <path fill="currentColor"
+                                d="M448 209.9a210.1 210.1 0 0 1 -122.8-39.3v178.7a162.6 162.6 0 1 1 -162.6-162.6V287.9a74.6 74.6 0 1 0 52.2 71.2V0l88 0a121.2 121.2 0 0 0 1.9 22.2h0A122.2 122.2 0 0 0 381 102.4a121.4 121.4 0 0 0 67 20.1z" />
+                        </svg>
+                    </a>
+                    <a href="https://www.youtube.com/@FTNewscoid" target="_blank" title="YouTube">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 576 512">
+                            <path fill="currentColor"
+                                d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6C16 166.4 16 256 16 256s0 89.6 10.3 131.9c6.3 23.7 24.8 41.5 48.3 47.8C117.2 448 288 448 288 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8C560 345.6 560 256 560 256s0-89.6-10.3-131.9zM232 344V168l144 88-144 88z" />
+                        </svg>
+                    </a>
+                    <a href="https://www.instagram.com/ftnews.co.id/" target="_blank" title="Instagram">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z" />
+                        </svg>
+                    </a>
+                    <a href="https://whatsapp.com/channel/0029Vb7g7dnFMqrgveDpgg0O" target="_blank" title="WhatsApp">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 448 512">
+                            <path fill="currentColor"
+                                d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5c0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="today-news-container" style="position: fixed; margin-top:135px; z-index: 9998;">
+            <div class="today-headline">Terpopuler</div>
+            <div class="news-marquee-container">
+                <div class="news-marquee-text">
+                    <ul>
+                        @foreach ($postTerpopuler as $item)
+                            <li><a
+                                    href="{{ route('detail.desktop', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
