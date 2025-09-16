@@ -150,6 +150,12 @@ Route::middleware(['auth', 'role:author|admin'])->group(function () {
     // SEO Post Page
     Route::get('/dashboard/blog/seo-post', [BlogController::class, 'seoPost'])->name('blog.seoPost');
 
+        // trash
+    Route::get('/blog/trash', [BlogController::class, 'trash'])->name('blog.trash');
+    Route::post('/blog/{id}/restore', [BlogController::class, 'restorePost'])->name('blog.restore');
+    Route::delete('/blog/{id}/force-delete', [BlogController::class, 'forceDeletePost'])->name('blog.forceDelete');
+
+    Route::get('/blog/log', [BlogController::class, 'logviews'])->name('blog.logviews');
 
     // Tags
     Route::get('/dashboard/blog/tags', [TagsController::class, 'tagsIndex'])->name('tags.index');

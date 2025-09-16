@@ -57,7 +57,7 @@
                     </li>
                 @endforeach
                 <li class="menu-item">
-                    <a href="https://www.youtube.com/@indopopid" target="_blank">Video</a>
+                    <a href="https://www.youtube.com/@FTNewscoid" target="_blank">Video</a>
                 </li>
                 <li class="menu-item {{ Request::is('indeks') ? 'active' : '' }}">
                     <a href="/indeks">Indeks</a>
